@@ -1,0 +1,39 @@
+{
+  "executedAt": "2026-11-02T23:03:34.326789+00:00",
+  "build": {
+    "java": "21.0.10",
+    "maven": "3.9.16",
+    "commands": [
+      "mvnw.cmd validate",
+      "mvnw.cmd clean package -pl ms-dueno",
+      "mvnw.cmd package -pl ms-dueno"
+    ],
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "modules": [
+    "ms-dueno",
+    "ms-mascota",
+    "ms-veterinario",
+    "ms-turno"
+  ],
+  "architecture": {
+    "sourceFilesWithoutComments": 16,
+    "domainWithoutSpringAndAdapters": true,
+    "applicationWithoutAdaptersJpaAndSpringWeb": true,
+    "controllerUsesInboundPortAndDtos": true,
+    "jpaModel": "Simplificación didáctica explícita del paso 3 de la consigna"
+  },
+  "runtime": {
+    "application": "Temurin 25 en Docker",
+    "database": "MySQL 8.0.40 en Docker",
+    "port": 8081,
+    "startupVerified": true,
+    "openApiSuccessAndErrorSchemasVerified": true
+  },
+  "databaseSchema": "VERSION()\n8.0.40\nTable\tCreate Table\nduenos\tCREATE TABLE `duenos` (\\n  `id` bigint NOT NULL AUTO_INCREMENT,\\n  `apellido` varchar(100) NOT NULL,\\n  `email` varchar(254) NOT NULL,\\n  `nombre` varchar(100) NOT NULL,\\n  `telefono` varchar(30) NOT NULL,\\n  PRIMARY KEY (`id`),\\n  UNIQUE KEY `uk_duenos_email` (`email`)\\n) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci\nduenos\n0\n",
+  "specificationSha256": "bb8e54e9065e22664e9cfef64e126871007973ac38e36361d8af3c2b4d180e69",
+  "originalSpecificationUnchanged": true
+}

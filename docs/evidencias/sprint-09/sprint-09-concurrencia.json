@@ -1,0 +1,98 @@
+{
+  "executedAt": "2026-11-02T23:02:13.036234+00:00",
+  "requests": 8,
+  "statuses": [
+    201,
+    409,
+    409,
+    409,
+    409,
+    409,
+    409,
+    409
+  ],
+  "persistedOwners": 1,
+  "cleanup": "Base sin dueños al finalizar",
+  "results": [
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.951695486",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.896121628",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.951695479",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.896123438",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.951695689",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.896122778",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    },
+    {
+      "status": 201,
+      "body": {
+        "id": 5,
+        "nombre": "Prueba",
+        "apellido": "Concurrente",
+        "email": "concurrencia@example.com",
+        "telefono": "1112345678"
+      }
+    },
+    {
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:01:12.951695669",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: concurrencia@example.com",
+        "path": "/api/duenos"
+      }
+    }
+  ]
+}

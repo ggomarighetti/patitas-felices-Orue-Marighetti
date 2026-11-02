@@ -1,6 +1,7 @@
 package com.patitas.dueno.application;
 
-import com.patitas.dueno.domain.exception.DuplicatedEmailException;
+import com.patitas.dueno.domain.exception.DuplicateResourceException;
+import com.patitas.dueno.domain.exception.ResourceNotFoundException;
 import com.patitas.dueno.domain.model.Dueno;
 import com.patitas.dueno.domain.port.in.DuenoService;
 import com.patitas.dueno.domain.port.out.DuenoRepository;
@@ -76,8 +77,8 @@ class DuenoServiceImplTest {
         Dueno duplicate = new Dueno(null, "Otra", "Persona", original.getEmail(), "1122222222");
         int previousSaveCalls = repository.saveCalls;
 
-        DuplicatedEmailException error = assertThrows(
-                DuplicatedEmailException.class, () -> service.save(duplicate));
+        DuplicateResourceException error = assertThrows(
+                DuplicateResourceException.class, () -> service.save(duplicate));
 
         assertTrue(error.getMessage().contains(original.getEmail()));
         assertEquals(previousSaveCalls, repository.saveCalls);
@@ -92,6 +93,49 @@ class DuenoServiceImplTest {
 
         assertFalse(first.getId().equals(second.getId()));
         assertEquals(2, repository.findAll().size());
+    }
+
+    @Test
+    void saveNormalizesEmailBeforeCheckingDuplicates() {
+        repository.save(dueno("ana@example.com"));
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.save(dueno(" ANA@EXAMPLE.COM ")));
+
+        assertEquals(1, repository.findAll().size());
+    }
+
+    @Test
+    void updateRejectsAnotherOwnersEmailWithoutChangingTheOriginal() {
+        Dueno original = repository.save(dueno("ana@example.com"));
+        repository.save(dueno("luis@example.com"));
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.update(original.getId(), dueno("LUIS@EXAMPLE.COM")));
+
+        assertEquals("ana@example.com", repository.findById(original.getId()).orElseThrow().getEmail());
+    }
+
+    @Test
+    void updateAllowsKeepingTheCurrentEmail() {
+        Dueno original = repository.save(dueno("ana@example.com"));
+        Dueno changes = new Dueno(null, "Ana María", "Gómez", "ANA@EXAMPLE.COM", "1199999999");
+
+        Dueno updated = service.update(original.getId(), changes);
+
+        assertEquals("Ana María", updated.getNombre());
+        assertEquals("ana@example.com", updated.getEmail());
+    }
+
+    @Test
+    void updateRejectsAnUnknownId() {
+        assertThrows(ResourceNotFoundException.class, () -> service.update(999L, dueno("ana@example.com")));
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    void deleteRejectsAnUnknownId() {
+        assertThrows(ResourceNotFoundException.class, () -> service.deleteById(999L));
     }
 
     @Test
@@ -142,7 +186,6 @@ class DuenoServiceImplTest {
         return new Dueno(null, "Ana", "Gómez", email, "1112345678");
     }
 
-    // Doble de prueba del puerto de salida; no es un adaptador de producción.
     private static class InMemoryDuenoRepository implements DuenoRepository {
 
         private final Map<Long, Dueno> owners = new LinkedHashMap<>();
@@ -185,6 +228,12 @@ class DuenoServiceImplTest {
         @Override
         public boolean existsByEmail(String email) {
             return owners.values().stream().anyMatch(dueno -> Objects.equals(dueno.getEmail(), email));
+        }
+
+        @Override
+        public boolean existsByEmailAndIdNot(String email, Long id) {
+            return owners.values().stream().anyMatch(dueno -> Objects.equals(dueno.getEmail(), email)
+                    && !Objects.equals(dueno.getId(), id));
         }
 
         private static Dueno copyWithId(Long id, Dueno dueno) {

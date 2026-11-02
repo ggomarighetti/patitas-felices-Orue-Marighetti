@@ -1,0 +1,33 @@
+{
+  "executedAt": "2026-11-02T23:04:46.442183+00:00",
+  "method": "Interacción con Swagger UI en navegador",
+  "post": {
+    "status": 201,
+    "body": {
+      "id": 10,
+      "nombre": "Ana",
+      "apellido": "Gómez",
+      "email": "swagger@example.com",
+      "telefono": "1112345678"
+    },
+    "screenshot": "sprint-09-swagger-post.png"
+  },
+  "get": {
+    "status": 200,
+    "body": [
+      {
+        "id": 10,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "swagger@example.com",
+        "telefono": "1112345678"
+      }
+    ],
+    "screenshot": "sprint-09-swagger-get.png"
+  },
+  "cleanup": {
+    "method": "DELETE",
+    "status": 204,
+    "finalOwners": []
+  }
+}

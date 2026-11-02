@@ -1,0 +1,36 @@
+services:
+  mysql:
+    image: mysql:8.0.40
+    environment:
+      MYSQL_DATABASE: dueno_db
+      MYSQL_USER: ${DB_USERNAME:-patitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - dueno-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  ms-dueno:
+    image: eclipse-temurin:25-jre-alpine
+    profiles: ["app"]
+    command: ["java", "-jar", "/app/ms-dueno.jar"]
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/dueno_db
+      DB_USERNAME: ${DB_USERNAME:-patitas}
+      DB_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - ./ms-dueno/target/ms-dueno-0.0.1-SNAPSHOT.jar:/app/ms-dueno.jar:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  dueno-data:

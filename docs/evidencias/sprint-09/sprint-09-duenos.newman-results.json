@@ -1,0 +1,1222 @@
+{
+  "formatVersion": 1,
+  "tool": {
+    "name": "Newman",
+    "version": "6.2.3"
+  },
+  "executedAt": "2026-11-02T23:00:22.803000+00:00",
+  "collection": "Sprint 09 - API de dueños hexagonal con MySQL",
+  "totals": {
+    "requests": 40,
+    "assertions": 81,
+    "failures": 0
+  },
+  "failures": [],
+  "results": [
+    {
+      "name": "01 - Lista inicial vacía",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Sin dueños",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "02 - Registrar Ana",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 201,
+      "body": {
+        "id": 3,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        },
+        {
+          "name": "ID generado y Location",
+          "passed": true
+        },
+        {
+          "name": "DTO de salida",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "03 - Consultar Ana",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Email registrado",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "04 - Registrar Luis",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 201,
+      "body": {
+        "id": 4,
+        "nombre": "Luis",
+        "apellido": "Gómez",
+        "email": "luis@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "05 - Listar ambos dueños",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [
+        {
+          "id": 3,
+          "nombre": "Ana",
+          "apellido": "Gómez",
+          "email": "ana@example.com",
+          "telefono": "1112345678"
+        },
+        {
+          "id": 4,
+          "nombre": "Luis",
+          "apellido": "Gómez",
+          "email": "luis@example.com",
+          "telefono": "1112345678"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Dos dueños",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "06 - Rechazar email duplicado",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:00:24.348940246",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: ana@example.com",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "07 - Rechazar email duplicado en mayúsculas",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:00:24.452502561",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: ana@example.com",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "08 - Rechazar campos ausentes",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:24.534952075",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido es obligatorio; email: El email es obligatorio; nombre: El nombre es obligatorio; telefono: El teléfono es obligatorio",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "09 - Rechazar nombre en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:24.930220463",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "nombre: El nombre es obligatorio",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "10 - Rechazar apellido en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:25.335622764",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido es obligatorio",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "11 - Rechazar email en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:25.724084869",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email debe tener un formato válido; email: El email es obligatorio",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "12 - Rechazar telefono en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:26.127358193",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "telefono: El teléfono es obligatorio",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "13 - Rechazar email inválido",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:26.534718083",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email debe tener un formato válido",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "14 - Rechazar nombre demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:26.937576346",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "nombre: El nombre admite hasta 100 caracteres",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "15 - Rechazar apellido demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:27.328123416",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido admite hasta 100 caracteres",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "16 - Rechazar email demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:27.710914126",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email admite hasta 254 caracteres; email: El email debe tener un formato válido",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "17 - Rechazar telefono demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:28.116279665",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "telefono: El teléfono admite hasta 30 caracteres",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "18 - Rechazar JSON malformado",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:28.518058711",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "19 - Rechazar ID no numérico",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/abc",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:28.906402344",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/abc"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "20 - Rechazar ID cero",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/0",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:29.329109653",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/0"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "21 - Rechazar ID negativo",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/-1",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:29.728897761",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/-1"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "22 - Consultar dueño inexistente",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:00:30.116054448",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "23 - Actualizar dueño inexistente",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:00:30.195803574",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "24 - Eliminar dueño inexistente",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:00:30.27194401",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "25 - Actualizar conservando el email propio",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Email normalizado",
+          "passed": true
+        },
+        {
+          "name": "Nombre actualizado",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "26 - Rechazar actualización con email ajeno",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:00:30.494898953",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: luis@example.com",
+        "path": "/api/duenos/3"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "27 - Conservar datos tras conflicto",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Nombre intacto",
+          "passed": true
+        },
+        {
+          "name": "Email intacto",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "28 - Rechazar actualización inválida",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:00:30.676020971",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/3"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "29 - Conservar email tras validación fallida",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Email intacto",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "30 - Cambiar email",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana.nueva@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Nuevo email",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "31 - Consultar email actualizado",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 200,
+      "body": {
+        "id": 3,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana.nueva@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Cambio persistido",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "32 - Eliminar Ana",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true
+        },
+        {
+          "name": "Sin cuerpo",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "33 - Consultar Ana eliminada",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:00:31.440685028",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 3",
+        "path": "/api/duenos/3"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "34 - Repetir eliminación",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/3",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:00:31.534027507",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 3",
+        "path": "/api/duenos/3"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "35 - Eliminar Luis",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/4",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "36 - Lista final vacía",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "37 - Especificación OpenAPI",
+      "method": "GET",
+      "url": "http://localhost:8081/v3/api-docs",
+      "status": 200,
+      "body": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "OpenAPI definition",
+          "version": "v0"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8081",
+            "description": "Generated server url"
+          }
+        ],
+        "tags": [
+          {
+            "name": "Dueños",
+            "description": "CRUD de dueños de Patitas Felices"
+          }
+        ],
+        "paths": {
+          "/api/duenos/{id}": {
+            "get": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Consultar un dueño",
+              "operationId": "findById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Dueño encontrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Identificador inválido",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Dueño inexistente",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "put": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Actualizar un dueño",
+              "operationId": "update",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/DuenoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Dueño actualizado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Datos inválidos",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Dueño inexistente",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "409": {
+                  "description": "Email ya registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Eliminar un dueño",
+              "operationId": "deleteById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "204": {
+                  "description": "Dueño eliminado"
+                },
+                "400": {
+                  "description": "Identificador inválido"
+                },
+                "404": {
+                  "description": "Dueño inexistente"
+                }
+              }
+            }
+          },
+          "/api/duenos": {
+            "get": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Listar dueños",
+              "operationId": "findAll",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DuenoResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Registrar un dueño",
+              "operationId": "save",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/DuenoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "201": {
+                  "description": "Dueño registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Datos inválidos",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "409": {
+                  "description": "Email ya registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "DuenoRequest": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "type": "string",
+                  "example": "Ana",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "apellido": {
+                  "type": "string",
+                  "example": "Gómez",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "ana@example.com",
+                  "maxLength": 254,
+                  "minLength": 0
+                },
+                "telefono": {
+                  "type": "string",
+                  "example": "1112345678",
+                  "maxLength": 30,
+                  "minLength": 0
+                }
+              },
+              "required": [
+                "apellido",
+                "email",
+                "nombre",
+                "telefono"
+              ]
+            },
+            "DuenoResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "apellido": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "telefono": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Cinco operaciones CRUD documentadas",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "38 - Swagger disponible",
+      "method": "GET",
+      "url": "http://localhost:8081/swagger-ui/index.html",
+      "status": 200,
+      "body": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n  </head>\n\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"./swagger-ui-bundle.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-ui-standalone-preset.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-initializer.js\" charset=\"UTF-8\"> </script>\n  </body>\n</html>\n",
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Página Swagger UI",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "39 - Rechazar tipo de contenido incorrecto",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 415,
+      "body": {
+        "timestamp": "2026-11-02T23:00:32.059320933",
+        "status": 415,
+        "error": "Unsupported Media Type",
+        "mensaje": "El tipo de contenido no es compatible",
+        "path": "/api/duenos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 415",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "40 - Rechazar método no permitido",
+      "method": "PATCH",
+      "url": "http://localhost:8081/api/duenos/1",
+      "status": 405,
+      "body": {
+        "timestamp": "2026-11-02T23:00:32.151904706",
+        "status": 405,
+        "error": "Method Not Allowed",
+        "mensaje": "El método HTTP no está permitido",
+        "path": "/api/duenos/1"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 405",
+          "passed": true
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

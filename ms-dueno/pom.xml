@@ -13,7 +13,7 @@
 
     <artifactId>ms-dueno</artifactId>
     <name>ms-dueno</name>
-    <description>Contexto de dueños: dominio y aplicación</description>
+    <description>Microservicio de dueños con arquitectura hexagonal</description>
 
     <dependencies>
         <dependency>
@@ -43,9 +43,23 @@
             <artifactId>mapstruct</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

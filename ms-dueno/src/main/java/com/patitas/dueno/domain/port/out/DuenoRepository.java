@@ -18,4 +18,6 @@ public interface DuenoRepository {
     void deleteById(Long id);
 
     boolean existsByEmail(String email);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
 }

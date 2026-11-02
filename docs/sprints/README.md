@@ -1,58 +1,26 @@
-# Sprints
+# Documentos de los sprints
 
-Se conserva cada consigna original en esta carpeta, sin modificar el PDF.
-Las nuevas versiones se guardarán con nombres distintos para mantener el historial.
+Se conserva la consigna original sin modificar el PDF.
 
 | Sprint | Consigna | Alcance desarrollado |
 | --- | --- | --- |
-| 9 | [Sprint_09_v2.pdf](Sprint_09_v2.pdf) | Pasos 1 a 4 de la sección 6 |
+| 09 | [Arquitectura hexagonal y descomposición en microservicios](Sprint_09_v2.pdf) | Pasos 1 a 8, ms-dueno funcional |
 
-## Sprint 9: arquitectura hexagonal y descomposición en microservicios
+## Sprint 09
 
-La solicitud actual llega hasta **PASO 4 - Implementar la capa Application**, inclusive.
-Los criterios de aceptación del PDF corresponden al sprint completo; el servidor, Swagger y el CRUD
-HTTP aún no forman parte de esta entrega parcial.
+| Paso | Implementación |
+| --- | --- |
+| 1. Proyecto padre Maven | Cuatro módulos y gestión de dependencias comunes |
+| 2. Módulo ms-dueno | Paquetes hexagonales, MySQL dueno_db y puerto 8081 |
+| 3. Dominio | Dueno, puertos de entrada y salida y excepciones reutilizables |
+| 4. Aplicación | Casos de uso, email único en alta y actualización y control de ausencia |
+| 5. Persistencia | Adaptador del puerto de salida, Spring Data JPA y restricción única de email |
+| 6. Web | DTOs validados, mapper MapStruct, CRUD REST y errores centralizados |
+| 7. Ejecución | Clase principal, JAR ejecutable, MySQL y Swagger |
+| 8. Arquitectura | Revisión de imports y decisiones documentadas en el README |
 
-| Paso | Estado | Evidencia |
-| --- | --- | --- |
-| 1. Proyecto padre Maven | Implementado | POM con cuatro módulos y dependencias comunes; Maven Wrapper |
-| 2. Módulo ms-dueno | Implementado | POM hijo, paquetes completos y configuración de `dueno_db` / puerto 8081 |
-| 3. Domain | Implementado | `Dueno`, `DuenoService`, `DuenoRepository` y excepción de email duplicado |
-| 4. Application | Implementado | `DuenoServiceImpl`, inyección por constructor, delegación y validación en `save` |
-| 5. Adaptador de persistencia | Pendiente | Implementar el puerto de salida con JPA y MySQL |
-| 6. Adaptador web | Pendiente | DTOs, validaciones, controlador y respuestas de error |
-| 7. Primera ejecución | Pendiente | Clase principal, JAR ejecutable, MySQL y comprobación en Swagger |
-| 8. Verificación completa de arquitectura | Pendiente | Revisar también los adaptadores cuando existan |
+El [README](../../README.md#arquitectura) explica las decisiones necesarias para resolver las contradicciones de la guía: entidad JPA en el dominio y composición del adaptador de persistencia. AGENTS.md exige excepciones por categoría; se usa DuplicateResourceException con mensaje recibido al lanzarla, conservando la causa cuando se traduce un error.
 
-### Consideraciones al continuar
+Las verificaciones realizadas y la demostración funcional se conservan en [evidencias del sprint 09](../evidencias/sprint-09/README.md).
 
-La contradicción entre dominio puro y entidad JPA, los contratos elegidos y la configuración están
-explicados en el [README principal](../../README.md#arquitectura).
-
-En el paso 5, `JpaRepository` no aporta por sí mismo `update(Long, Dueno)` y su `save` es genérico.
-Conviene usar un adaptador que implemente `DuenoRepository` y delegue en una interfaz Spring Data,
-resolviendo explícitamente actualización, ausencia y unicidad de email. Esto conserva las dependencias
-hacia los puertos y evita asumir que extender `JpaRepository` implementa automáticamente todo el contrato.
-
-### Verificación de esta entrega
-
-Desde la raíz del proyecto:
-
-```powershell
-.\mvnw.cmd validate
-.\mvnw.cmd clean verify
-.\mvnw.cmd clean package -pl ms-dueno
-```
-
-Las pruebas están en `ms-dueno/src/test/java/com/patitas/dueno/application/DuenoServiceImplTest.java`.
-La revisión de imports debe mantener el dominio sin Spring y la aplicación sin `adapter.*`,
-`jakarta.persistence`, `javax.persistence` ni Spring Web.
-
-Resultado comprobado el 29 de septiembre de 2026 con JDK 25 (compilación dirigida a Java 21)
-y Maven 3.9.16:
-
-- `validate`: correcto para el padre y los cuatro módulos.
-- `clean verify`: correcto para todo el reactor; JAR de `ms-dueno` generado.
-- 10 pruebas ejecutadas, sin fallos, errores ni omisiones.
-- Imports de dominio y aplicación revisados, sin dependencias prohibidas.
-- PDF archivado verificado mediante SHA-256: idéntico al adjunto original.
+Los módulos de mascotas, veterinarios y turnos quedan reservados. No se implementan entregables del sprint 10.

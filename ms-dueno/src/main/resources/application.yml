@@ -3,7 +3,7 @@ spring:
     name: ms-dueno
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/dueno_db}
-    username: ${DB_USERNAME:root}
+    username: ${DB_USERNAME:patitas}
     password: ${DB_PASSWORD:}
   jpa:
     hibernate:
