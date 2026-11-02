@@ -1,14 +1,5 @@
 spring:
   application:
     name: ms-dueno
-  datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/dueno_db}
-    username: ${DB_USERNAME:patitas}
-    password: ${DB_PASSWORD:}
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-
-server:
-  port: 8081
+  config:
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}

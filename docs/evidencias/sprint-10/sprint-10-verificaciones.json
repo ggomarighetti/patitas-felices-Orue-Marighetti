@@ -1,0 +1,135 @@
+{
+  "executedAt": "2026-11-02T23:41:51.891638+00:00",
+  "modules": [
+    "ms-dueno",
+    "ms-mascota",
+    "ms-veterinario",
+    "ms-turno",
+    "eureka-server",
+    "config-server"
+  ],
+  "versions": {
+    "springBoot": "4.1.0",
+    "springCloud": "2025.1.4",
+    "javaCompilation": "21.0.10",
+    "javaRuntime": "25.0.4.1",
+    "maven": "3.9.16"
+  },
+  "build": {
+    "commands": [
+      "mvnw.cmd validate",
+      "mvnw.cmd clean verify",
+      "mvnw.cmd verify"
+    ],
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "architecture": {
+    "javaFilesWithoutComments": 29,
+    "applicationDependencyRule": true,
+    "controllerUsesInboundPort": true,
+    "manualMapper": true,
+    "dtoLombok": true,
+    "sharedDatabaseRelationships": false
+  },
+  "scaffolds": {
+    "mascota": {
+      "modelFields": [
+        "nombre",
+        "especie",
+        "raza",
+        "fechaNacimiento",
+        "duenoId"
+      ],
+      "inboundMethods": [
+        "findAll",
+        "findById",
+        "findByDuenoId",
+        "save",
+        "update",
+        "deleteById"
+      ],
+      "externalLayersReserved": true,
+      "compiled": true,
+      "crossServiceJpaRelationships": false
+    },
+    "veterinario": {
+      "modelFields": [
+        "nombre",
+        "apellido",
+        "matricula",
+        "especialidad",
+        "email"
+      ],
+      "inboundMethods": [
+        "findAll",
+        "findById",
+        "findByEspecialidad",
+        "save",
+        "update",
+        "deleteById"
+      ],
+      "externalLayersReserved": true,
+      "compiled": true,
+      "crossServiceJpaRelationships": false
+    },
+    "turno": {
+      "modelFields": [
+        "fechaHora",
+        "mascotaId",
+        "veterinarioId",
+        "motivo",
+        "estado"
+      ],
+      "inboundMethods": [
+        "findAll",
+        "findById",
+        "findByVeterinarioId",
+        "findByMascotaId",
+        "save",
+        "cancelar"
+      ],
+      "externalLayersReserved": true,
+      "compiled": true,
+      "crossServiceJpaRelationships": false
+    }
+  },
+  "configuration": {
+    "repository": "https://github.com/ggomarighetti/patitas-config",
+    "commit": "f765e0e0ed4e3d72b73aa28ecb7d20a0cea83e25",
+    "propertySources": [
+      "https://github.com/ggomarighetti/patitas-config.git/ms-dueno.yml",
+      "https://github.com/ggomarighetti/patitas-config.git/application.yml"
+    ],
+    "localClientOnlyNameAndImport": true,
+    "requiredImport": true
+  },
+  "runtime": {
+    "configServerPort": 8888,
+    "eurekaPort": 8761,
+    "duenoPort": 8081,
+    "health": "UP",
+    "database": "MySQL",
+    "registration": "MS-DUENO UP"
+  },
+  "startup": {
+    "dependencyHealthConditionsVerified": true,
+    "missingConfigServer": {
+      "exitCode": 1,
+      "exception": "ConfigClientFailFastException",
+      "reason": "Connection refused; el import obligatorio impide arrancar sin configuración"
+    },
+    "portsBoundToLoopback": true
+  },
+  "postman": {
+    "requests": 55,
+    "assertions": 111,
+    "failures": 0
+  },
+  "cleanup": {
+    "owners": []
+  },
+  "specificationSha256": "4c539e84dc9ae3730e36b2464fd555128b88553c75bd744b447dc2e7e3afc5c8"
+}

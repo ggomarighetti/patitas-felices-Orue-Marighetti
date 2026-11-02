@@ -1,0 +1,1681 @@
+{
+  "info": {
+    "name": "Sprint 10 - Config Server, Eureka, Actuator y CRUD de dueños",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "anaId",
+      "value": ""
+    },
+    {
+      "key": "luisId",
+      "value": ""
+    },
+    {
+      "key": "configUrl",
+      "value": "http://localhost:8888"
+    },
+    {
+      "key": "eurekaUrl",
+      "value": "http://localhost:8761"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Configuración Git de ms-dueno",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-dueno/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Configuración compartida y propia desde Git\", () => {",
+              "const data=pm.response.json();",
+              "pm.expect(data.version).to.match(/^[0-9a-f]{40}$/);",
+              "pm.expect(data.name).to.eql(\"ms-dueno\");",
+              "const own=data.propertySources.find(p => p.name.endsWith(\"/ms-dueno.yml\"));",
+              "const shared=data.propertySources.find(p => p.name.endsWith(\"/application.yml\"));",
+              "pm.expect(own.source[\"server.port\"]).to.eql(8081);",
+              "pm.expect(own.source[\"spring.datasource.password\"]).to.eql(\"${DB_PASSWORD:}\");",
+              "pm.expect(shared.source[\"patitas.config-source\"]).to.eql(\"patitas-config\");",
+              "pm.expect(shared.source[\"eureka.client.service-url.defaultZone\"]).to.include(\"8761/eureka/\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Configuración Git de ms-mascota",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-mascota/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Configuración compartida y propia desde Git\", () => {",
+              "const data=pm.response.json();",
+              "pm.expect(data.version).to.match(/^[0-9a-f]{40}$/);",
+              "pm.expect(data.name).to.eql(\"ms-mascota\");",
+              "const own=data.propertySources.find(p => p.name.endsWith(\"/ms-mascota.yml\"));",
+              "const shared=data.propertySources.find(p => p.name.endsWith(\"/application.yml\"));",
+              "pm.expect(own.source[\"server.port\"]).to.eql(8082);",
+              "pm.expect(own.source[\"spring.datasource.password\"]).to.eql(\"${DB_PASSWORD:}\");",
+              "pm.expect(shared.source[\"patitas.config-source\"]).to.eql(\"patitas-config\");",
+              "pm.expect(shared.source[\"eureka.client.service-url.defaultZone\"]).to.include(\"8761/eureka/\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Configuración Git de ms-veterinario",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-veterinario/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Configuración compartida y propia desde Git\", () => {",
+              "const data=pm.response.json();",
+              "pm.expect(data.version).to.match(/^[0-9a-f]{40}$/);",
+              "pm.expect(data.name).to.eql(\"ms-veterinario\");",
+              "const own=data.propertySources.find(p => p.name.endsWith(\"/ms-veterinario.yml\"));",
+              "const shared=data.propertySources.find(p => p.name.endsWith(\"/application.yml\"));",
+              "pm.expect(own.source[\"server.port\"]).to.eql(8083);",
+              "pm.expect(own.source[\"spring.datasource.password\"]).to.eql(\"${DB_PASSWORD:}\");",
+              "pm.expect(shared.source[\"patitas.config-source\"]).to.eql(\"patitas-config\");",
+              "pm.expect(shared.source[\"eureka.client.service-url.defaultZone\"]).to.include(\"8761/eureka/\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Configuración Git de ms-turno",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-turno/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Configuración compartida y propia desde Git\", () => {",
+              "const data=pm.response.json();",
+              "pm.expect(data.version).to.match(/^[0-9a-f]{40}$/);",
+              "pm.expect(data.name).to.eql(\"ms-turno\");",
+              "const own=data.propertySources.find(p => p.name.endsWith(\"/ms-turno.yml\"));",
+              "const shared=data.propertySources.find(p => p.name.endsWith(\"/application.yml\"));",
+              "pm.expect(own.source[\"server.port\"]).to.eql(8084);",
+              "pm.expect(own.source[\"spring.datasource.password\"]).to.eql(\"${DB_PASSWORD:}\");",
+              "pm.expect(shared.source[\"patitas.config-source\"]).to.eql(\"patitas-config\");",
+              "pm.expect(shared.source[\"eureka.client.service-url.defaultZone\"]).to.include(\"8761/eureka/\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Representación YAML de Config Server",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-dueno-default.yml",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"YAML remoto\", () => { pm.expect(pm.response.text()).to.include(\"dueno_db\"); pm.expect(pm.response.text()).to.include(\"patitas-config\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Config Server UP",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Servicio UP\", () => pm.expect(pm.response.json().status).to.eql(\"UP\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Eureka Server UP",
+      "request": {
+        "method": "GET",
+        "url": "{{eurekaUrl}}/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Servicio UP\", () => pm.expect(pm.response.json().status).to.eql(\"UP\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Registro MS-DUENO en Eureka",
+      "request": {
+        "method": "GET",
+        "url": "{{eurekaUrl}}/eureka/apps/MS-DUENO",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Instancia UP en puerto 8081\", () => { const app=pm.response.json().application; pm.expect(app.name).to.eql(\"MS-DUENO\"); pm.expect(app.instance.some(i => i.status === \"UP\" && i.port[\"$\"] === 8081)).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Dashboard Eureka",
+      "request": {
+        "method": "GET",
+        "url": "{{eurekaUrl}}/",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Dashboard con MS-DUENO\", () => pm.expect(pm.response.text()).to.include(\"MS-DUENO\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Salud de ms-dueno y MySQL",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Servicio, MySQL y Config Server UP\", () => { const health=pm.response.json(); pm.expect(health.status).to.eql(\"UP\"); pm.expect(health.components.db.status).to.eql(\"UP\"); pm.expect(health.components.db.details.database).to.eql(\"MySQL\"); pm.expect(health.components.clientConfigServer.status).to.eql(\"UP\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Información de ms-dueno",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/info",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Nombre, descripción y versión\", () => { const app=pm.response.json().app; pm.expect(app.name).to.eql(\"ms-dueno\"); pm.expect(app.description).to.include(\"Patitas Felices\"); pm.expect(app.version).to.eql(\"1.0.0\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Métricas JVM",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/metrics",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Métricas disponibles\", () => pm.expect(pm.response.json().names).to.include(\"jvm.memory.used\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Configuración efectiva con valores ocultos",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/env",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Configuración remota activa y valores ocultos\", () => { const sources=pm.response.json().propertySources; pm.expect(sources.some(p => p.name.includes(\"configserver:\") && p.properties[\"patitas.config-source\"])).to.eql(true); for (const source of sources) { for (const property of Object.values(source.properties)) { if (Object.prototype.hasOwnProperty.call(property,\"value\")) pm.expect(property.value).to.eql(\"******\"); } } });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - Beans de Spring",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/beans",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Contexto con beans\", () => pm.expect(Object.keys(pm.response.json().contexts).length).to.be.above(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - Mapeos HTTP",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/mappings",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"API de dueños registrada\", () => pm.expect(JSON.stringify(pm.response.json())).to.include(\"/api/duenos\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 - Lista inicial vacía",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Sin due\\u00f1os\", () => pm.expect(pm.response.json()).to.eql([]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 - Registrar Ana",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"anaId\", pm.response.json().id);",
+              "pm.test(\"ID generado y Location\", () => { pm.expect(pm.response.json().id).to.be.above(0); pm.expect(pm.response.headers.get(\"Location\")).to.include(\"/api/duenos/\" + pm.response.json().id); });",
+              "pm.test(\"DTO de salida\", () => pm.expect(Object.keys(pm.response.json()).sort()).to.eql([\"apellido\", \"email\", \"id\", \"nombre\", \"telefono\"]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 - Consultar Ana",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Email registrado\", () => pm.expect(pm.response.json().email).to.eql(\"ana@example.com\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 - Registrar Luis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luis\", \"apellido\": \"Gómez\", \"email\": \"luis@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"luisId\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 - Listar ambos dueños",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Dos due\\u00f1os\", () => pm.expect(pm.response.json().length).to.eql(2));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 - Rechazar email duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(409);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 - Rechazar email duplicado en mayúsculas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ANA@EXAMPLE.COM\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(409);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 - Rechazar campos ausentes",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24 - Rechazar nombre en blanco",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \" \", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25 - Rechazar apellido en blanco",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \" \", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26 - Rechazar email en blanco",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \" \", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27 - Rechazar telefono en blanco",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \" \"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28 - Rechazar email inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"correo-invalido\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29 - Rechazar nombre demasiado largo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30 - Rechazar apellido demasiado largo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31 - Rechazar email demasiado largo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32 - Rechazar telefono demasiado largo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1111111111111111111111111111111\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33 - Rechazar JSON malformado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\":",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "34 - Rechazar ID no numérico",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/abc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "35 - Rechazar ID cero",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/0"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "36 - Rechazar ID negativo",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/-1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "37 - Consultar dueño inexistente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/999999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(404);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "38 - Actualizar dueño inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/999999999",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(404);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "39 - Eliminar dueño inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/999999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(404);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "40 - Actualizar conservando el email propio",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana María\", \"apellido\": \"Gómez\", \"email\": \"ANA@EXAMPLE.COM\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Email normalizado\", () => pm.expect(pm.response.json().email).to.eql(\"ana@example.com\"));",
+              "pm.test(\"Nombre actualizado\", () => pm.expect(pm.response.json().nombre).to.eql(\"Ana María\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "41 - Rechazar actualización con email ajeno",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"No debe guardarse\", \"apellido\": \"Gómez\", \"email\": \"LUIS@EXAMPLE.COM\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(409);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "42 - Conservar datos tras conflicto",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Nombre intacto\", () => pm.expect(pm.response.json().nombre).to.eql(\"Ana María\"));",
+              "pm.test(\"Email intacto\", () => pm.expect(pm.response.json().email).to.eql(\"ana@example.com\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "43 - Rechazar actualización inválida",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"invalido\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(400);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "44 - Conservar email tras validación fallida",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Email intacto\", () => pm.expect(pm.response.json().email).to.eql(\"ana@example.com\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "45 - Cambiar email",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana.nueva@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Nuevo email\", () => pm.expect(pm.response.json().email).to.eql(\"ana.nueva@example.com\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "46 - Consultar email actualizado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Cambio persistido\", () => pm.expect(pm.response.json().email).to.eql(\"ana.nueva@example.com\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "47 - Eliminar Ana",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+              "pm.test(\"Sin cuerpo\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "48 - Consultar Ana eliminada",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(404);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "49 - Repetir eliminación",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{anaId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(404);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "50 - Eliminar Luis",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos/{{luisId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "51 - Lista final vacía",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/duenos"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Datos de prueba eliminados\", () => pm.expect(pm.response.json()).to.eql([]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "52 - Especificación OpenAPI",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Cinco operaciones CRUD documentadas\", () => { const paths = pm.response.json().paths; pm.expect(paths[\"/api/duenos\"]).to.have.keys(\"get\", \"post\"); pm.expect(paths[\"/api/duenos/{id}\"]).to.have.keys(\"get\", \"put\", \"delete\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "53 - Swagger disponible",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/swagger-ui/index.html"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Página Swagger UI\", () => pm.expect(pm.response.text()).to.include(\"Swagger UI\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "54 - Rechazar tipo de contenido incorrecto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos",
+        "body": {
+          "mode": "raw",
+          "raw": "texto",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 415\", () => pm.response.to.have.status(415));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(415);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "55 - Rechazar método no permitido",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/duenos/1",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"ana@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 405\", () => pm.response.to.have.status(405));",
+              "pm.test(\"Error descriptivo y uniforme\", () => {",
+              "  const error = pm.response.json();",
+              "  pm.expect(error).to.have.all.keys(\"timestamp\", \"status\", \"error\", \"mensaje\", \"path\");",
+              "  pm.expect(error.status).to.eql(405);",
+              "  pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
