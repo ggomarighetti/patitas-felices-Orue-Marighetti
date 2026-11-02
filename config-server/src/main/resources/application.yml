@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        accept-empty: false
+        git:
+          uri: ${CONFIG_GIT_URI:https://github.com/ggomarighetti/patitas-config.git}
+          default-label: main
+          clone-on-start: true
+          force-pull: true
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

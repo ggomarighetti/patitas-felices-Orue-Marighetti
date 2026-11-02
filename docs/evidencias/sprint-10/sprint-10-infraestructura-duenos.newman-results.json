@@ -1,0 +1,2113 @@
+{
+  "formatVersion": 1,
+  "tool": {
+    "name": "Newman",
+    "version": "6.2.3"
+  },
+  "executedAt": "2026-11-02T23:38:06.196000+00:00",
+  "collection": "Sprint 10 - Config Server, Eureka, Actuator y CRUD de dueños",
+  "totals": {
+    "requests": 55,
+    "assertions": 111,
+    "failures": 0
+  },
+  "failures": [],
+  "results": [
+    {
+      "name": "01 - Configuración Git de ms-dueno",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-dueno/default",
+      "status": 200,
+      "body": {
+        "name": "ms-dueno",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": "f765e0e0ed4e3d72b73aa28ecb7d20a0cea83e25",
+        "state": "",
+        "propertySources": [
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/ms-dueno.yml",
+            "source": {
+              "server.port": 8081,
+              "spring.datasource.url": "${DB_URL:jdbc:mysql://localhost:3306/dueno_db}",
+              "spring.datasource.username": "${DB_USERNAME:patitas}",
+              "spring.datasource.password": "${DB_PASSWORD:}",
+              "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+              "spring.jpa.hibernate.ddl-auto": "update",
+              "spring.jpa.show-sql": true,
+              "spring.jpa.open-in-view": false,
+              "info.app.name": "ms-dueno",
+              "info.app.description": "Microservicio de gestión de dueños - Patitas Felices",
+              "info.app.version": "1.0.0"
+            }
+          },
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "source": {
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.instance.prefer-ip-address": true,
+              "management.endpoints.web.exposure.include": "health,info,metrics,env,beans,mappings",
+              "management.endpoint.health.show-details": "always",
+              "management.endpoint.env.show-values": "never",
+              "management.info.env.enabled": true,
+              "patitas.config-source": "patitas-config"
+            }
+          }
+        ]
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración compartida y propia desde Git",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "02 - Configuración Git de ms-mascota",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-mascota/default",
+      "status": 200,
+      "body": {
+        "name": "ms-mascota",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": "f765e0e0ed4e3d72b73aa28ecb7d20a0cea83e25",
+        "state": "",
+        "propertySources": [
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/ms-mascota.yml",
+            "source": {
+              "server.port": 8082,
+              "spring.datasource.url": "${DB_URL:jdbc:mysql://localhost:3306/mascota_db}",
+              "spring.datasource.username": "${DB_USERNAME:patitas}",
+              "spring.datasource.password": "${DB_PASSWORD:}",
+              "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+              "spring.jpa.hibernate.ddl-auto": "update",
+              "spring.jpa.show-sql": true,
+              "spring.jpa.open-in-view": false,
+              "info.app.name": "ms-mascota",
+              "info.app.description": "Microservicio de gestión de mascotas - Patitas Felices",
+              "info.app.version": "1.0.0"
+            }
+          },
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "source": {
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.instance.prefer-ip-address": true,
+              "management.endpoints.web.exposure.include": "health,info,metrics,env,beans,mappings",
+              "management.endpoint.health.show-details": "always",
+              "management.endpoint.env.show-values": "never",
+              "management.info.env.enabled": true,
+              "patitas.config-source": "patitas-config"
+            }
+          }
+        ]
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración compartida y propia desde Git",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "03 - Configuración Git de ms-veterinario",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-veterinario/default",
+      "status": 200,
+      "body": {
+        "name": "ms-veterinario",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": "f765e0e0ed4e3d72b73aa28ecb7d20a0cea83e25",
+        "state": "",
+        "propertySources": [
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/ms-veterinario.yml",
+            "source": {
+              "server.port": 8083,
+              "spring.datasource.url": "${DB_URL:jdbc:mysql://localhost:3306/veterinario_db}",
+              "spring.datasource.username": "${DB_USERNAME:patitas}",
+              "spring.datasource.password": "${DB_PASSWORD:}",
+              "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+              "spring.jpa.hibernate.ddl-auto": "update",
+              "spring.jpa.show-sql": true,
+              "spring.jpa.open-in-view": false,
+              "info.app.name": "ms-veterinario",
+              "info.app.description": "Microservicio de gestión de veterinarios - Patitas Felices",
+              "info.app.version": "1.0.0"
+            }
+          },
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "source": {
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.instance.prefer-ip-address": true,
+              "management.endpoints.web.exposure.include": "health,info,metrics,env,beans,mappings",
+              "management.endpoint.health.show-details": "always",
+              "management.endpoint.env.show-values": "never",
+              "management.info.env.enabled": true,
+              "patitas.config-source": "patitas-config"
+            }
+          }
+        ]
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración compartida y propia desde Git",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "04 - Configuración Git de ms-turno",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-turno/default",
+      "status": 200,
+      "body": {
+        "name": "ms-turno",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": "f765e0e0ed4e3d72b73aa28ecb7d20a0cea83e25",
+        "state": "",
+        "propertySources": [
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+            "source": {
+              "server.port": 8084,
+              "spring.datasource.url": "${DB_URL:jdbc:mysql://localhost:3306/turno_db}",
+              "spring.datasource.username": "${DB_USERNAME:patitas}",
+              "spring.datasource.password": "${DB_PASSWORD:}",
+              "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+              "spring.jpa.hibernate.ddl-auto": "update",
+              "spring.jpa.show-sql": true,
+              "spring.jpa.open-in-view": false,
+              "info.app.name": "ms-turno",
+              "info.app.description": "Microservicio de gestión de turnos - Patitas Felices",
+              "info.app.version": "1.0.0"
+            }
+          },
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "source": {
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.instance.prefer-ip-address": true,
+              "management.endpoints.web.exposure.include": "health,info,metrics,env,beans,mappings",
+              "management.endpoint.health.show-details": "always",
+              "management.endpoint.env.show-values": "never",
+              "management.info.env.enabled": true,
+              "patitas.config-source": "patitas-config"
+            }
+          }
+        ]
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración compartida y propia desde Git",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "05 - Representación YAML de Config Server",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-dueno-default.yml",
+      "status": 200,
+      "body": "eureka:\n  client:\n    service-url:\n      defaultZone: http://localhost:8761/eureka/\n  instance:\n    prefer-ip-address: true\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: health,info,metrics,env,beans,mappings\n  endpoint:\n    health:\n      show-details: always\n    env:\n      show-values: never\n  info:\n    env:\n      enabled: true\npatitas:\n  config-source: patitas-config\nserver:\n  port: 8081\nspring:\n  datasource:\n    url: jdbc:mysql://localhost:3306/dueno_db\n    username: patitas\n    password: ''\n    driver-class-name: com.mysql.cj.jdbc.Driver\n  jpa:\n    hibernate:\n      ddl-auto: update\n    show-sql: true\n    open-in-view: false\ninfo:\n  app:\n    name: ms-dueno\n    description: Microservicio de gestión de dueños - Patitas Felices\n    version: 1.0.0\n",
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "YAML remoto",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "06 - Config Server UP",
+      "method": "GET",
+      "url": "http://localhost:8888/actuator/health",
+      "status": 200,
+      "body": {
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "07 - Eureka Server UP",
+      "method": "GET",
+      "url": "http://localhost:8761/actuator/health",
+      "status": 200,
+      "body": {
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "08 - Registro MS-DUENO en Eureka",
+      "method": "GET",
+      "url": "http://localhost:8761/eureka/apps/MS-DUENO",
+      "status": 200,
+      "body": {
+        "application": {
+          "name": "MS-DUENO",
+          "instance": [
+            {
+              "instanceId": "38dbb354c6b7:ms-dueno:8081",
+              "hostName": "172.30.0.5",
+              "app": "MS-DUENO",
+              "ipAddr": "172.30.0.5",
+              "status": "UP",
+              "overriddenStatus": "UNKNOWN",
+              "port": {
+                "$": 8081,
+                "@enabled": "true"
+              },
+              "securePort": {
+                "$": 443,
+                "@enabled": "false"
+              },
+              "countryId": 1,
+              "dataCenterInfo": {
+                "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                "name": "MyOwn"
+              },
+              "leaseInfo": {
+                "renewalIntervalInSecs": 30,
+                "durationInSecs": 90,
+                "registrationTimestamp": 1793662582567,
+                "lastRenewalTimestamp": 1793662582567,
+                "evictionTimestamp": 0,
+                "serviceUpTimestamp": 1793662581794
+              },
+              "metadata": {
+                "management.port": "8081"
+              },
+              "homePageUrl": "http://172.30.0.5:8081/",
+              "statusPageUrl": "http://172.30.0.5:8081/actuator/info",
+              "healthCheckUrl": "http://172.30.0.5:8081/actuator/health",
+              "vipAddress": "ms-dueno",
+              "secureVipAddress": "ms-dueno",
+              "isCoordinatingDiscoveryServer": "false",
+              "lastUpdatedTimestamp": "1793662582567",
+              "lastDirtyTimestamp": "1793662581593",
+              "actionType": "ADDED"
+            }
+          ]
+        }
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Instancia UP en puerto 8081",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "09 - Dashboard Eureka",
+      "method": "GET",
+      "url": "http://localhost:8761/",
+      "status": 200,
+      "body": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <base href=\"/\">\n    <meta charset=\"utf-8\">\n    <title>Eureka</title>\n    <meta name=\"description\" content=\"\">\n    <meta name=\"viewport\" content=\"width=device-width\">\n\n    <link rel=\"stylesheet\" href=\"eureka/css/wro.css\">\n\n  </head>\n\n  <body id=\"one\">\n    <script type=\"text/javascript\">\n      if ( document.documentMode ) {\n         document.write('<p>You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</p>');\n      }\n    </script>\n\n<nav class=\"navbar navbar-expand-md navbar-dark\" role=\"navigation\">\n  <div class=\"container\">\n    <a class=\"navbar-brand my-auto\" href=\"\"><span></span></a>\n    <button type=\"button\" class=\"navbar-toggler\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div class=\"collapse navbar-collapse\" id=\"navbarContent\">\n      <ul class=\"navbar-nav ms-auto\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link px-2\" href=\"\">Home</a>\n        </li>\n        <li class=\"nav-item\">\n          <a class=\"nav-link px-2\" href=\"/lastn\">Last 1000 since startup</a>\n        </li>\n      </ul>\n    </div>\n  </div>\n</nav>\n\n\n    <div class=\"container-fluid xd-container\">\n<h1>System Status</h1>\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <table id='instances' class=\"table table-condensed table-striped table-hover\">\n            <tr>\n        <td>Environment</td>\n        <td>test</td>\n      </tr>\n      <tr>\n        <td>Data center</td>\n        <td>default</td>\n      </tr>\n    </table>\n  </div>\n  <div class=\"col-md-6\">\n    <table id='instances' class=\"table table-condensed table-striped table-hover\">\n      <tr>\n        <td>Current time</td>\n        <td>2026-11-02T23:38:12 +0000</td>\n      </tr>\n      <tr>\n        <td>Uptime</td>\n        <td>00:02</td>\n      </tr>\n      <tr>\n        <td>Lease expiration enabled</td>\n        <td>true</td>\n      </tr>\n      <tr>\n        <td>Renews threshold</td>\n        <td>3</td>\n      </tr>\n      <tr>\n        <td>Renews (last min)</td>\n        <td>4</td>\n      </tr>\n    </table>\n  </div>\n</div>\n\n    <h4 id=\"uptime\"><font size=\"+1\" color=\"red\"><b>THE SELF PRESERVATION MODE IS TURNED OFF. THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS.</b></font></h4>\n\n<h1>DS Replicas</h1>\n<ul class=\"list-group mb-3\">\n    <li class=\"list-group-item\"><a href=\"http://localhost:8761/eureka/\">localhost</a></li>\n</ul>\n\n      <h1>Instances currently registered with Eureka</h1>\n      <table id='instances' class=\"table table-striped table-hover\">\n        <thead>\n          <tr><th>Application</th><th>AMIs</th><th>Availability Zones</th><th>Status</th></tr>\n        </thead>\n        <tbody>\n              <tr>\n                <td><b>MS-DUENO</b></td>\n                <td>\n                    <b>n/a</b> (1)\n                </td>\n                <td>\n                    <b></b> (1)\n                </td>\n                <td>\n                    <b>UP</b> (1) -\n                        <a href=\"http://172.30.0.5:8081/actuator/info\" target=\"_blank\">38dbb354c6b7:ms-dueno:8081</a>\n\n                </td>\n              </tr>\n\n        </tbody>\n      </table>\n\n      <h1>General Info</h1>\n\n      <table id='generalInfo' class=\"table table-striped table-hover\">\n        <thead>\n          <tr><th>Name</th><th>Value</th></tr>\n        </thead>\n        <tbody>\n            <tr>\n              <td>total-avail-memory</td><td>96mb</td>\n            </tr>\n            <tr>\n              <td>num-of-cpus</td><td>12</td>\n            </tr>\n            <tr>\n              <td>current-memory-usage</td><td>64mb (66%)</td>\n            </tr>\n            <tr>\n              <td>server-uptime</td><td>00:02</td>\n            </tr>\n            <tr>\n              <td>registered-replicas</td><td>http://localhost:8761/eureka/</td>\n            </tr>\n            <tr>\n              <td>unavailable-replicas</td><td>http://localhost:8761/eureka/,</td>\n            </tr>\n            <tr>\n              <td>available-replicas</td><td></td>\n            </tr>\n        </tbody>\n      </table>\n\n      <h1>Instance Info</h1>\n\n      <table id='instanceInfo' class=\"table table-striped table-hover\">\n        <thead>\n          <tr><th>Name</th><th>Value</th></tr>\n        <thead>\n        <tbody>\n            <tr>\n              <td>ipAddr</td><td>172.30.0.4</td>\n            </tr>\n            <tr>\n              <td>status</td><td>UP</td>\n            </tr>\n        </tbody>\n      </table>\n    </div>\n    <script type=\"text/javascript\" src=\"eureka/js/wro.js\" ></script>\n  </body>\n</html>\n",
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Dashboard con MS-DUENO",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "10 - Salud de ms-dueno y MySQL",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/health",
+      "status": 200,
+      "body": {
+        "components": {
+          "clientConfigServer": {
+            "details": {
+              "propertySources": [
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-dueno.yml",
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                "configClient"
+              ]
+            },
+            "status": "UP"
+          },
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "discoveryComposite": {
+            "components": {
+              "discoveryClient": {
+                "details": {
+                  "services": [
+                    "ms-dueno"
+                  ]
+                },
+                "status": "UP"
+              },
+              "eureka": {
+                "details": {
+                  "applications": {
+                    "MS-DUENO": 1
+                  }
+                },
+                "description": "Remote status from Eureka server",
+                "status": "UP"
+              }
+            },
+            "status": "UP"
+          },
+          "diskSpace": {
+            "details": {
+              "total": 1081101176832,
+              "free": 949071953920,
+              "threshold": 10485760,
+              "path": "/.",
+              "exists": true
+            },
+            "status": "UP"
+          },
+          "livenessState": {
+            "status": "UP"
+          },
+          "ping": {
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          },
+          "refreshScope": {
+            "status": "UP"
+          },
+          "ssl": {
+            "details": {
+              "expiringChains": [],
+              "invalidChains": [],
+              "validChains": []
+            },
+            "status": "UP"
+          }
+        },
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio, MySQL y Config Server UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "11 - Información de ms-dueno",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/info",
+      "status": 200,
+      "body": {
+        "app": {
+          "name": "ms-dueno",
+          "description": "Microservicio de gestión de dueños - Patitas Felices",
+          "version": "1.0.0"
+        }
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombre, descripción y versión",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "12 - Métricas JVM",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/metrics",
+      "status": 200,
+      "body": {
+        "names": [
+          "application.ready.time",
+          "application.started.time",
+          "disk.free",
+          "disk.total",
+          "executor.active",
+          "executor.completed",
+          "executor.pool.core",
+          "executor.pool.max",
+          "executor.pool.size",
+          "executor.queue.remaining",
+          "executor.queued",
+          "hikaricp.connections",
+          "hikaricp.connections.acquire",
+          "hikaricp.connections.active",
+          "hikaricp.connections.creation",
+          "hikaricp.connections.idle",
+          "hikaricp.connections.max",
+          "hikaricp.connections.min",
+          "hikaricp.connections.pending",
+          "hikaricp.connections.timeout",
+          "hikaricp.connections.usage",
+          "http.server.requests",
+          "http.server.requests.active",
+          "jdbc.connections.active",
+          "jdbc.connections.idle",
+          "jdbc.connections.max",
+          "jdbc.connections.min",
+          "jvm.buffer.count",
+          "jvm.buffer.memory.used",
+          "jvm.buffer.total.capacity",
+          "jvm.classes.loaded",
+          "jvm.classes.loaded.count",
+          "jvm.classes.unloaded",
+          "jvm.compilation.time",
+          "jvm.gc.concurrent.phase.time",
+          "jvm.gc.live.data.size",
+          "jvm.gc.max.data.size",
+          "jvm.gc.memory.allocated",
+          "jvm.gc.memory.promoted",
+          "jvm.gc.overhead",
+          "jvm.gc.pause",
+          "jvm.info",
+          "jvm.memory.committed",
+          "jvm.memory.max",
+          "jvm.memory.usage.after.gc",
+          "jvm.memory.used",
+          "jvm.threads.daemon",
+          "jvm.threads.live",
+          "jvm.threads.peak",
+          "jvm.threads.started",
+          "jvm.threads.states",
+          "logback.events",
+          "process.cpu.time",
+          "process.cpu.usage",
+          "process.files.max",
+          "process.files.open",
+          "process.start.time",
+          "process.uptime",
+          "system.cpu.count",
+          "system.cpu.usage",
+          "system.load.average.1m",
+          "tomcat.sessions.active.current",
+          "tomcat.sessions.active.max",
+          "tomcat.sessions.alive.max",
+          "tomcat.sessions.created",
+          "tomcat.sessions.expired",
+          "tomcat.sessions.rejected"
+        ]
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Métricas disponibles",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "13 - Configuración efectiva con valores ocultos",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/env",
+      "status": 200,
+      "body": {
+        "activeProfiles": [],
+        "propertySources": [
+          {
+            "name": "server.ports",
+            "propertiesCount": 1,
+            "allValuesHidden": true
+          },
+          {
+            "name": "servletContextInitParams",
+            "propertiesCount": 0,
+            "allValuesHidden": true
+          },
+          {
+            "name": "systemProperties",
+            "propertiesCount": 62,
+            "allValuesHidden": true
+          },
+          {
+            "name": "systemEnvironment",
+            "propertiesCount": 17,
+            "allValuesHidden": true
+          },
+          {
+            "name": "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-dueno.yml",
+            "propertiesCount": 11,
+            "allValuesHidden": true
+          },
+          {
+            "name": "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "propertiesCount": 7,
+            "allValuesHidden": true
+          },
+          {
+            "name": "configClient",
+            "propertiesCount": 1,
+            "allValuesHidden": true
+          },
+          {
+            "name": "Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'",
+            "propertiesCount": 2,
+            "allValuesHidden": true
+          },
+          {
+            "name": "springCloudClientHostInfo",
+            "propertiesCount": 2,
+            "allValuesHidden": true
+          },
+          {
+            "name": "applicationInfo",
+            "propertiesCount": 2,
+            "allValuesHidden": true
+          },
+          {
+            "name": "Management Server",
+            "propertiesCount": 1,
+            "allValuesHidden": true
+          }
+        ]
+      },
+      "bodySummarized": true,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración remota activa y valores ocultos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "14 - Beans de Spring",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/beans",
+      "status": 200,
+      "body": {
+        "contexts": {
+          "ms-dueno": {
+            "beansCount": 539
+          }
+        }
+      },
+      "bodySummarized": true,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Contexto con beans",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "15 - Mapeos HTTP",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/mappings",
+      "status": 200,
+      "body": {
+        "contextNames": [
+          "ms-dueno"
+        ],
+        "containsDuenoApi": true
+      },
+      "bodySummarized": true,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "API de dueños registrada",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "16 - Lista inicial vacía",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin dueños",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "17 - Registrar Ana",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 201,
+      "body": {
+        "id": 11,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "ID generado y Location",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "DTO de salida",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "18 - Consultar Ana",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Email registrado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "19 - Registrar Luis",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 201,
+      "body": {
+        "id": 12,
+        "nombre": "Luis",
+        "apellido": "Gómez",
+        "email": "luis@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "20 - Listar ambos dueños",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [
+        {
+          "id": 11,
+          "nombre": "Ana",
+          "apellido": "Gómez",
+          "email": "ana@example.com",
+          "telefono": "1112345678"
+        },
+        {
+          "id": 12,
+          "nombre": "Luis",
+          "apellido": "Gómez",
+          "email": "luis@example.com",
+          "telefono": "1112345678"
+        }
+      ],
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Dos dueños",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "21 - Rechazar email duplicado",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:38:15.050604306",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: ana@example.com",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "22 - Rechazar email duplicado en mayúsculas",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:38:15.12249379",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: ana@example.com",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "23 - Rechazar campos ausentes",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:15.224258779",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido es obligatorio; email: El email es obligatorio; nombre: El nombre es obligatorio; telefono: El teléfono es obligatorio",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "24 - Rechazar nombre en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:15.620734684",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "nombre: El nombre es obligatorio",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "25 - Rechazar apellido en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:16.024214516",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido es obligatorio",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "26 - Rechazar email en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:16.430187647",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email debe tener un formato válido; email: El email es obligatorio",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "27 - Rechazar telefono en blanco",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:16.838813952",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "telefono: El teléfono es obligatorio",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "28 - Rechazar email inválido",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:17.24408481",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email debe tener un formato válido",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "29 - Rechazar nombre demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:17.64598955",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "nombre: El nombre admite hasta 100 caracteres",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "30 - Rechazar apellido demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:18.048741216",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "apellido: El apellido admite hasta 100 caracteres",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "31 - Rechazar email demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:18.450529553",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: El email admite hasta 254 caracteres; email: El email debe tener un formato válido",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "32 - Rechazar telefono demasiado largo",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:18.838756429",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "telefono: El teléfono admite hasta 30 caracteres",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "33 - Rechazar JSON malformado",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:19.245833436",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "34 - Rechazar ID no numérico",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/abc",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:19.652011718",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/abc"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "35 - Rechazar ID cero",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/0",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:20.063176848",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/0"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "36 - Rechazar ID negativo",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/-1",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:20.45799984",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/-1"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "37 - Consultar dueño inexistente",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:38:20.867764644",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "38 - Actualizar dueño inexistente",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:38:20.961230008",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "39 - Eliminar dueño inexistente",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/999999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:38:21.035909511",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 999999999",
+        "path": "/api/duenos/999999999"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "40 - Actualizar conservando el email propio",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Email normalizado",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombre actualizado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "41 - Rechazar actualización con email ajeno",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 409,
+      "body": {
+        "timestamp": "2026-11-02T23:38:21.312235929",
+        "status": 409,
+        "error": "Conflict",
+        "mensaje": "Ya existe un dueño con el email: luis@example.com",
+        "path": "/api/duenos/11"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "42 - Conservar datos tras conflicto",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombre intacto",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Email intacto",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "43 - Rechazar actualización inválida",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-02T23:38:21.487708879",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/duenos/11"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "44 - Conservar email tras validación fallida",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana María",
+        "apellido": "Gómez",
+        "email": "ana@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Email intacto",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "45 - Cambiar email",
+      "method": "PUT",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana.nueva@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nuevo email",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "46 - Consultar email actualizado",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 200,
+      "body": {
+        "id": 11,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "ana.nueva@example.com",
+        "telefono": "1112345678"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Cambio persistido",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "47 - Eliminar Ana",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 204,
+      "body": null,
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin cuerpo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "48 - Consultar Ana eliminada",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:38:22.281882869",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 11",
+        "path": "/api/duenos/11"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "49 - Repetir eliminación",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/11",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-02T23:38:22.376828121",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "No existe un dueño con id: 11",
+        "path": "/api/duenos/11"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "50 - Eliminar Luis",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/12",
+      "status": 204,
+      "body": null,
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "51 - Lista final vacía",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "52 - Especificación OpenAPI",
+      "method": "GET",
+      "url": "http://localhost:8081/v3/api-docs",
+      "status": 200,
+      "body": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "OpenAPI definition",
+          "version": "v0"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8081",
+            "description": "Generated server url"
+          }
+        ],
+        "tags": [
+          {
+            "name": "Dueños",
+            "description": "CRUD de dueños de Patitas Felices"
+          }
+        ],
+        "paths": {
+          "/api/duenos/{id}": {
+            "get": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Consultar un dueño",
+              "operationId": "findById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Dueño encontrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Identificador inválido",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Dueño inexistente",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "put": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Actualizar un dueño",
+              "operationId": "update",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/DuenoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Dueño actualizado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Datos inválidos",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Dueño inexistente",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "409": {
+                  "description": "Email ya registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Eliminar un dueño",
+              "operationId": "deleteById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "204": {
+                  "description": "Dueño eliminado"
+                },
+                "400": {
+                  "description": "Identificador inválido",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Dueño inexistente",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/duenos": {
+            "get": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Listar dueños",
+              "operationId": "findAll",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DuenoResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "tags": [
+                "Dueños"
+              ],
+              "summary": "Registrar un dueño",
+              "operationId": "save",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/DuenoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "201": {
+                  "description": "Dueño registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DuenoResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Datos inválidos",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "409": {
+                  "description": "Email ya registrado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "DuenoRequest": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "type": "string",
+                  "example": "Ana",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "apellido": {
+                  "type": "string",
+                  "example": "Gómez",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "ana@example.com",
+                  "maxLength": 254,
+                  "minLength": 0
+                },
+                "telefono": {
+                  "type": "string",
+                  "example": "1112345678",
+                  "maxLength": 30,
+                  "minLength": 0
+                }
+              },
+              "required": [
+                "apellido",
+                "email",
+                "nombre",
+                "telefono"
+              ]
+            },
+            "ErrorResponse": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "status": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "mensaje": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            },
+            "DuenoResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "apellido": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "telefono": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Cinco operaciones CRUD documentadas",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "53 - Swagger disponible",
+      "method": "GET",
+      "url": "http://localhost:8081/swagger-ui/index.html",
+      "status": 200,
+      "body": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n  </head>\n\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"./swagger-ui-bundle.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-ui-standalone-preset.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-initializer.js\" charset=\"UTF-8\"> </script>\n  </body>\n</html>\n",
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Página Swagger UI",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "54 - Rechazar tipo de contenido incorrecto",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 415,
+      "body": {
+        "timestamp": "2026-11-02T23:38:23.06749113",
+        "status": 415,
+        "error": "Unsupported Media Type",
+        "mensaje": "El tipo de contenido no es compatible",
+        "path": "/api/duenos"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 415",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "55 - Rechazar método no permitido",
+      "method": "PATCH",
+      "url": "http://localhost:8081/api/duenos/1",
+      "status": 405,
+      "body": {
+        "timestamp": "2026-11-02T23:38:23.159294054",
+        "status": 405,
+        "error": "Method Not Allowed",
+        "mensaje": "El método HTTP no está permitido",
+        "path": "/api/duenos/1"
+      },
+      "bodySummarized": false,
+      "assertions": [
+        {
+          "name": "HTTP 405",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error descriptivo y uniforme",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    }
+  ]
+}

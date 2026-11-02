@@ -1,6 +1,7 @@
 package com.patitas.dueno.adapter.in.web;
 
 import com.patitas.dueno.adapter.in.web.dto.DuenoRequest;
+import com.patitas.dueno.adapter.in.web.dto.DuenoMapper;
 import com.patitas.dueno.adapter.in.web.dto.DuenoResponse;
 import com.patitas.dueno.adapter.in.web.dto.ErrorResponse;
 import com.patitas.dueno.domain.exception.ResourceNotFoundException;
@@ -35,12 +36,11 @@ import java.util.List;
 public class DuenoController {
 
     private final DuenoService duenoService;
-    private final DuenoWebMapper mapper;
 
     @GetMapping
     @Operation(summary = "Listar dueños")
     public List<DuenoResponse> findAll() {
-        return duenoService.findAll().stream().map(mapper::toResponse).toList();
+        return duenoService.findAll().stream().map(DuenoMapper::toResponse).toList();
     }
 
     @GetMapping("/{id}")
@@ -51,7 +51,7 @@ public class DuenoController {
             @ApiResponse(responseCode = "404", description = "Dueño inexistente",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     public DuenoResponse findById(@PathVariable @Positive Long id) {
-        return duenoService.findById(id).map(mapper::toResponse)
+        return duenoService.findById(id).map(DuenoMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe un dueño con id: " + id));
     }
 
@@ -63,9 +63,9 @@ public class DuenoController {
             @ApiResponse(responseCode = "409", description = "Email ya registrado",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     public ResponseEntity<DuenoResponse> save(@Valid @RequestBody DuenoRequest request) {
-        DuenoResponse response = mapper.toResponse(duenoService.save(mapper.toDomain(request)));
+        DuenoResponse response = DuenoMapper.toResponse(duenoService.save(DuenoMapper.toEntity(request)));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(response.id()).toUri();
+                .buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(location).body(response);
     }
 
@@ -79,7 +79,7 @@ public class DuenoController {
             @ApiResponse(responseCode = "409", description = "Email ya registrado",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
     public DuenoResponse update(@PathVariable @Positive Long id, @Valid @RequestBody DuenoRequest request) {
-        return mapper.toResponse(duenoService.update(id, mapper.toDomain(request)));
+        return DuenoMapper.toResponse(duenoService.update(id, DuenoMapper.toEntity(request)));
     }
 
     @DeleteMapping("/{id}")
