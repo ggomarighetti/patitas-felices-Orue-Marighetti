@@ -1,0 +1,678 @@
+{
+  "executedAt": "2026-11-03T02:43:24.235470+00:00",
+  "requests": 60,
+  "accepted": 20,
+  "rejected": 40,
+  "durationMs": 73.06,
+  "results": [
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 23.14,
+      "headers": {
+        "x-ratelimit-remaining": "19",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 49.48,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 31.59,
+      "headers": {
+        "x-ratelimit-remaining": "6",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 52.42,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 52.38,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 30.58,
+      "headers": {
+        "x-ratelimit-remaining": "9",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 62.73,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 48.15,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 33.62,
+      "headers": {
+        "x-ratelimit-remaining": "11",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 55.2,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 54.72,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 47.72,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 41.85,
+      "headers": {
+        "x-ratelimit-remaining": "8",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 30.57,
+      "headers": {
+        "x-ratelimit-remaining": "7",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 55.09,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 34.01,
+      "headers": {
+        "x-ratelimit-remaining": "10",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 61.32,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 18.04,
+      "headers": {
+        "x-ratelimit-remaining": "18",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 46.99,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 52.44,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 30.5,
+      "headers": {
+        "x-ratelimit-remaining": "13",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 47.06,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 46.61,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 63.14,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 58.83,
+      "headers": {
+        "x-ratelimit-remaining": "3",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 59.5,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 34.71,
+      "headers": {
+        "x-ratelimit-remaining": "15",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 51.76,
+      "headers": {
+        "x-ratelimit-remaining": "2",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 58.25,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 34.48,
+      "headers": {
+        "x-ratelimit-remaining": "5",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 47.65,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 53.41,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 56.34,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 62.63,
+      "headers": {
+        "x-ratelimit-remaining": "1",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 49.99,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 20.63,
+      "headers": {
+        "x-ratelimit-remaining": "17",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 55.54,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 56.86,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 53.08,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 50.22,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 200,
+      "durationMs": 19.39,
+      "headers": {
+        "x-ratelimit-remaining": "16",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 49.9,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 55.34,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 48.17,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 57.38,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 51.96,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 46.71,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 55.97,
+      "headers": {
+        "x-ratelimit-remaining": "4",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 54.57,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 23.45,
+      "headers": {
+        "x-ratelimit-remaining": "14",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 43.49,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 51.3,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 52.81,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 51.22,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 55.32,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 49.83,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 55.55,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 429,
+      "durationMs": 45.71,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/api/turnos",
+      "status": 429,
+      "durationMs": 47.41,
+      "headers": {
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    },
+    {
+      "path": "/ms-turno/api/turnos",
+      "status": 200,
+      "durationMs": 33.79,
+      "headers": {
+        "x-ratelimit-remaining": "12",
+        "x-ratelimit-requested-tokens": "1",
+        "x-ratelimit-burst-capacity": "20",
+        "x-ratelimit-replenish-rate": "10"
+      }
+    }
+  ],
+  "redisKeys": [
+    "request_rate_limiter.{ms-turno.172.30.0.1}.timestamp",
+    "request_rate_limiter.{ms-turno.172.30.0.1}.tokens"
+  ],
+  "backendGetCountBefore": 17.0,
+  "backendGetCountAfter": 37.0,
+  "rejectedRequestsDidNotReachBackend": true,
+  "recoveredAfterTokenRefill": true,
+  "sharedQuotaBetweenCanonicalAndAlias": true
+}

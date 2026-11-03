@@ -4,7 +4,9 @@ Sistema de gestión veterinaria de la materia Microservicios y APIs Escalables d
 
 Este repositorio continúa la Fase 2 del trabajo práctico. El [monolito VetSystem, sprints 01 a 08](https://github.com/ggomarighetti/vetSystem-Orue-Marighetti) conserva sus entregas e historial. Se toma como base el [avance de los pasos 1 a 4 del sprint 09](https://github.com/ggomarighetti/patitas-felices-base-sprint-09/tree/e5cdd7d), cuyo historial también se conserva aquí.
 
-**Sprint 12:** API Gateway reactivo como entrada de las cuatro APIs en el puerto 8080, rutas por Eureka y LoadBalancer, CORS, logging y configuración centralizada. Se incluyen la [consigna](docs/sprints/Sprint_12_APIGateway.pdf) y las [evidencias actuales](docs/evidencias/sprint-12/README.md).
+**Sprint 13:** Circuit Breaker y Retry con Resilience4j en los adaptadores Feign de Turnos, fallback 503, observabilidad y Rate Limiter con Redis en Gateway. Se incluyen la [consigna](docs/sprints/Sprint_13_Resilience4j.pdf) y las [evidencias actuales](docs/evidencias/sprint-13/README.md).
+
+**Sprint 12:** API Gateway reactivo como entrada de las cuatro APIs en el puerto 8080, rutas por Eureka y LoadBalancer, CORS, logging y configuración centralizada. Se conservan la [consigna](docs/sprints/Sprint_12_APIGateway.pdf) y las [evidencias](docs/evidencias/sprint-12/README.md).
 
 **Sprint 11:** comunicación con OpenFeign desde Turnos hacia Mascotas y Veterinarios, resolución por Eureka, validación de referencias y errores 404/503 con timeout. Se conservan la [consigna](docs/sprints/Sprint_11_OpenFeign_Comunicacion.pdf) y las [evidencias](docs/evidencias/sprint-11/README.md).
 
@@ -15,7 +17,7 @@ Este repositorio continúa la Fase 2 del trabajo práctico. El [monolito VetSyst
 ## Requisitos
 
 - JDK 21, con `JAVA_HOME` apuntando al JDK. El wrapper incluido utiliza Maven 3.9.16.
-- MySQL 8 con dueno_db, mascota_db, veterinario_db y turno_db, o Docker Desktop para levantar las cuatro bases incluidas.
+- MySQL 8 con dueno_db, mascota_db, veterinario_db y turno_db, y Redis 8 para el Rate Limiter, o Docker Desktop para levantar los servicios incluidos.
 - Acceso a Maven Central en la primera compilación y a GitHub para que Config Server clone el repositorio público de configuración.
 
 En PowerShell, si el JDK instalado no está seleccionado:
@@ -38,13 +40,16 @@ if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 docker compose --profile app up -d --wait
 ```
 
-Compose espera que Config Server esté disponible antes de iniciar Eureka. Cada microservicio espera a su propia base y a la infraestructura; Turnos también espera a Mascotas y Veterinarios. Gateway espera a los cuatro servicios. Los siete JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux.
+Compose espera que Config Server esté disponible antes de iniciar Eureka. Cada microservicio espera a su propia base y a la infraestructura; Turnos también espera a Mascotas y Veterinarios. Gateway espera a los cuatro servicios y a Redis saludable. Los siete JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux. El ecosistema contiene doce contenedores.
 
 1. Config Server en 8888 clona la rama main de patitas-config.
 2. Eureka Server en 8761 habilita el registro.
 3. ms-mascota y ms-veterinario obtienen su configuración, conectan a sus bases y se registran en Eureka.
 4. ms-turno arranca con ambos destinos disponibles. ms-dueno también se ejecuta en 8081.
-5. api-gateway obtiene las rutas de Config Server, se registra en Eureka y recibe las solicitudes externas en 8080.
+5. Redis almacena los tokens del Rate Limiter dentro de la red de Compose.
+6. api-gateway obtiene las rutas de Config Server, se registra en Eureka y recibe las solicitudes externas en 8080.
+
+Eureka y LoadBalancer actualizan sus registros y cachés periódicamente. Antes de ejecutar las colecciones, esperar que las cuatro listas públicas respondan 200. Tras reiniciar un servicio puede haber una demora de propagación aunque su health ya indique UP.
 
 En Docker, los puertos 8081 a 8084 quedan dentro de la red de Compose. Todas las llamadas de negocio se hacen a `http://localhost:8080`. Los puertos 8888 y 8761 siguen disponibles en localhost para administrar configuración y registro; los puertos MySQL permiten la administración local de las bases.
 
@@ -56,7 +61,7 @@ Cada contenedor MySQL crea la base de su servicio, con usuario `patitas` y contr
 
 ### Orden de arranque con Java local
 
-En un entorno con Java local funcionando, se puede ejecutar solo MySQL con `docker compose up -d --wait`. Después, desde la raíz, iniciar cada aplicación en una terminal distinta y respetar el orden:
+En un entorno con Java local funcionando, iniciar las cuatro bases con `docker compose --profile app up -d --wait mysql mysql-mascota mysql-veterinario mysql-turno`. Después, desde la raíz, iniciar cada aplicación en una terminal distinta y respetar el orden:
 
 ```powershell
 .\mvnw.cmd spring-boot:run -pl config-server
@@ -97,7 +102,7 @@ $env:DB_URL = 'jdbc:mysql://localhost:3309/turno_db'
 .\mvnw.cmd spring-boot:run -pl ms-turno
 ```
 
-Cuando los cuatro servicios figuren UP en Eureka, iniciar el gateway en otra terminal:
+Cuando los cuatro servicios figuren UP en Eureka, disponer de Redis en localhost:6379 e iniciar el gateway en otra terminal. Para usar el Redis de Compose con Java local, abrir una terminal desde la raíz y ejecutar `docker compose --profile app run --rm -p 127.0.0.1:6379:6379 redis`; el proceso permanece en primer plano. El Redis utilizado por el ecosistema completo de Compose conserva su puerto interno.
 
 ```powershell
 .\mvnw.cmd spring-boot:run -pl api-gateway
@@ -118,6 +123,8 @@ Spring Boot no carga `.env` automáticamente; Docker Compose sí lo utiliza. Si 
 | `CONFIG_SERVER_URL` | `http://localhost:8888` | Dirección de arranque del cliente |
 | `CONFIG_GIT_URI` | `https://github.com/ggomarighetti/patitas-config.git` | Repositorio que clona Config Server |
 | `EUREKA_URL` | `http://localhost:8761/eureka/` | Registro obtenido desde configuración compartida |
+| `REDIS_HOST` | `localhost` | Servidor Redis del gateway; Compose usa redis |
+| `REDIS_PORT` | `6379` | Puerto Redis del gateway |
 
 Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto al ejecutar Java local. Cada microservicio recibe su propia DB_URL; dentro de Docker se usan los nombres de los cuatro servidores MySQL. No se configura `spring.jpa.database-platform`: Hibernate detecta el dialecto.
 
@@ -132,6 +139,9 @@ Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto a
 - Mascotas: <http://localhost:8080/api/mascotas>.
 - Veterinarios: <http://localhost:8080/api/veterinarios>.
 - Turnos: <http://localhost:8080/api/turnos>.
+- Circuitos de Turnos: <http://localhost:8080/ms-turno/actuator/circuitbreakers>.
+- Eventos de Circuit Breaker: <http://localhost:8080/ms-turno/actuator/circuitbreakerevents>.
+- Eventos de Retry: <http://localhost:8080/ms-turno/actuator/retryevents>.
 
 Swagger y OpenAPI permanecen en cada microservicio como documentación interna. Este sprint no agrega una interfaz Swagger unificada; la colección de Postman valida el acceso público por Gateway.
 
@@ -194,12 +204,14 @@ patitas-felices/
     src/main/java/com/patitas/turno/
       domain/port/out/          MascotaServicePort y VeterinarioServicePort
       adapter/out/feign/        Clients, adaptadores y DTOs de consumo propios
+                               Circuit Breaker, Retry y predicado de errores transitorios
   eureka-server/                Aplicación de registro en 8761
   config-server/                Servidor de configuración Git en 8888
   api-gateway/                  Entrada WebFlux/Netty en 8080
     src/main/java/com/patitas/gateway/
       ApiGatewayApplication.java
       filters/LoggingFilter.java
+      config/RateLimitConfiguration.java
   docs/
   compose.yml
   pom.xml
@@ -249,7 +261,7 @@ MsTurnoApplication habilita el escaneo explícito del paquete com.patitas.turno.
 
 Al crear un turno se consulta primero la mascota y luego el veterinario. Solo si ambos existen se asigna PENDIENTE y se guarda. PUT también valida las referencias antes de modificar el registro. Únicamente el HTTP 404 remoto se transforma en false; la aplicación lo expresa con ResourceNotFoundException y el handler central devuelve 404. Los demás errores Feign y los timeouts se traducen en RemoteServiceUnavailableException, conservando la causa, y devuelven 503 con un mensaje descriptivo. Una respuesta vacía o de otro ID también se considera inválida.
 
-La configuración de patitas-config/ms-turno.yml usa spring.cloud.openfeign.client.config.default con connectTimeout 3000 ms y readTimeout 5000 ms. Compresión de solicitud/respuesta está habilitada, loggerLevel es BASIC y el paquete de clientes registra DEBUG. Se usa el prefijo vigente spring.cloud.openfeign, porque el prefijo feign.client del ejemplo ya no configura estos clientes. Spring Cloud utiliza Retryer.NEVER_RETRY por defecto; no se agrega Circuit Breaker en esta entrega. [Referencia oficial](https://docs.spring.io/spring-cloud-openfeign/reference/spring-cloud-openfeign.html).
+La configuración de patitas-config/ms-turno.yml usa spring.cloud.openfeign.client.config.default con connectTimeout 3000 ms y readTimeout 5000 ms. Compresión de solicitud/respuesta está habilitada, loggerLevel es BASIC y el paquete de clientes registra DEBUG. Se usa el prefijo vigente spring.cloud.openfeign, porque el prefijo feign.client del ejemplo ya no configura estos clientes. Spring Cloud utiliza Retryer.NEVER_RETRY por defecto; desde el sprint 13 los reintentos se aplican con Resilience4j sobre los adaptadores, evitando dos mecanismos de Retry superpuestos. [Referencia oficial](https://docs.spring.io/spring-cloud-openfeign/reference/spring-cloud-openfeign.html).
 
 ### APIs del flujo
 
@@ -305,7 +317,7 @@ La consigna del sprint 11 prevalece sobre las vistas previas anteriores: Gateway
 
 El módulo `api-gateway` usa `spring-cloud-starter-gateway-server-webflux`, Eureka Client, Spring Cloud LoadBalancer, Config Client y Actuator. El servidor es Netty reactivo; su JAR no incluye Spring MVC, servidor Tomcat, JPA ni drivers MySQL. Se conserva la versión real del padre Maven, `0.0.1-SNAPSHOT`.
 
-El `application.yml` local contiene solamente `spring.application.name: api-gateway` y el import obligatorio de Config Server. Puerto, Eureka, rutas, CORS y Actuator provienen de [api-gateway.yml en patitas-config](https://github.com/ggomarighetti/patitas-config/blob/883fa80bb6587636669f2f6c337c8293dbea6da0/api-gateway.yml). Los cambios de configuración se aplican al reiniciar la aplicación.
+El `application.yml` local contiene solamente `spring.application.name: api-gateway` y el import obligatorio de Config Server. Puerto, Eureka, rutas, CORS, Redis y Actuator provienen de [api-gateway.yml en patitas-config](https://github.com/ggomarighetti/patitas-config/blob/c369260a51fec773c2f1b7165333652ad306744b/api-gateway.yml). Los cambios de configuración se aplican al reiniciar la aplicación.
 
 | Ruta pública en 8080 | Destino resuelto por Eureka |
 | --- | --- |
@@ -314,9 +326,9 @@ El `application.yml` local contiene solamente `spring.application.name: api-gate
 | `/api/veterinarios/**` | `lb://ms-veterinario` |
 | `/api/turnos/**` | `lb://ms-turno` |
 
-Los cuatro destinos usan nombres de servicio, sin direcciones fijas. Discovery Locator está habilitado con prefijos en minúscula y limitado a los nombres `ms-*`, para evitar una ruta del gateway hacia sí mismo. Genera además `/ms-dueno/**`, `/ms-mascota/**`, `/ms-veterinario/**` y `/ms-turno/**`, eliminando el prefijo del servicio antes de reenviar. Por ejemplo, `/ms-dueno/api/duenos` llega a `/api/duenos`.
+Los cuatro destinos usan nombres de servicio, sin direcciones fijas. Discovery Locator genera `/ms-dueno/**`, `/ms-mascota/**` y `/ms-veterinario/**`, eliminando el prefijo del servicio antes de reenviar. Por ejemplo, `/ms-dueno/api/duenos` llega a `/api/duenos`. Desde el sprint 13, `/ms-turno/**` pertenece a la ruta canónica de Turnos y usa RewritePath: comparte la cuota de Rate Limiter con `/api/turnos/**`. El locator excluye Turnos y el propio gateway.
 
-Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` se reescriben a `/api/duenos` y `/api/duenos/{id}`. Por eso Actuator muestra **nueve rutas**: cuatro canónicas, cuatro automáticas de discovery y una de versionado. Los identificadores automáticos pueden conservar el nombre de aplicación en mayúsculas; sus prefijos públicos son minúsculos.
+Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` se reescriben a `/api/duenos` y `/api/duenos/{id}`. Actuator muestra actualmente **ocho rutas**: cuatro canónicas, tres automáticas de discovery y una de versionado. La entrega original del sprint 12 tenía nueve; el sprint 13 integra el alias de Turnos en la misma ruta protegida. Los identificadores automáticos pueden conservar el nombre de aplicación en mayúsculas; sus prefijos públicos son minúsculos.
 
 `RewriteLocationResponseHeader` conserva el host público en las cabeceras `Location` de las altas, para que sus enlaces sigan pasando por 8080. CORS permite cualquier origen y cabecera en desarrollo, los métodos GET, POST, PUT, PATCH, DELETE y OPTIONS, sin credenciales. PATCH conserva la cancelación de turnos existente. También se responden las solicitudes preflight que no coinciden con una ruta.
 
@@ -324,7 +336,32 @@ Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` s
 
 Actuator expone `health`, `info` y `gateway`; este último tiene acceso `read-only`. `GET /actuator/gateway/routes` permite inspeccionar rutas y `POST /actuator/gateway/refresh` devuelve 404 al no exponer operaciones de escritura. Se usan los nombres actuales `spring.cloud.gateway.server.webflux` y `management.endpoint.gateway.access`, según los manuales oficiales de [WebFlux](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/starter.html), [CORS](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/cors-configuration.html) y [Actuator](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/actuator-api.html).
 
-La verificación real de balanceo levanta temporalmente dos instancias de Dueños: Eureka publica ambas y el gateway distribuye solicitudes entre sus dos direcciones. Después se restaura una instancia y se comprueba la recuperación. Se mantienen las cuatro bases MySQL existentes; el esquema H2 ilustrativo del PDF no implica migrar la persistencia. Circuit Breaker corresponde al sprint 13; autenticación JWT y rate limiting, al 14.
+La verificación real de balanceo del sprint 12 levantó temporalmente dos instancias de Dueños: Eureka publicó ambas y el gateway distribuyó solicitudes entre sus dos direcciones. Después se restauró una instancia y se comprobó la recuperación. Se mantienen las cuatro bases MySQL existentes; el esquema H2 ilustrativo del PDF no implica migrar la persistencia.
+
+## Resiliencia — Sprint 13
+
+Los métodos `existsById` de `MascotaFeignAdapter` y `VeterinarioFeignAdapter` llevan `@CircuitBreaker` y `@Retry`, con nombres `mascotaService` y `veterinarioService`. Sus fallbacks privados reciben `Long` y `Throwable` y devuelven el mismo tipo booleano que el puerto. Lanzan la excepción de categoría `RemoteServiceUnavailableException`, con mensaje descriptivo y causa conservada; el handler existente en `config/GlobalExceptionHandler.java` responde 503. Se reutiliza esta excepción en lugar de crear otra clase equivalente llamada ServicioNoDisponibleException. No se inventan datos ni se confirma una referencia inexistente para guardar un turno.
+
+La configuración vive en [ms-turno.yml](https://github.com/ggomarighetti/patitas-config/blob/c369260a51fec773c2f1b7165333652ad306744b/ms-turno.yml); el bootstrap local sigue conteniendo únicamente nombre e import de Config Server.
+
+| Parámetro por servicio | Valor |
+| --- | --- |
+| Ventana | COUNT_BASED, últimas 10 llamadas lógicas |
+| Mínimo para evaluar | 5 llamadas, contando éxitos y fallos |
+| Umbral de fallos | 50% |
+| Espera en OPEN | 10 segundos, transición automática a HALF_OPEN |
+| Pruebas en HALF_OPEN | 3 llamadas |
+| Retry | 3 intentos totales, esperas de 1 y 2 segundos |
+
+Circuit Breaker tiene orden 1 y envuelve Retry, de orden 2. Así, el circuito cuenta una llamada lógica después de agotar los reintentos y, estando OPEN, rechaza sin volver a ejecutar Retry. Los 404 se convierten en `false`, conservan la respuesta de negocio 404 y no causan reintentos ni abren el circuito. El predicado permite reintentar errores Feign de transporte, HTTP 429 y HTTP 5xx; los otros errores de cliente y las respuestas inválidas se degradan sin reintentos.
+
+Se usa `resilience4j-spring-boot4:2.4.0`, que integra el SPI de salud de Boot 4, y `spring-boot-starter-aspectj`, el starter AOP vigente. El BOM de Cloud usado por el proyecto aún administra Resilience4j 2.3.0; por eso el padre importa el BOM 2.4.0 antes del de Cloud y administra también el módulo Boot 4 que ese BOM omite. Los módulos hijos no fijan versiones. Las adaptaciones están fundamentadas en la [publicación oficial 2.4.0](https://github.com/resilience4j/resilience4j/releases/tag/v2.4.0), el [módulo Boot 4](https://github.com/resilience4j/resilience4j/tree/v2.4.0/resilience4j-spring-boot4) y el [manual de AOP](https://docs.spring.io/spring-boot/4.0/reference/features/aop.html).
+
+Actuator de Turnos expone `health`, `info`, `metrics`, `circuitbreakers`, `circuitbreakerevents` y `retryevents`. La métrica `resilience4j.circuitbreaker.state` permite consultar los estados. El detalle de salud informa `state: OPEN` y estado `CIRCUIT_OPEN`; en HALF_OPEN usa `CIRCUIT_HALF_OPEN`. El agregador puede conservar UP, por lo que se comprueba el detalle de cada circuito. Readiness informa la disponibilidad del proceso y de su propia base; Compose utiliza `/actuator/health/readiness` para conservar disponible el fallback durante la caída de otra API. Recuperar un servicio también requiere que se actualicen discovery y sus cachés.
+
+Gateway utiliza `RequestRateLimiter` con Redis: 10 tokens por segundo, capacidad 20 y costo 1. `clientIpKeyResolver` obtiene la dirección remota de la conexión, sin depender de principal, parámetros ni `X-Forwarded-For`. La cuota es compartida por los accesos canónico y con prefijo de Turnos. Los excesos devuelven 429; tras regenerar tokens vuelven a pasar. Clientes que comparten una dirección comparten también su cuota. [Referencia oficial](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/gatewayfilter-factories/requestratelimiter-factory.html).
+
+Redis es una dependencia de esta ejecución: Compose lo inicia, comprueba su salud y lo conecta al gateway por la red interna. Sus tokens son datos temporales y no se guardan en un volumen. La nueva consigna incorpora Rate Limiter en el sprint 13, por encima de la vista previa del sprint 12; JWT queda para una entrega posterior.
 
 ## Verificaciones
 
@@ -334,15 +371,23 @@ La verificación real de balanceo levanta temporalmente dos instancias de Dueño
 .\mvnw.cmd verify
 ```
 
-Las pruebas de aplicación usan un repositorio en memoria como doble, sin levantar Spring ni MySQL. Cuatro pruebas del gateway comprueban el logging, la ausencia de duplicados y la propagación del error con su estado final. La [colección actual](docs/evidencias/sprint-12/sprint-12-gateway.postman_collection.json) comprueba las cuatro APIs por 8080, el flujo OpenFeign, rutas, CORS, Eureka, configuración y Actuator. Las [evidencias del sprint 12](docs/evidencias/sprint-12/README.md) incluyen el balanceo real. Se conservan las entregas históricas de los [sprints 11](docs/evidencias/sprint-11/README.md), [10](docs/evidencias/sprint-10/README.md) y [09](docs/evidencias/sprint-09/README.md); sus colecciones corresponden a sus respectivas versiones.
+Las 55 pruebas Maven incluyen las 47 existentes, seis pruebas de los proxies AOP reales y dos de la clave de Rate Limiter. Las pruebas AOP comprueban reintentos, fallback, causa original, aislamiento de circuitos, rechazo inmediato de OPEN y cierre tras tres pruebas correctas. Usan esperas de milisegundos; las pruebas del entorno real conservan los tiempos de la consigna.
+
+La [colección actual](docs/evidencias/sprint-13/sprint-13-resiliencia.postman_collection.json) comprueba las cuatro APIs por 8080, OpenFeign, CORS, Eureka, Redis y Actuator. Las [evidencias del sprint 13](docs/evidencias/sprint-13/README.md) incluyen las caídas reales de Mascotas y Veterinarios, recuperación y una ráfaga para verificar 429 y ausencia de llegada al backend. Se conservan las entregas históricas de los [sprints 12](docs/evidencias/sprint-12/README.md), [11](docs/evidencias/sprint-11/README.md), [10](docs/evidencias/sprint-10/README.md) y [09](docs/evidencias/sprint-09/README.md); sus colecciones corresponden a sus respectivas versiones.
 
 Con el ecosistema iniciado y las cuatro bases sin registros, ejecutar la colección en el orden guardado:
 
 ```powershell
-npx newman run docs/evidencias/sprint-12/sprint-12-gateway.postman_collection.json
+npx newman run docs/evidencias/sprint-13/sprint-13-resiliencia.postman_collection.json --delay-request 120
 ```
 
-La colección crea y elimina sus propios datos. Para ejecutar el JAR generado:
+La colección crea y elimina sus propios datos. La demora entre solicitudes mantiene esta prueba funcional dentro de la cuota; la prueba de ráfaga se ejecuta por separado. Para repetir los escenarios de caída, recuperación y límite:
+
+```powershell
+python docs/evidencias/sprint-13/verificar-resiliencia.py
+```
+
+Ese script detiene y restaura Mascotas y Veterinarios por separado, crea datos propios y los elimina al terminar. Requiere el ecosistema de Compose activo y las cuatro bases sin registros. Para ejecutar el JAR generado:
 
 ```powershell
 java -jar api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
