@@ -6,6 +6,7 @@ Se conserva la consigna original sin modificar el PDF.
 | --- | --- | --- |
 | 09 | [Arquitectura hexagonal y descomposición en microservicios](Sprint_09_v2.pdf) | Pasos 1 a 8, ms-dueno funcional |
 | 10 | [Eureka, Config Server y Actuator](Sprint_10_Eureka_ConfigServer_Actuator.pdf) | Infraestructura funcional y estructura de los otros contextos |
+| 11 | [Comunicación con OpenFeign](Sprint_11_OpenFeign_Comunicacion.pdf) | APIs de Mascotas, Veterinarios y Turnos; validación cruzada, errores y timeout |
 
 ## Sprint 09
 
@@ -34,4 +35,12 @@ Mascota, Veterinario y Turno tienen las entidades y puertos definidos en la secc
 
 Se conserva Spring Boot 4.1.0 y se usa Spring Cloud 2025.1.4 por compatibilidad. El cliente exige Config Server al arrancar. Las diferencias respecto de los ejemplos de la consigna se explican en el [README](../../README.md#configuración-centralizada-y-actuator).
 
-Las verificaciones y la captura del dashboard de Eureka están en las [evidencias del sprint 10](../evidencias/sprint-10/README.md). Gateway, Circuit Breaker y comunicación HTTP entre contextos quedan para sus consignas posteriores.
+Las verificaciones y la captura del dashboard de Eureka están en las [evidencias del sprint 10](../evidencias/sprint-10/README.md). Esa entrega conserva su alcance histórico; los módulos se completan en el sprint 11.
+
+## Sprint 11
+
+Se completan los servicios REST de Mascotas, Veterinarios y Turnos para ejecutar el flujo de la nueva consigna. Turnos usa OpenFeign y Spring Cloud LoadBalancer con Eureka para verificar la mascota y el veterinario antes de guardar un turno PENDIENTE. Los puertos de dominio abstraen la comunicación y los DTOs de consumo pertenecen exclusivamente a ms-turno.
+
+Los recursos remotos inexistentes devuelven 404; las caídas y timeouts devuelven 503 sin persistir. La configuración centralizada establece conexión de 3000 ms y lectura de 5000 ms con el prefijo actual spring.cloud.openfeign. Se mantiene la convención de paquetes y las excepciones por categoría del proyecto.
+
+Las [evidencias del sprint 11](../evidencias/sprint-11/README.md) contienen la colección, sus resultados, las pruebas reales de stop/start y pause/unpause, y la captura de Eureka con los cuatro servicios. Gateway y Circuit Breaker corresponden a los sprints 12 y 13 según este nuevo PDF.

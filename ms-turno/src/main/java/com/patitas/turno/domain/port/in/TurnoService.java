@@ -14,7 +14,11 @@ public interface TurnoService {
 
     List<Turno> findByMascotaId(Long mascotaId);
 
-    Turno save(Turno turno);
+    Turno save(Turno value);
+
+    Turno update(Long id, Turno value);
 
     Turno cancelar(Long id);
+
+    void deleteById(Long id);
 }

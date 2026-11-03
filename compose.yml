@@ -79,5 +79,151 @@ services:
       retries: 36
       start_period: 15s
 
+
+  mysql-mascota:
+    image: mysql:8.0.40
+    profiles: ["app"]
+    environment:
+      MYSQL_DATABASE: mascota_db
+      MYSQL_USER: ${DB_USERNAME:-patitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - mascota-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+
+  ms-mascota:
+    image: eclipse-temurin:25-jre-alpine
+    profiles: ["app"]
+    command: ["java", "-jar", "/app/ms-mascota.jar"]
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-mascota:3306/mascota_db
+      DB_USERNAME: ${DB_USERNAME:-patitas}
+      DB_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:8082:8082"
+    volumes:
+      - ./ms-mascota/target/ms-mascota-0.0.1-SNAPSHOT.jar:/app/ms-mascota.jar:ro
+    depends_on:
+      mysql-mascota:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8082/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+      start_period: 15s
+
+  mysql-veterinario:
+    image: mysql:8.0.40
+    profiles: ["app"]
+    environment:
+      MYSQL_DATABASE: veterinario_db
+      MYSQL_USER: ${DB_USERNAME:-patitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "127.0.0.1:3308:3306"
+    volumes:
+      - veterinario-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+
+  ms-veterinario:
+    image: eclipse-temurin:25-jre-alpine
+    profiles: ["app"]
+    command: ["java", "-jar", "/app/ms-veterinario.jar"]
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-veterinario:3306/veterinario_db
+      DB_USERNAME: ${DB_USERNAME:-patitas}
+      DB_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:8083:8083"
+    volumes:
+      - ./ms-veterinario/target/ms-veterinario-0.0.1-SNAPSHOT.jar:/app/ms-veterinario.jar:ro
+    depends_on:
+      mysql-veterinario:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8083/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+      start_period: 15s
+
+  mysql-turno:
+    image: mysql:8.0.40
+    profiles: ["app"]
+    environment:
+      MYSQL_DATABASE: turno_db
+      MYSQL_USER: ${DB_USERNAME:-patitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "127.0.0.1:3309:3306"
+    volumes:
+      - turno-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+
+  ms-turno:
+    image: eclipse-temurin:25-jre-alpine
+    profiles: ["app"]
+    command: ["java", "-jar", "/app/ms-turno.jar"]
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-turno:3306/turno_db
+      DB_USERNAME: ${DB_USERNAME:-patitas}
+      DB_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+    ports:
+      - "127.0.0.1:8084:8084"
+    volumes:
+      - ./ms-turno/target/ms-turno-0.0.1-SNAPSHOT.jar:/app/ms-turno.jar:ro
+    depends_on:
+      mysql-turno:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      ms-mascota:
+        condition: service_healthy
+      ms-veterinario:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8084/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+      start_period: 15s
+
 volumes:
   dueno-data:
+  mascota-data:
+  veterinario-data:
+  turno-data:
