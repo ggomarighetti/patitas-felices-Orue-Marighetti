@@ -8,6 +8,7 @@ Se conserva la consigna original sin modificar el PDF.
 | 10 | [Eureka, Config Server y Actuator](Sprint_10_Eureka_ConfigServer_Actuator.pdf) | Infraestructura funcional y estructura de los otros contextos |
 | 11 | [Comunicación con OpenFeign](Sprint_11_OpenFeign_Comunicacion.pdf) | APIs de Mascotas, Veterinarios y Turnos; validación cruzada, errores y timeout |
 | 12 | [API Gateway](Sprint_12_APIGateway.pdf) | Entrada reactiva en 8080, rutas con Eureka, CORS, logging, Actuator y configuración Git |
+| 13 | [Resiliencia con Resilience4j](Sprint_13_Resilience4j.pdf) | Circuit Breaker, Retry y fallback en Feign; Rate Limiter con Redis; Actuator y recuperación |
 
 ## Sprint 09
 
@@ -54,4 +55,16 @@ El gateway se registra como quinta aplicación en Eureka, obtiene su configuraci
 
 Las [evidencias del sprint 12](../evidencias/sprint-12/README.md) conservan la colección de 66 solicitudes y 131 verificaciones, el resultado de las 47 pruebas Maven, el registro de las cinco aplicaciones y el balanceo entre dos instancias reales de Dueños. Las diferencias de nombres de propiedades y dependencias respecto del ejemplo se explican en el [README](../../README.md#api-gateway--sprint-12), usando la versión compatible con Boot 4.1.0.
 
-Se mantienen las bases MySQL de los servicios. Circuit Breaker queda para el sprint 13 y JWT/rate limiting para el 14, conforme a la consigna activa.
+Se mantienen las bases MySQL de los servicios. Esta entrega anticipaba resiliencia para el sprint 13 y JWT/rate limiting para el 14; la consigna posterior del sprint 13 adelanta explícitamente Rate Limiter con Redis.
+
+## Sprint 13
+
+Se incorporan Circuit Breaker y Retry a los adaptadores de Mascotas y Veterinarios en Turnos. Cada servicio tiene su circuito con ventana de 10, mínimo de 5 llamadas, umbral 50%, espera de 10 segundos en OPEN y tres llamadas en HALF_OPEN. Retry permite tres intentos con esperas de 1 y 2 segundos para errores transitorios. El Circuit Breaker envuelve Retry para que una llamada OPEN devuelva fallback inmediatamente.
+
+Los fallbacks conservan las firmas booleanas de los puertos y reutilizan RemoteServiceUnavailableException, ya existente para la misma categoría, preservando la causa. Su mapeo 503 permanece en config/GlobalExceptionHandler.java. Los 404 no se reintentan ni se confunden con indisponibilidad; ninguna caída valida una referencia ni guarda un turno.
+
+Gateway utiliza RequestRateLimiter con Redis y clave por dirección remota: 10 tokens por segundo, capacidad 20 y costo 1. El alias /ms-turno comparte la ruta canónica para conservar una sola cuota. Hay ocho rutas, porque ya no se genera una ruta automática adicional para Turnos. Redis permanece dentro de la red de Compose.
+
+Los bootstraps locales siguen siendo mínimos; la configuración se publica en patitas-config. Se adaptan las dependencias a Boot 4 mediante Resilience4j 2.4.0 y el starter AspectJ; las razones se explican en el [README](../../README.md#resiliencia--sprint-13).
+
+Las [evidencias del sprint 13](../evidencias/sprint-13/README.md) contienen la colección funcional, las 55 pruebas Maven, las caídas reales de ambas dependencias, las transiciones CLOSED → OPEN → HALF_OPEN → CLOSED, los reintentos, la ausencia de escrituras tras errores y la ráfaga con HTTP 429. JWT queda fuera de esta entrega.

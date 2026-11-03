@@ -1,0 +1,1609 @@
+{
+  "executedAt": "2026-11-03T02:39:14.333229+00:00",
+  "normalCreation": {
+    "status": 201,
+    "durationMs": 359.81,
+    "headers": {
+      "transfer-encoding": "chunked",
+      "vary": "Access-Control-Request-Headers",
+      "x-ratelimit-remaining": "17",
+      "x-ratelimit-requested-tokens": "1",
+      "x-ratelimit-burst-capacity": "20",
+      "x-ratelimit-replenish-rate": "10",
+      "content-type": "application/json",
+      "date": "Tue, 03 Nov 2026 02:39:14 GMT",
+      "location": "http://127.0.0.1:8080/api/turnos/12",
+      "connection": "close"
+    },
+    "body": {
+      "id": 12,
+      "fechaHora": "2026-12-20T10:00:00",
+      "mascotaId": 10,
+      "veterinarioId": 10,
+      "motivo": "Verificación de resiliencia",
+      "estado": "PENDIENTE"
+    }
+  },
+  "normalHealth": {
+    "status": 200,
+    "durationMs": 25.82,
+    "headers": {
+      "transfer-encoding": "chunked",
+      "vary": "Access-Control-Request-Headers",
+      "x-ratelimit-remaining": "19",
+      "x-ratelimit-requested-tokens": "1",
+      "x-ratelimit-burst-capacity": "20",
+      "x-ratelimit-replenish-rate": "10",
+      "content-type": "application/json",
+      "date": "Tue, 03 Nov 2026 02:39:15 GMT",
+      "connection": "close"
+    },
+    "body": {
+      "components": {
+        "circuitBreakers": {
+          "details": {
+            "mascotaService": {
+              "details": {
+                "failureRate": "-1.0%",
+                "failureRateThreshold": "50.0%",
+                "slowCallRate": "-1.0%",
+                "slowCallRateThreshold": "100.0%",
+                "bufferedCalls": 1,
+                "slowCalls": 0,
+                "slowFailedCalls": 0,
+                "failedCalls": 0,
+                "notPermittedCalls": 0,
+                "state": "CLOSED"
+              },
+              "status": "UP"
+            },
+            "veterinarioService": {
+              "details": {
+                "failureRate": "-1.0%",
+                "failureRateThreshold": "50.0%",
+                "slowCallRate": "-1.0%",
+                "slowCallRateThreshold": "100.0%",
+                "bufferedCalls": 1,
+                "slowCalls": 0,
+                "slowFailedCalls": 0,
+                "failedCalls": 0,
+                "notPermittedCalls": 0,
+                "state": "CLOSED"
+              },
+              "status": "UP"
+            }
+          },
+          "status": "UP"
+        },
+        "clientConfigServer": {
+          "details": {
+            "propertySources": [
+              "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+              "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+              "configClient"
+            ]
+          },
+          "status": "UP"
+        },
+        "db": {
+          "details": {
+            "database": "MySQL",
+            "validationQuery": "isValid()"
+          },
+          "status": "UP"
+        },
+        "discoveryComposite": {
+          "components": {
+            "discoveryClient": {
+              "details": {
+                "services": [
+                  "ms-dueno",
+                  "api-gateway",
+                  "ms-mascota",
+                  "ms-veterinario"
+                ]
+              },
+              "status": "UP"
+            },
+            "eureka": {
+              "details": {
+                "applications": {
+                  "MS-DUENO": 1,
+                  "API-GATEWAY": 1,
+                  "MS-MASCOTA": 1,
+                  "MS-VETERINARIO": 1
+                }
+              },
+              "description": "Eureka discovery client has not yet successfully connected to a Eureka server",
+              "status": "UP"
+            }
+          },
+          "status": "UP"
+        },
+        "diskSpace": {
+          "details": {
+            "total": 1081101176832,
+            "free": 948275326976,
+            "threshold": 10485760,
+            "path": "/.",
+            "exists": true
+          },
+          "status": "UP"
+        },
+        "livenessState": {
+          "status": "UP"
+        },
+        "ping": {
+          "status": "UP"
+        },
+        "readinessState": {
+          "status": "UP"
+        },
+        "refreshScope": {
+          "status": "UP"
+        },
+        "ssl": {
+          "details": {
+            "expiringChains": [],
+            "invalidChains": [],
+            "validChains": []
+          },
+          "status": "UP"
+        }
+      },
+      "groups": [
+        "liveness",
+        "readiness"
+      ],
+      "status": "UP"
+    }
+  },
+  "scenarios": [
+    {
+      "service": "ms-mascota",
+      "circuit": "mascotaService",
+      "closedHealth": {
+        "status": 200,
+        "durationMs": 25.87,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "17",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:39:15 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 1,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 1,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-mascota",
+                      "ms-veterinario"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-MASCOTA": 1,
+                      "MS-VETERINARIO": 1
+                    }
+                  },
+                  "description": "Eureka discovery client has not yet successfully connected to a Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275326976,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "failingRequests": [
+        {
+          "status": 503,
+          "durationMs": 12073.34,
+          "body": {
+            "timestamp": "2026-11-03T02:39:30.746777827",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de mascotas no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 12044.19,
+          "body": {
+            "timestamp": "2026-11-03T02:39:42.858091895",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de mascotas no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 9023.49,
+          "body": {
+            "timestamp": "2026-11-03T02:39:51.944271275",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de mascotas no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 3040.22,
+          "body": {
+            "timestamp": "2026-11-03T02:39:55.04374629",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de mascotas no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        }
+      ],
+      "openHealth": {
+        "status": 200,
+        "durationMs": 29.08,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "18",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:39:55 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "80.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "0.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 5,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 4,
+                    "notPermittedCalls": 0,
+                    "state": "OPEN"
+                  },
+                  "status": "CIRCUIT_OPEN"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 1,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-turno",
+                      "ms-veterinario"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-TURNO": 1,
+                      "MS-VETERINARIO": 1
+                    }
+                  },
+                  "description": "Remote status from Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275310592,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "readinessDuringOpen": {
+        "components": {
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          }
+        },
+        "status": "UP"
+      },
+      "rejectedWithoutRetries": [
+        {
+          "status": 503,
+          "durationMs": 25.19
+        },
+        {
+          "status": 503,
+          "durationMs": 31.01
+        },
+        {
+          "status": 503,
+          "durationMs": 8.65
+        }
+      ],
+      "halfOpenHealth": {
+        "status": 200,
+        "durationMs": 20.27,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "18",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:40:05 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 0,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "HALF_OPEN"
+                  },
+                  "status": "CIRCUIT_HALF_OPEN"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 1,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-turno",
+                      "ms-veterinario"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-TURNO": 1,
+                      "MS-VETERINARIO": 1
+                    }
+                  },
+                  "description": "Remote status from Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275294208,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "discoveryRecovery": {
+        "registeredInTurnoClient": true,
+        "registryWaitMs": 17439.28,
+        "loadBalancerCacheWaitSeconds": 36
+      },
+      "probes": [
+        {
+          "status": 201,
+          "state": "HALF_OPEN",
+          "body": {
+            "id": 13,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        },
+        {
+          "status": 201,
+          "state": "HALF_OPEN",
+          "body": {
+            "id": 14,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        },
+        {
+          "status": 201,
+          "state": "CLOSED",
+          "body": {
+            "id": 15,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "circuitBreakerName": "mascotaService",
+          "creationTime": "2026-11-03T02:39:55.043378730Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from CLOSED to OPEN",
+          "type": "STATE_TRANSITION"
+        },
+        {
+          "circuitBreakerName": "mascotaService",
+          "creationTime": "2026-11-03T02:40:05.044423452Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from OPEN to HALF_OPEN",
+          "type": "STATE_TRANSITION"
+        },
+        {
+          "circuitBreakerName": "mascotaService",
+          "creationTime": "2026-11-03T02:41:15.967413411Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from HALF_OPEN to CLOSED",
+          "type": "STATE_TRANSITION"
+        }
+      ],
+      "retryEvents": [
+        {
+          "creationTime": "2026-11-03T02:39:21.724209323Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 1,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:25.730106094Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 2,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:30.736605660Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 3,
+          "retryName": "mascotaService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:33.848908165Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 1,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:37.852531948Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 2,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:42.857660999Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 3,
+          "retryName": "mascotaService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:45.934825920Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 1,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:49.939125856Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 2,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:51.943872833Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 3,
+          "retryName": "mascotaService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:52.035006254Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 1,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:53.036944570Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 2,
+          "retryName": "mascotaService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:39:55.038885570Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-mascota",
+          "numberOfAttempts": 3,
+          "retryName": "mascotaService",
+          "type": "ERROR"
+        }
+      ]
+    },
+    {
+      "service": "ms-veterinario",
+      "circuit": "veterinarioService",
+      "closedHealth": {
+        "status": 200,
+        "durationMs": 25.3,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "15",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:41:16 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 0,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 4,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-mascota",
+                      "ms-turno",
+                      "ms-veterinario"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-MASCOTA": 1,
+                      "MS-TURNO": 1,
+                      "MS-VETERINARIO": 1
+                    }
+                  },
+                  "description": "Remote status from Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275220480,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "failingRequests": [
+        {
+          "status": 503,
+          "durationMs": 12047.51,
+          "body": {
+            "timestamp": "2026-11-03T02:41:31.768418424",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de veterinarios no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 12038.3,
+          "body": {
+            "timestamp": "2026-11-03T02:41:43.846958298",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de veterinarios no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 9055.12,
+          "body": {
+            "timestamp": "2026-11-03T02:41:52.958949273",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de veterinarios no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        },
+        {
+          "status": 503,
+          "durationMs": 3044.46,
+          "body": {
+            "timestamp": "2026-11-03T02:41:56.05563126",
+            "status": 503,
+            "error": "Service Unavailable",
+            "mensaje": "El servicio de veterinarios no está disponible. Intentá nuevamente más tarde.",
+            "path": "/api/turnos"
+          }
+        }
+      ],
+      "openHealth": {
+        "status": 200,
+        "durationMs": 28.13,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "18",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:41:56 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 4,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "50.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "0.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 8,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 4,
+                    "notPermittedCalls": 0,
+                    "state": "OPEN"
+                  },
+                  "status": "CIRCUIT_OPEN"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-mascota",
+                      "ms-turno"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-MASCOTA": 1,
+                      "MS-TURNO": 1
+                    }
+                  },
+                  "description": "Remote status from Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275212288,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "readinessDuringOpen": {
+        "components": {
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          }
+        },
+        "status": "UP"
+      },
+      "rejectedWithoutRetries": [
+        {
+          "status": 503,
+          "durationMs": 40.22
+        },
+        {
+          "status": 503,
+          "durationMs": 29.61
+        },
+        {
+          "status": 503,
+          "durationMs": 31.52
+        }
+      ],
+      "halfOpenHealth": {
+        "status": 200,
+        "durationMs": 30.88,
+        "headers": {
+          "transfer-encoding": "chunked",
+          "vary": "Access-Control-Request-Headers",
+          "x-ratelimit-remaining": "19",
+          "x-ratelimit-requested-tokens": "1",
+          "x-ratelimit-burst-capacity": "20",
+          "x-ratelimit-replenish-rate": "10",
+          "content-type": "application/json",
+          "date": "Tue, 03 Nov 2026 02:42:06 GMT",
+          "connection": "close"
+        },
+        "body": {
+          "components": {
+            "circuitBreakers": {
+              "details": {
+                "mascotaService": {
+                  "details": {
+                    "failureRate": "0.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "0.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 7,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "CLOSED"
+                  },
+                  "status": "UP"
+                },
+                "veterinarioService": {
+                  "details": {
+                    "failureRate": "-1.0%",
+                    "failureRateThreshold": "50.0%",
+                    "slowCallRate": "-1.0%",
+                    "slowCallRateThreshold": "100.0%",
+                    "bufferedCalls": 0,
+                    "slowCalls": 0,
+                    "slowFailedCalls": 0,
+                    "failedCalls": 0,
+                    "notPermittedCalls": 0,
+                    "state": "HALF_OPEN"
+                  },
+                  "status": "CIRCUIT_HALF_OPEN"
+                }
+              },
+              "status": "UP"
+            },
+            "clientConfigServer": {
+              "details": {
+                "propertySources": [
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                  "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                  "configClient"
+                ]
+              },
+              "status": "UP"
+            },
+            "db": {
+              "details": {
+                "database": "MySQL",
+                "validationQuery": "isValid()"
+              },
+              "status": "UP"
+            },
+            "discoveryComposite": {
+              "components": {
+                "discoveryClient": {
+                  "details": {
+                    "services": [
+                      "ms-dueno",
+                      "api-gateway",
+                      "ms-mascota",
+                      "ms-turno"
+                    ]
+                  },
+                  "status": "UP"
+                },
+                "eureka": {
+                  "details": {
+                    "applications": {
+                      "MS-DUENO": 1,
+                      "API-GATEWAY": 1,
+                      "MS-MASCOTA": 1,
+                      "MS-TURNO": 1
+                    }
+                  },
+                  "description": "Remote status from Eureka server",
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            },
+            "diskSpace": {
+              "details": {
+                "total": 1081101176832,
+                "free": 948275187712,
+                "threshold": 10485760,
+                "path": "/.",
+                "exists": true
+              },
+              "status": "UP"
+            },
+            "livenessState": {
+              "status": "UP"
+            },
+            "ping": {
+              "status": "UP"
+            },
+            "readinessState": {
+              "status": "UP"
+            },
+            "refreshScope": {
+              "status": "UP"
+            },
+            "ssl": {
+              "details": {
+                "expiringChains": [],
+                "invalidChains": [],
+                "validChains": []
+              },
+              "status": "UP"
+            }
+          },
+          "groups": [
+            "liveness",
+            "readiness"
+          ],
+          "status": "UP"
+        }
+      },
+      "discoveryRecovery": {
+        "registeredInTurnoClient": true,
+        "registryWaitMs": 16425.75,
+        "loadBalancerCacheWaitSeconds": 36
+      },
+      "probes": [
+        {
+          "status": 201,
+          "state": "HALF_OPEN",
+          "body": {
+            "id": 16,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        },
+        {
+          "status": 201,
+          "state": "HALF_OPEN",
+          "body": {
+            "id": 17,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        },
+        {
+          "status": 201,
+          "state": "CLOSED",
+          "body": {
+            "id": 18,
+            "fechaHora": "2026-12-20T10:00:00",
+            "mascotaId": 10,
+            "veterinarioId": 10,
+            "motivo": "Verificación de resiliencia",
+            "estado": "PENDIENTE"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "circuitBreakerName": "veterinarioService",
+          "creationTime": "2026-11-03T02:41:56.055352730Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from CLOSED to OPEN",
+          "type": "STATE_TRANSITION"
+        },
+        {
+          "circuitBreakerName": "veterinarioService",
+          "creationTime": "2026-11-03T02:42:06.055521348Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from OPEN to HALF_OPEN",
+          "type": "STATE_TRANSITION"
+        },
+        {
+          "circuitBreakerName": "veterinarioService",
+          "creationTime": "2026-11-03T02:43:15.915548897Z[GMT]",
+          "durationInMs": null,
+          "errorMessage": null,
+          "stateTransition": "State transition from HALF_OPEN to CLOSED",
+          "type": "STATE_TRANSITION"
+        }
+      ],
+      "retryEvents": [
+        {
+          "creationTime": "2026-11-03T02:41:22.758857605Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 1,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:26.762736347Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 2,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:31.767816288Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 3,
+          "retryName": "veterinarioService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:34.839351757Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 1,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:38.842727101Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 2,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:43.846594238Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 3,
+          "retryName": "veterinarioService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:46.952873571Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 1,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:50.956617136Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 2,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:52.958599446Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 3,
+          "retryName": "veterinarioService",
+          "type": "ERROR"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:53.051254480Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 1,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:54.053080623Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 2,
+          "retryName": "veterinarioService",
+          "type": "RETRY"
+        },
+        {
+          "creationTime": "2026-11-03T02:41:56.055155539Z[GMT]",
+          "errorMessage": "com.patitas.turno.domain.exception.RemoteServiceUnavailableException: Servicio remoto no disponible: ms-veterinario",
+          "numberOfAttempts": 3,
+          "retryName": "veterinarioService",
+          "type": "ERROR"
+        }
+      ]
+    }
+  ],
+  "finalHealth": {
+    "status": 200,
+    "durationMs": 30.08,
+    "headers": {
+      "transfer-encoding": "chunked",
+      "vary": "Access-Control-Request-Headers",
+      "x-ratelimit-remaining": "18",
+      "x-ratelimit-requested-tokens": "1",
+      "x-ratelimit-burst-capacity": "20",
+      "x-ratelimit-replenish-rate": "10",
+      "content-type": "application/json",
+      "date": "Tue, 03 Nov 2026 02:43:16 GMT",
+      "connection": "close"
+    },
+    "body": {
+      "components": {
+        "circuitBreakers": {
+          "details": {
+            "mascotaService": {
+              "details": {
+                "failureRate": "0.0%",
+                "failureRateThreshold": "50.0%",
+                "slowCallRate": "0.0%",
+                "slowCallRateThreshold": "100.0%",
+                "bufferedCalls": 10,
+                "slowCalls": 0,
+                "slowFailedCalls": 0,
+                "failedCalls": 0,
+                "notPermittedCalls": 0,
+                "state": "CLOSED"
+              },
+              "status": "UP"
+            },
+            "veterinarioService": {
+              "details": {
+                "failureRate": "-1.0%",
+                "failureRateThreshold": "50.0%",
+                "slowCallRate": "-1.0%",
+                "slowCallRateThreshold": "100.0%",
+                "bufferedCalls": 0,
+                "slowCalls": 0,
+                "slowFailedCalls": 0,
+                "failedCalls": 0,
+                "notPermittedCalls": 0,
+                "state": "CLOSED"
+              },
+              "status": "UP"
+            }
+          },
+          "status": "UP"
+        },
+        "clientConfigServer": {
+          "details": {
+            "propertySources": [
+              "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+              "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+              "configClient"
+            ]
+          },
+          "status": "UP"
+        },
+        "db": {
+          "details": {
+            "database": "MySQL",
+            "validationQuery": "isValid()"
+          },
+          "status": "UP"
+        },
+        "discoveryComposite": {
+          "components": {
+            "discoveryClient": {
+              "details": {
+                "services": [
+                  "ms-dueno",
+                  "api-gateway",
+                  "ms-mascota",
+                  "ms-turno",
+                  "ms-veterinario"
+                ]
+              },
+              "status": "UP"
+            },
+            "eureka": {
+              "details": {
+                "applications": {
+                  "MS-DUENO": 1,
+                  "API-GATEWAY": 1,
+                  "MS-MASCOTA": 1,
+                  "MS-TURNO": 1,
+                  "MS-VETERINARIO": 1
+                }
+              },
+              "description": "Remote status from Eureka server",
+              "status": "UP"
+            }
+          },
+          "status": "UP"
+        },
+        "diskSpace": {
+          "details": {
+            "total": 1081101176832,
+            "free": 948275122176,
+            "threshold": 10485760,
+            "path": "/.",
+            "exists": true
+          },
+          "status": "UP"
+        },
+        "livenessState": {
+          "status": "UP"
+        },
+        "ping": {
+          "status": "UP"
+        },
+        "readinessState": {
+          "status": "UP"
+        },
+        "refreshScope": {
+          "status": "UP"
+        },
+        "ssl": {
+          "details": {
+            "expiringChains": [],
+            "invalidChains": [],
+            "validChains": []
+          },
+          "status": "UP"
+        }
+      },
+      "groups": [
+        "liveness",
+        "readiness"
+      ],
+      "status": "UP"
+    }
+  },
+  "circuitStateMetric": {
+    "availableTags": [
+      {
+        "tag": "name",
+        "values": [
+          "veterinarioService",
+          "mascotaService"
+        ]
+      },
+      {
+        "tag": "state",
+        "values": [
+          "closed",
+          "disabled",
+          "half_open",
+          "forced_open",
+          "open",
+          "metrics_only"
+        ]
+      }
+    ],
+    "description": "The states of the circuit breaker",
+    "measurements": [
+      {
+        "statistic": "VALUE",
+        "value": 2.0
+      }
+    ],
+    "name": "resilience4j.circuitbreaker.state"
+  },
+  "cleanup": {
+    "turnos": [],
+    "veterinarios": [],
+    "mascotas": [],
+    "duenos": []
+  }
+}

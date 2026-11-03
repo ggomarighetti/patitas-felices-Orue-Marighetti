@@ -1,0 +1,2244 @@
+{
+  "info": {
+    "name": "Sprint 13 - Resilience4j, Redis y flujo completo por Gateway",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gatewayUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "eurekaUrl",
+      "value": "http://localhost:8761"
+    },
+    {
+      "key": "configUrl",
+      "value": "http://localhost:8888"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Salud del gateway reactivo",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Gateway y configuraci\\u00f3n UP\", () => { const health=pm.response.json(); pm.expect(health.status).to.eql(\"UP\"); pm.expect(health.components.clientConfigServer.status).to.eql(\"UP\"); pm.expect(health.components).not.to.have.property(\"db\"); });",
+              "pm.test(\"Redis UP\", () => { pm.expect(pm.response.json().components.redis.status).to.eql(\"UP\"); });"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"resilienceVerificationStarted\", new Date().toISOString());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Información del gateway",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/actuator/info",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Nombre del servicio\", () => { pm.expect(pm.response.json().app.name).to.eql(\"api-gateway\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Cinco servicios registrados",
+      "request": {
+        "method": "GET",
+        "url": "{{eurekaUrl}}/eureka/apps",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Gateway y cuatro APIs UP\", () => { const apps=[].concat(pm.response.json().applications.application); for (const name of [\"API-GATEWAY\",\"MS-DUENO\",\"MS-MASCOTA\",\"MS-VETERINARIO\",\"MS-TURNO\"]) pm.expect(apps.some(a => a.name===name && [].concat(a.instance).some(i => i.status===\"UP\"))).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Configuración centralizada del gateway",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/api-gateway/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Rutas y CORS desde Git\", () => { const data=pm.response.json(); const p=data.propertySources.find(s => s.name.endsWith(\"/api-gateway.yml\")).source; pm.expect(data.version).to.match(/^[0-9a-f]{40}$/); pm.expect(p[\"server.port\"]).to.eql(8080); pm.expect(p[\"spring.cloud.gateway.server.webflux.discovery.locator.enabled\"]).to.eql(true); pm.expect(p[\"management.endpoint.gateway.access\"]).to.eql(\"read-only\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Rutas canónicas, alias y discovery",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/actuator/gateway/routes",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Cuatro rutas lb y alias\", () => { const routes=pm.response.json(); for (const slug of [\"dueno\",\"mascota\",\"veterinario\",\"turno\"]) { const route=routes.find(r => r.route_id===\"ms-\"+slug); pm.expect(route.uri).to.eql(\"lb://ms-\"+slug); } pm.expect(routes.some(r => r.route_id===\"ms-dueno-v1\")).to.eql(true); pm.expect(routes.filter(r => r.route_id.includes(\"DiscoveryClient\")).length).to.eql(3); pm.expect(routes.length).to.eql(8); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - LoggingFilter global y orden",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/actuator/gateway/globalfilters",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Orden -1\", () => { const entry=Object.entries(pm.response.json()).find(([key]) => key.includes(\"com.patitas.gateway.filters.LoggingFilter\")); pm.expect(entry).not.to.eql(undefined); pm.expect(entry[1]).to.eql(-1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Actuator omite el endpoint de modificación",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/actuator/gateway/refresh",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Endpoint no expuesto",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/actuator/env",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Ruta desconocida",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ruta-inexistente",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Ruta propia de gateway excluida del locator",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api-gateway/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Preflight CORS duenos",
+      "request": {
+        "method": "OPTIONS",
+        "url": "{{gatewayUrl}}/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "PATCH"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "Content-Type,X-Cliente"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"CORS sin credenciales\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Credentials\")).not.to.eql(\"true\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"PATCH\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Preflight CORS mascotas",
+      "request": {
+        "method": "OPTIONS",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "PATCH"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "Content-Type,X-Cliente"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"CORS sin credenciales\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Credentials\")).not.to.eql(\"true\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"PATCH\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Preflight CORS veterinarios",
+      "request": {
+        "method": "OPTIONS",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "PATCH"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "Content-Type,X-Cliente"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"CORS sin credenciales\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Credentials\")).not.to.eql(\"true\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"PATCH\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - Preflight CORS turnos",
+      "request": {
+        "method": "OPTIONS",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "PATCH"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "Content-Type,X-Cliente"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"CORS sin credenciales\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Credentials\")).not.to.eql(\"true\"); pm.expect(pm.response.headers.get(\"Access-Control-Allow-Methods\")).to.include(\"PATCH\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - Preflight sin ruta de negocio",
+      "request": {
+        "method": "OPTIONS",
+        "url": "{{gatewayUrl}}/ruta-inexistente",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "GET"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"CORS global\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 - GET de navegador con CORS",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Origin",
+            "value": "http://localhost:5500"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Origen permitido\", () => { pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"*\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 - Discovery con prefijo minúsculo",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-dueno/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Colecci\\u00f3n vac\\u00eda\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 - Alias versionado en ruta base",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/v1/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Colecci\\u00f3n vac\\u00eda\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 - Lista inicial vacía de duenos",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Sin registros previos\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 - Lista inicial vacía de mascotas",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Sin registros previos\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 - Lista inicial vacía de veterinarios",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Sin registros previos\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 - Lista inicial vacía de turnos",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Sin registros previos\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 - Registrar dueño de la mascota",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Ana\", \"apellido\": \"Gómez\", \"email\": \"sprint11@example.com\", \"telefono\": \"1112345678\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"duenoId\", pm.response.json().id);",
+              "pm.test(\"Location mantiene la entrada p\\u00fablica\", () => { const location=pm.response.headers.get(\"Location\"); pm.expect(location).to.be.a(\"string\"); pm.expect(location).to.match(/^http:\\/\\/localhost:8080\\/api\\//); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24 - Alias versionado consulta el mismo dueño",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/v1/duenos/{{duenoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"ID y datos conservados\", () => { pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"duenoId\"))); pm.expect(pm.response.json().nombre).to.eql(\"Ana\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25 - Crear Luna según ejemplo del PDF",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 3, \"duenoId\": {{duenoId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"mascotaId\", pm.response.json().id);",
+              "pm.test(\"Edad declarada conservada\", () => { pm.expect(pm.response.json().edad).to.eql(3); });",
+              "pm.test(\"No se inventa fecha de nacimiento\", () => { pm.expect(pm.response.json().fechaNacimiento).to.eql(null); });",
+              "pm.test(\"Location mantiene la entrada p\\u00fablica\", () => { const location=pm.response.headers.get(\"Location\"); pm.expect(location).to.be.a(\"string\"); pm.expect(location).to.match(/^http:\\/\\/localhost:8080\\/api\\//); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26 - Consultar Luna",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/mascotas/{{mascotaId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Nombre conservado\", () => { pm.expect(pm.response.json().nombre).to.eql(\"Luna\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27 - Mascotas por dueño",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/mascotas/dueno/{{duenoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Solo la mascota del due\\u00f1o\", () => { pm.expect(pm.response.json().length).to.eql(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28 - Rechazar edad negativa",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": -1, \"duenoId\": {{duenoId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29 - Rechazar dueño no positivo",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 3, \"duenoId\": 0}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30 - Rechazar nombre de mascota vacío",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \" \", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 3, \"duenoId\": {{duenoId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31 - Rechazar fecha de nacimiento futura",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 3, \"duenoId\": {{duenoId}}, \"fechaNacimiento\": \"2099-01-01\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32 - Mascota inexistente responde 404",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/mascotas/999999",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33 - Actualizar mascota",
+      "request": {
+        "method": "PUT",
+        "url": "{{gatewayUrl}}/api/mascotas/{{mascotaId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 4, \"duenoId\": {{duenoId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Edad actualizada\", () => { pm.expect(pm.response.json().edad).to.eql(4); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "34 - Actualizar mascota inexistente",
+      "request": {
+        "method": "PUT",
+        "url": "{{gatewayUrl}}/api/mascotas/999999",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Luna\", \"especie\": \"Gato\", \"raza\": \"Siamés\", \"edad\": 3, \"duenoId\": {{duenoId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "35 - Crear veterinaria según ejemplo sin matrícula",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Marta\", \"apellido\": \"López\", \"especialidad\": \"Felinos\", \"email\": \"marta@patitas.com\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"veterinarioId\", pm.response.json().id);",
+              "pm.test(\"Nombre conservado\", () => { pm.expect(pm.response.json().nombre).to.eql(\"Marta\"); });",
+              "pm.test(\"Location mantiene la entrada p\\u00fablica\", () => { const location=pm.response.headers.get(\"Location\"); pm.expect(location).to.be.a(\"string\"); pm.expect(location).to.match(/^http:\\/\\/localhost:8080\\/api\\//); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "36 - Consultar veterinaria",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/veterinarios/{{veterinarioId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "37 - Veterinarios por especialidad",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/veterinarios/especialidad/Felinos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Especialidad encontrada\", () => { pm.expect(pm.response.json().length).to.eql(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "38 - Rechazar email inválido de veterinario",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Marta\", \"apellido\": \"López\", \"especialidad\": \"Felinos\", \"email\": \"invalido\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "39 - Rechazar especialidad vacía",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Marta\", \"apellido\": \"López\", \"especialidad\": \"\", \"email\": \"marta@patitas.com\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "40 - Veterinario inexistente responde 404",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/veterinarios/999999",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "41 - Actualizar veterinario",
+      "request": {
+        "method": "PUT",
+        "url": "{{gatewayUrl}}/api/veterinarios/{{veterinarioId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Marta María\", \"apellido\": \"López\", \"especialidad\": \"Felinos\", \"email\": \"marta@patitas.com\", \"matricula\": \"MP-1234\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Datos actualizados\", () => { pm.expect(pm.response.json().matricula).to.eql(\"MP-1234\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "42 - Crear turno validando ambos servicios con Feign",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control anual\", \"mascotaId\": {{mascotaId}}, \"veterinarioId\": {{veterinarioId}}, \"estado\": \"CONFIRMADO\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"turnoId\", pm.response.json().id);",
+              "pm.test(\"Estado inicial PENDIENTE\", () => { pm.expect(pm.response.json().estado).to.eql(\"PENDIENTE\"); });",
+              "pm.test(\"Location con ID asignado\", () => { pm.expect(pm.response.headers.get(\"Location\")).to.include(\"/api/turnos/\"+pm.response.json().id); });",
+              "pm.test(\"Location mantiene la entrada p\\u00fablica\", () => { const location=pm.response.headers.get(\"Location\"); pm.expect(location).to.be.a(\"string\"); pm.expect(location).to.match(/^http:\\/\\/localhost:8080\\/api\\//); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "43 - Consultar turno",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Motivo conservado\", () => { pm.expect(pm.response.json().motivo).to.eql(\"Control anual\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "44 - Rechazar mascota inexistente en Turnos",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control anual\", \"mascotaId\": 999999, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });",
+              "pm.test(\"Error de mascota\", () => { pm.expect(pm.response.json().mensaje).to.include(\"Mascota no encontrada: 999999\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "45 - Rechazar veterinario inexistente en Turnos",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control anual\", \"mascotaId\": {{mascotaId}}, \"veterinarioId\": 999999}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });",
+              "pm.test(\"Error de veterinario\", () => { pm.expect(pm.response.json().mensaje).to.include(\"Veterinario no encontrado: 999999\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "46 - Rechazar ID de mascota no positivo",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control anual\", \"mascotaId\": 0, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "47 - Rechazar fecha inválida",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"no-es-fecha\", \"motivo\": \"Control anual\", \"mascotaId\": {{mascotaId}}, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "48 - Rechazar datos obligatorios ausentes",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => { pm.response.to.have.status(400); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "49 - Ningún turno inválido fue persistido",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Un \\u00fanico turno\", () => { pm.expect(pm.response.json().length).to.eql(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "50 - Rechazar actualización con mascota inexistente",
+      "request": {
+        "method": "PUT",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"No debe guardarse\", \"mascotaId\": 999999, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "51 - Conservar turno tras actualización rechazada",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Motivo intacto\", () => { pm.expect(pm.response.json().motivo).to.eql(\"Control anual\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "52 - Actualizar turno con referencias válidas",
+      "request": {
+        "method": "PUT",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control actualizado\", \"mascotaId\": {{mascotaId}}, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Motivo actualizado\", () => { pm.expect(pm.response.json().motivo).to.eql(\"Control actualizado\"); });",
+              "pm.test(\"Conserva estado\", () => { pm.expect(pm.response.json().estado).to.eql(\"PENDIENTE\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "53 - Turnos por mascota",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos/mascota/{{mascotaId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Turno de la mascota\", () => { pm.expect(pm.response.json().length).to.eql(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "54 - Turnos por veterinario",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos/veterinario/{{veterinarioId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Turno del veterinario\", () => { pm.expect(pm.response.json().length).to.eql(1); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "55 - Cancelar turno",
+      "request": {
+        "method": "PATCH",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}/cancelar",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Estado CANCELADO\", () => { pm.expect(pm.response.json().estado).to.eql(\"CANCELADO\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "56 - Turno inexistente responde 404",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos/999999",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "57 - Cancelar turno inexistente",
+      "request": {
+        "method": "PATCH",
+        "url": "{{gatewayUrl}}/api/turnos/999999/cancelar",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "58 - Eliminar turno de prueba",
+      "request": {
+        "method": "DELETE",
+        "url": "{{gatewayUrl}}/api/turnos/{{turnoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "59 - Eliminar mascota de prueba",
+      "request": {
+        "method": "DELETE",
+        "url": "{{gatewayUrl}}/api/mascotas/{{mascotaId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "60 - Mascota eliminada deja de validar turnos",
+      "request": {
+        "method": "POST",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fechaHora\": \"2026-11-15T10:00:00\", \"motivo\": \"Control anual\", \"mascotaId\": {{mascotaId}}, \"veterinarioId\": {{veterinarioId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => { pm.response.to.have.status(404); });",
+              "pm.test(\"Error uniforme y descriptivo\", () => { const error=pm.response.json(); pm.expect(error).to.have.all.keys(\"timestamp\",\"status\",\"error\",\"mensaje\",\"path\"); pm.expect(error.mensaje).to.be.a(\"string\").and.not.empty; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "61 - Eliminar veterinario de prueba",
+      "request": {
+        "method": "DELETE",
+        "url": "{{gatewayUrl}}/api/veterinarios/{{veterinarioId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "62 - Eliminar dueño de prueba",
+      "request": {
+        "method": "DELETE",
+        "url": "{{gatewayUrl}}/api/duenos/{{duenoId}}",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "63 - Lista final vacía de duenos",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/duenos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Datos de prueba eliminados\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "64 - Lista final vacía de mascotas",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/mascotas",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Datos de prueba eliminados\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "65 - Lista final vacía de veterinarios",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/veterinarios",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Datos de prueba eliminados\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "66 - Lista final vacía de turnos",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Datos de prueba eliminados\", () => { pm.expect(pm.response.json()).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "67 - Configuración centralizada de Circuit Breaker y Retry",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/ms-turno/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Dos circuitos con parámetros de la consigna\", () => { const p=pm.response.json().propertySources.find(s => s.name.endsWith(\"/ms-turno.yml\")).source; for (const name of [\"mascotaService\",\"veterinarioService\"]) { const prefix=\"resilience4j.circuitbreaker.instances.\"+name+\".\"; pm.expect(p[prefix+\"slidingWindowSize\"]).to.eql(10); pm.expect(p[prefix+\"minimumNumberOfCalls\"]).to.eql(5); pm.expect(p[prefix+\"failureRateThreshold\"]).to.eql(50); pm.expect(p[prefix+\"waitDurationInOpenState\"]).to.eql(\"10s\"); pm.expect(p[prefix+\"permittedNumberOfCallsInHalfOpenState\"]).to.eql(3); pm.expect(p[prefix+\"automaticTransitionFromOpenToHalfOpenEnabled\"]).to.eql(true); } });",
+              "pm.test(\"Tres intentos con backoff progresivo y Circuit Breaker exterior\", () => { const p=pm.response.json().propertySources.find(s => s.name.endsWith(\"/ms-turno.yml\")).source; for (const name of [\"mascotaService\",\"veterinarioService\"]) { const prefix=\"resilience4j.retry.instances.\"+name+\".\"; pm.expect(p[prefix+\"maxAttempts\"]).to.eql(3); pm.expect(p[prefix+\"waitDuration\"]).to.eql(\"1s\"); pm.expect(p[prefix+\"enableExponentialBackoff\"]).to.eql(true); pm.expect(p[prefix+\"exponentialBackoffMultiplier\"]).to.eql(2); pm.expect(p[prefix+\"retryExceptionPredicate\"]).to.include(\"RemoteCallRetryPredicate\"); } pm.expect(p[\"resilience4j.circuitbreaker.circuitBreakerAspectOrder\"]).to.eql(1); pm.expect(p[\"resilience4j.retry.retryAspectOrder\"]).to.eql(2); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "68 - Configuración de Redis y cuota de Turnos",
+      "request": {
+        "method": "GET",
+        "url": "{{configUrl}}/api-gateway/default",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Token bucket 10 por segundo, capacidad 20 y costo 1\", () => { const p=pm.response.json().propertySources.find(s => s.name.endsWith(\"/api-gateway.yml\")).source; const value=suffix => Object.entries(p).find(([key]) => key.endsWith(suffix))[1]; pm.expect(value(\"redis-rate-limiter.replenishRate\")).to.eql(10); pm.expect(value(\"redis-rate-limiter.burstCapacity\")).to.eql(20); pm.expect(value(\"redis-rate-limiter.requestedTokens\")).to.eql(1); pm.expect(value(\"key-resolver\")).to.eql(\"#{@clientIpKeyResolver}\"); pm.expect(p[\"spring.data.redis.port\"]).to.eql(\"${REDIS_PORT:6379}\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "69 - Salud de Turnos con ambos circuitos CLOSED",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/health",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Circuitos CLOSED y base UP\", () => { const h=pm.response.json(); pm.expect(h.status).to.eql(\"UP\"); pm.expect(h.components.db.status).to.eql(\"UP\"); for (const name of [\"mascotaService\",\"veterinarioService\"]) pm.expect(h.components.circuitBreakers.details[name].details.state).to.eql(\"CLOSED\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "70 - Readiness distingue aplicación de dependencias remotas",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/health/readiness",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Aplicación y base disponibles\", () => { const h=pm.response.json(); pm.expect(h.status).to.eql(\"UP\"); pm.expect(h.components).to.have.property(\"db\"); pm.expect(h.components).not.to.have.property(\"circuitBreakers\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "71 - Registro de los dos circuitos en Actuator",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/circuitbreakers",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Nombres coincidentes\", () => { pm.expect(Object.keys(pm.response.json().circuitBreakers).sort()).to.eql([\"mascotaService\",\"veterinarioService\"]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "72 - Eventos observables de Circuit Breaker",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/circuitbreakerevents",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Eventos de las validaciones correctas\", () => { const events=pm.response.json().circuitBreakerEvents; pm.expect(events.some(e => e.type===\"SUCCESS\" && e.circuitBreakerName===\"mascotaService\")).to.eql(true); pm.expect(events.some(e => e.type===\"SUCCESS\" && e.circuitBreakerName===\"veterinarioService\")).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "73 - Retry no reintenta los 404 de negocio",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/retryevents",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Sin reintentos de recursos inexistentes\", () => { const started=Date.parse(pm.collectionVariables.get(\"resilienceVerificationStarted\")); const events=pm.response.json().retryEvents.filter(e => Date.parse(e.creationTime.split(\"[\")[0])>=started); pm.expect(events).to.eql([]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "74 - Métrica del estado de los circuitos",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/ms-turno/actuator/metrics/resilience4j.circuitbreaker.state",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Métrica expuesta\", () => { pm.expect(pm.response.json().name).to.eql(\"resilience4j.circuitbreaker.state\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "75 - Turnos sin principal con Rate Limiter activo",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/api/turnos",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => { pm.response.to.have.status(200); });",
+              "pm.test(\"Cuota correcta y colección vacía\", () => { pm.expect(pm.response.json()).to.eql([]); pm.expect(pm.response.headers.get(\"X-RateLimit-Replenish-Rate\")).to.eql(\"10\"); pm.expect(pm.response.headers.get(\"X-RateLimit-Burst-Capacity\")).to.eql(\"20\"); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

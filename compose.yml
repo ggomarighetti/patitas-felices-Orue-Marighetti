@@ -216,12 +216,21 @@ services:
       ms-veterinario:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O- http://localhost:8084/actuator/health | grep -q '\"status\":\"UP\"'"]
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8084/actuator/health/readiness | grep -q '\"status\":\"UP\"'"]
       interval: 5s
       timeout: 5s
       retries: 36
       start_period: 15s
 
+
+  redis:
+    image: redis:8-alpine
+    profiles: ["app"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
 
   api-gateway:
     image: eclipse-temurin:25-jre-alpine
@@ -230,6 +239,7 @@ services:
     environment:
       CONFIG_SERVER_URL: http://config-server:8888
       EUREKA_URL: http://eureka-server:8761/eureka/
+      REDIS_HOST: redis
     ports:
       - "127.0.0.1:8080:8080"
     volumes:
@@ -246,6 +256,8 @@ services:
       ms-veterinario:
         condition: service_healthy
       ms-turno:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
