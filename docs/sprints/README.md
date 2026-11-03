@@ -7,6 +7,7 @@ Se conserva la consigna original sin modificar el PDF.
 | 09 | [Arquitectura hexagonal y descomposición en microservicios](Sprint_09_v2.pdf) | Pasos 1 a 8, ms-dueno funcional |
 | 10 | [Eureka, Config Server y Actuator](Sprint_10_Eureka_ConfigServer_Actuator.pdf) | Infraestructura funcional y estructura de los otros contextos |
 | 11 | [Comunicación con OpenFeign](Sprint_11_OpenFeign_Comunicacion.pdf) | APIs de Mascotas, Veterinarios y Turnos; validación cruzada, errores y timeout |
+| 12 | [API Gateway](Sprint_12_APIGateway.pdf) | Entrada reactiva en 8080, rutas con Eureka, CORS, logging, Actuator y configuración Git |
 
 ## Sprint 09
 
@@ -44,3 +45,13 @@ Se completan los servicios REST de Mascotas, Veterinarios y Turnos para ejecutar
 Los recursos remotos inexistentes devuelven 404; las caídas y timeouts devuelven 503 sin persistir. La configuración centralizada establece conexión de 3000 ms y lectura de 5000 ms con el prefijo actual spring.cloud.openfeign. Se mantiene la convención de paquetes y las excepciones por categoría del proyecto.
 
 Las [evidencias del sprint 11](../evidencias/sprint-11/README.md) contienen la colección, sus resultados, las pruebas reales de stop/start y pause/unpause, y la captura de Eureka con los cuatro servicios. Gateway y Circuit Breaker corresponden a los sprints 12 y 13 según este nuevo PDF.
+
+## Sprint 12
+
+Se agrega api-gateway como módulo del reactor Maven, usando WebFlux y Netty. Las cuatro rutas canónicas de negocio reciben solicitudes en 8080 y usan destinos lb:// resueltos por Eureka. Discovery Locator agrega cuatro prefijos automáticos y el paso opcional RewritePath agrega /v1/duenos: nueve rutas en total, sin una ruta del gateway hacia sí mismo.
+
+El gateway se registra como quinta aplicación en Eureka, obtiene su configuración desde patitas-config/api-gateway.yml y expone health, info y la inspección de rutas de Actuator en modo de solo lectura. Se implementan CORS de desarrollo sin credenciales y LoggingFilter con orden -1, estado HTTP efectivo y duración. Los puertos de negocio 8081 a 8084 dejan de publicarse en Docker; las cabeceras Location apuntan al acceso público.
+
+Las [evidencias del sprint 12](../evidencias/sprint-12/README.md) conservan la colección de 66 solicitudes y 131 verificaciones, el resultado de las 47 pruebas Maven, el registro de las cinco aplicaciones y el balanceo entre dos instancias reales de Dueños. Las diferencias de nombres de propiedades y dependencias respecto del ejemplo se explican en el [README](../../README.md#api-gateway--sprint-12), usando la versión compatible con Boot 4.1.0.
+
+Se mantienen las bases MySQL de los servicios. Circuit Breaker queda para el sprint 13 y JWT/rate limiting para el 14, conforme a la consigna activa.

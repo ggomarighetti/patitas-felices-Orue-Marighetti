@@ -1,0 +1,267 @@
+{
+  "executedAt": "2026-11-03T01:57:55.728651+00:00",
+  "baseMerge": "ad506a137e08a28a01079d75cf73b28805272561",
+  "modules": [
+    "ms-dueno",
+    "ms-mascota",
+    "ms-veterinario",
+    "ms-turno",
+    "eureka-server",
+    "config-server",
+    "api-gateway"
+  ],
+  "build": {
+    "command": "mvnw.cmd -B clean verify",
+    "tests": 47,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "com.patitas.dueno.application.DuenoServiceImplTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.adapter.out.feign.MascotaFeignAdapterTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.adapter.out.feign.VeterinarioFeignAdapterTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.application.TurnoServiceImplTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.gateway.filters.LoggingFilterTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "gateway": {
+    "server": "Netty",
+    "stack": "WebFlux",
+    "gatewayVersion": "5.0.4",
+    "port": 8080,
+    "withoutServletJpaOrMysql": true,
+    "bomManagedDependencies": true,
+    "localBootstrapOnlyNameAndConfigImport": true,
+    "javaFilesWithoutComments": 76
+  },
+  "configuration": {
+    "repository": "https://github.com/ggomarighetti/patitas-config",
+    "commit": "883fa80bb6587636669f2f6c337c8293dbea6da0",
+    "configServerVersion": "883fa80bb6587636669f2f6c337c8293dbea6da0",
+    "locator": {
+      "enabled": true,
+      "lower-case-service-id": true,
+      "include-expression": "serviceId matches '(?i)ms-.*'"
+    },
+    "cors": {
+      "allowedOrigins": "*",
+      "allowedMethods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "allowedHeaders": "*",
+      "allowCredentials": false
+    },
+    "actuatorAccess": "read-only"
+  },
+  "routing": {
+    "total": 9,
+    "canonical": {
+      "ms-dueno": "lb://ms-dueno",
+      "ms-mascota": "lb://ms-mascota",
+      "ms-veterinario": "lb://ms-veterinario",
+      "ms-turno": "lb://ms-turno"
+    },
+    "discoveryRoutes": 4,
+    "versionAlias": "/v1/duenos",
+    "routes": [
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/ms-dueno/**], match trailing slash: true)",
+        "metadata": {
+          "management.port": "8081"
+        },
+        "route_id": "ReactiveCompositeDiscoveryClient_MS-DUENO",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]",
+          "[[RewritePath /ms-dueno/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+        ],
+        "uri": "lb://MS-DUENO",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/ms-mascota/**], match trailing slash: true)",
+        "metadata": {
+          "management.port": "8082"
+        },
+        "route_id": "ReactiveCompositeDiscoveryClient_MS-MASCOTA",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]",
+          "[[RewritePath /ms-mascota/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+        ],
+        "uri": "lb://MS-MASCOTA",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/ms-turno/**], match trailing slash: true)",
+        "metadata": {
+          "management.port": "8084"
+        },
+        "route_id": "ReactiveCompositeDiscoveryClient_MS-TURNO",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]",
+          "[[RewritePath /ms-turno/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+        ],
+        "uri": "lb://MS-TURNO",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/ms-veterinario/**], match trailing slash: true)",
+        "metadata": {
+          "management.port": "8083"
+        },
+        "route_id": "ReactiveCompositeDiscoveryClient_MS-VETERINARIO",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]",
+          "[[RewritePath /ms-veterinario/?(?<remaining>.*) = '/${remaining}'], order = 1]"
+        ],
+        "uri": "lb://MS-VETERINARIO",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/api/duenos/**], match trailing slash: true)",
+        "route_id": "ms-dueno",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]"
+        ],
+        "uri": "lb://ms-dueno",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/api/mascotas/**], match trailing slash: true)",
+        "route_id": "ms-mascota",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]"
+        ],
+        "uri": "lb://ms-mascota",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/api/veterinarios/**], match trailing slash: true)",
+        "route_id": "ms-veterinario",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]"
+        ],
+        "uri": "lb://ms-veterinario",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/api/turnos/**], match trailing slash: true)",
+        "route_id": "ms-turno",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]"
+        ],
+        "uri": "lb://ms-turno",
+        "order": 0
+      },
+      {
+        "predicate": "(RouteDefinitionRouteLocator$$Lambda/0x00000000367f68a0 && Paths: [/v1/duenos/**], match trailing slash: true)",
+        "route_id": "ms-dueno-v1",
+        "filters": [
+          "[[RewriteLocationResponseHeader stripVersion = NEVER_STRIP, locationHeaderName = 'Location', hostValue = [null], protocols = 'https?|ftps?'], order = 1]",
+          "[[RewritePath /v1/duenos(?<segment>/?.*) = '/api/duenos$1'], order = 1]"
+        ],
+        "uri": "lb://ms-dueno",
+        "order": 0
+      }
+    ],
+    "publicLocations": [
+      "http://localhost:8080/api/duenos/16",
+      "http://localhost:8080/api/mascotas/4",
+      "http://localhost:8080/api/veterinarios/4",
+      "http://localhost:8080/api/turnos/7"
+    ]
+  },
+  "eureka": {
+    "MS-DUENO": [
+      "UP"
+    ],
+    "API-GATEWAY": [
+      "UP"
+    ],
+    "MS-MASCOTA": [
+      "UP"
+    ],
+    "MS-TURNO": [
+      "UP"
+    ],
+    "MS-VETERINARIO": [
+      "UP"
+    ]
+  },
+  "compose": {
+    "healthyServices": 11,
+    "unpublishedBusinessPorts": [
+      8081,
+      8082,
+      8083,
+      8084
+    ],
+    "gatewayPorts": [
+      {
+        "mode": "ingress",
+        "host_ip": "127.0.0.1",
+        "target": 8080,
+        "published": "8080",
+        "protocol": "tcp"
+      }
+    ]
+  },
+  "newman": {
+    "requests": 66,
+    "assertions": 131,
+    "failures": 0,
+    "durationMs": 8548
+  },
+  "loadBalancing": {
+    "expected": [
+      "172.30.0.13:8081",
+      "172.30.0.5:8081"
+    ],
+    "observed": [
+      "172.30.0.13:8081",
+      "172.30.0.5:8081"
+    ],
+    "restoredInstances": 1
+  },
+  "dataAfterVerification": {
+    "duenos": [],
+    "mascotas": [],
+    "veterinarios": [],
+    "turnos": []
+  },
+  "pdfSha256": "b08bcd5a46c9c49a48708394eeeb1cee34ab8d4d9db5ba4ccd2259a1f5c8e07b"
+}

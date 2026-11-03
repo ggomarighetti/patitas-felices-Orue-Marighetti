@@ -1,0 +1,51 @@
+{
+  "executedAt": "2026-11-03T01:54:55.881468+00:00",
+  "service": "ms-dueno",
+  "discovery": "Eureka",
+  "routing": "lb://ms-dueno",
+  "expectedUpstreams": [
+    "172.30.0.13:8081",
+    "172.30.0.5:8081"
+  ],
+  "eurekaDuringBalance": [
+    {
+      "instanceId": "20614b750438:ms-dueno:8081",
+      "ip": "172.30.0.5",
+      "status": "UP"
+    },
+    {
+      "instanceId": "9f82b901b203:ms-dueno:8081",
+      "ip": "172.30.0.13",
+      "status": "UP"
+    }
+  ],
+  "observedUpstreams": [
+    "172.30.0.13:8081",
+    "172.30.0.5:8081"
+  ],
+  "requests": 92,
+  "allResponses": 200,
+  "gatewayLogSample": [
+    "2026-11-03T01:54:50.272Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:50.279Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 5ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:50.304Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:50.334Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:52.723Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:52.753Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:52.784Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:52.815Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 6ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:55.444Z  INFO 1 --- [api-gateway] [or-http-epoll-3] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 223ms route=ms-dueno upstream=172.30.0.13:8081",
+    "2026-11-03T01:54:55.475Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 5ms route=ms-dueno upstream=172.30.0.5:8081",
+    "2026-11-03T01:54:55.508Z  INFO 1 --- [api-gateway] [or-http-epoll-3] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 7ms route=ms-dueno upstream=172.30.0.13:8081",
+    "2026-11-03T01:54:55.516Z  INFO 1 --- [api-gateway] [or-http-epoll-6] c.patitas.gateway.filters.LoggingFilter  : [GATEWAY] <-- GET /api/duenos 200 5ms route=ms-dueno upstream=172.30.0.5:8081"
+  ],
+  "cleanup": {
+    "instancesRestored": 1,
+    "owners": [],
+    "consecutiveResponses200": 4,
+    "transientErrors": [
+      500
+    ],
+    "completedAt": "2026-11-03T01:55:38.732758+00:00"
+  }
+}
