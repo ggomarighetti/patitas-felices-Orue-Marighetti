@@ -4,7 +4,9 @@ Sistema de gestión veterinaria de la materia Microservicios y APIs Escalables d
 
 Este repositorio continúa la Fase 2 del trabajo práctico. El [monolito VetSystem, sprints 01 a 08](https://github.com/ggomarighetti/vetSystem-Orue-Marighetti) conserva sus entregas e historial. Se toma como base el [avance de los pasos 1 a 4 del sprint 09](https://github.com/ggomarighetti/patitas-felices-base-sprint-09/tree/e5cdd7d), cuyo historial también se conserva aquí.
 
-**Sprint 11:** comunicación con OpenFeign desde Turnos hacia Mascotas y Veterinarios, resolución por Eureka, validación de referencias y errores 404/503 con timeout. Las cuatro APIs están disponibles. Se incluyen la [consigna](docs/sprints/Sprint_11_OpenFeign_Comunicacion.pdf) y las [evidencias](docs/evidencias/sprint-11/README.md).
+**Sprint 12:** API Gateway reactivo como entrada de las cuatro APIs en el puerto 8080, rutas por Eureka y LoadBalancer, CORS, logging y configuración centralizada. Se incluyen la [consigna](docs/sprints/Sprint_12_APIGateway.pdf) y las [evidencias actuales](docs/evidencias/sprint-12/README.md).
+
+**Sprint 11:** comunicación con OpenFeign desde Turnos hacia Mascotas y Veterinarios, resolución por Eureka, validación de referencias y errores 404/503 con timeout. Se conservan la [consigna](docs/sprints/Sprint_11_OpenFeign_Comunicacion.pdf) y las [evidencias](docs/evidencias/sprint-11/README.md).
 
 **Sprint 10:** infraestructura Eureka y Config Server, configuración centralizada en [patitas-config](https://github.com/ggomarighetti/patitas-config), Actuator y ms-dueno registrado. Se incluyen la [consigna del sprint 10](docs/sprints/Sprint_10_Eureka_ConfigServer_Actuator.pdf) y sus [evidencias](docs/evidencias/sprint-10/README.md).
 
@@ -36,12 +38,15 @@ if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 docker compose --profile app up -d --wait
 ```
 
-Compose espera que Config Server esté disponible antes de iniciar Eureka. Cada microservicio espera a su propia base y a la infraestructura; Turnos también espera a Mascotas y Veterinarios. Los seis JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux.
+Compose espera que Config Server esté disponible antes de iniciar Eureka. Cada microservicio espera a su propia base y a la infraestructura; Turnos también espera a Mascotas y Veterinarios. Gateway espera a los cuatro servicios. Los siete JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux.
 
 1. Config Server en 8888 clona la rama main de patitas-config.
 2. Eureka Server en 8761 habilita el registro.
 3. ms-mascota y ms-veterinario obtienen su configuración, conectan a sus bases y se registran en Eureka.
 4. ms-turno arranca con ambos destinos disponibles. ms-dueno también se ejecuta en 8081.
+5. api-gateway obtiene las rutas de Config Server, se registra en Eureka y recibe las solicitudes externas en 8080.
+
+En Docker, los puertos 8081 a 8084 quedan dentro de la red de Compose. Todas las llamadas de negocio se hacen a `http://localhost:8080`. Los puertos 8888 y 8761 siguen disponibles en localhost para administrar configuración y registro; los puertos MySQL permiten la administración local de las bases.
 
 Después de recompilar un servicio, reiniciar su contenedor. `docker compose --profile app stop` conserva el volumen de MySQL.
 
@@ -92,6 +97,14 @@ $env:DB_URL = 'jdbc:mysql://localhost:3309/turno_db'
 .\mvnw.cmd spring-boot:run -pl ms-turno
 ```
 
+Cuando los cuatro servicios figuren UP en Eureka, iniciar el gateway en otra terminal:
+
+```powershell
+.\mvnw.cmd spring-boot:run -pl api-gateway
+```
+
+El gateway no necesita credenciales de MySQL. Con ejecución Java local, los servicios escuchan en 8081 a 8084; los clientes del sistema deben usar igualmente el puerto 8080.
+
 Con un servidor MySQL propio, crear las cuatro bases y usar su puerto real en DB_URL. Con Compose, MySQL de Dueños está en 3306; Mascotas en 3307, Veterinarios en 3308 y Turnos en 3309.
 
 Spring Boot no carga `.env` automáticamente; Docker Compose sí lo utiliza. Si se usa MySQL instalado, crear `dueno_db` en Workbench y configurar las variables con el usuario correspondiente. Hibernate crea la tabla `duenos` al arrancar.
@@ -111,14 +124,16 @@ Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto a
 - Eureka: <http://localhost:8761>.
 - Configuración JSON: <http://localhost:8888/ms-dueno/default>.
 - Configuración YAML: <http://localhost:8888/ms-dueno-default.yml>.
-- Salud: <http://localhost:8081/actuator/health>.
-- Información: <http://localhost:8081/actuator/info>.
-- Swagger: <http://localhost:8081/swagger-ui/index.html>.
-- OpenAPI: <http://localhost:8081/v3/api-docs>.
-- API: <http://localhost:8081/api/duenos>.
-- Swagger de Mascotas: <http://localhost:8082/swagger-ui/index.html>.
-- Swagger de Veterinarios: <http://localhost:8083/swagger-ui/index.html>.
-- Swagger de Turnos: <http://localhost:8084/swagger-ui/index.html>.
+- Configuración del gateway: <http://localhost:8888/api-gateway/default>.
+- Salud del gateway: <http://localhost:8080/actuator/health>.
+- Información del gateway: <http://localhost:8080/actuator/info>.
+- Rutas activas: <http://localhost:8080/actuator/gateway/routes>.
+- Dueños: <http://localhost:8080/api/duenos>.
+- Mascotas: <http://localhost:8080/api/mascotas>.
+- Veterinarios: <http://localhost:8080/api/veterinarios>.
+- Turnos: <http://localhost:8080/api/turnos>.
+
+Swagger y OpenAPI permanecen en cada microservicio como documentación interna. Este sprint no agrega una interfaz Swagger unificada; la colección de Postman valida el acceso público por Gateway.
 
 Para detener la aplicación iniciada en la terminal, usar `Ctrl+C`. Para detener todos los contenedores conservando los datos:
 
@@ -181,6 +196,10 @@ patitas-felices/
       adapter/out/feign/        Clients, adaptadores y DTOs de consumo propios
   eureka-server/                Aplicación de registro en 8761
   config-server/                Servidor de configuración Git en 8888
+  api-gateway/                  Entrada WebFlux/Netty en 8080
+    src/main/java/com/patitas/gateway/
+      ApiGatewayApplication.java
+      filters/LoggingFilter.java
   docs/
   compose.yml
   pom.xml
@@ -194,12 +213,13 @@ La consigna combina un dominio independiente de frameworks con la exigencia expl
 
 ### Contextos y alcance
 
-| Módulo | Puerto | Responsabilidad | Estado en sprint 11 |
+| Módulo | Puerto interno | Responsabilidad | Estado actual |
 | --- | --- | --- | --- |
 | `ms-dueno` | 8081 | CRUD de dueños y email único | Implementado |
 | `ms-mascota` | 8082 | Mascotas y referencia al dueño | API REST y base propia |
 | `ms-veterinario` | 8083 | Veterinarios y especialidades | API REST y base propia |
 | `ms-turno` | 8084 | Turnos, cancelación y validación remota | API REST, base propia y OpenFeign |
+| `api-gateway` | 8080 (publicado) | Entrada HTTP, rutas, CORS y logging | WebFlux, Netty y Eureka |
 
 Cada servicio tiene su propia base. Mascota guarda duenoId como Long y Turno guarda mascotaId y veterinarioId como Long, sin JOIN, foreign key ni relaciones JPA entre servicios. Ningún módulo importa entidades o código de dominio de otro.
 
@@ -279,7 +299,32 @@ Matrícula permanece opcional para aceptar el ejemplo de la consigna. Nombre, ap
 
 La fecha, el motivo y los dos IDs positivos son obligatorios. El servidor controla el ID y el estado inicial. La comprobación HTTP no crea una transacción distribuida: valida la existencia al solicitar el alta, sin bloquear ni impedir eliminaciones en los servicios remotos.
 
-La consigna del sprint 11 prevalece sobre las vistas previas anteriores: Gateway corresponde al sprint 12 y la resiliencia con Circuit Breaker al sprint 13.
+La consigna del sprint 11 prevalece sobre las vistas previas anteriores: Gateway se incorpora en el sprint 12 y la resiliencia con Circuit Breaker corresponde al sprint 13.
+
+## API Gateway — Sprint 12
+
+El módulo `api-gateway` usa `spring-cloud-starter-gateway-server-webflux`, Eureka Client, Spring Cloud LoadBalancer, Config Client y Actuator. El servidor es Netty reactivo; su JAR no incluye Spring MVC, servidor Tomcat, JPA ni drivers MySQL. Se conserva la versión real del padre Maven, `0.0.1-SNAPSHOT`.
+
+El `application.yml` local contiene solamente `spring.application.name: api-gateway` y el import obligatorio de Config Server. Puerto, Eureka, rutas, CORS y Actuator provienen de [api-gateway.yml en patitas-config](https://github.com/ggomarighetti/patitas-config/blob/883fa80bb6587636669f2f6c337c8293dbea6da0/api-gateway.yml). Los cambios de configuración se aplican al reiniciar la aplicación.
+
+| Ruta pública en 8080 | Destino resuelto por Eureka |
+| --- | --- |
+| `/api/duenos/**` | `lb://ms-dueno` |
+| `/api/mascotas/**` | `lb://ms-mascota` |
+| `/api/veterinarios/**` | `lb://ms-veterinario` |
+| `/api/turnos/**` | `lb://ms-turno` |
+
+Los cuatro destinos usan nombres de servicio, sin direcciones fijas. Discovery Locator está habilitado con prefijos en minúscula y limitado a los nombres `ms-*`, para evitar una ruta del gateway hacia sí mismo. Genera además `/ms-dueno/**`, `/ms-mascota/**`, `/ms-veterinario/**` y `/ms-turno/**`, eliminando el prefijo del servicio antes de reenviar. Por ejemplo, `/ms-dueno/api/duenos` llega a `/api/duenos`.
+
+Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` se reescriben a `/api/duenos` y `/api/duenos/{id}`. Por eso Actuator muestra **nueve rutas**: cuatro canónicas, cuatro automáticas de discovery y una de versionado. Los identificadores automáticos pueden conservar el nombre de aplicación en mayúsculas; sus prefijos públicos son minúsculos.
+
+`RewriteLocationResponseHeader` conserva el host público en las cabeceras `Location` de las altas, para que sus enlaces sigan pasando por 8080. CORS permite cualquier origen y cabecera en desarrollo, los métodos GET, POST, PUT, PATCH, DELETE y OPTIONS, sin credenciales. PATCH conserva la cancelación de turnos existente. También se responden las solicitudes preflight que no coinciden con una ruta.
+
+`LoggingFilter` implementa `GlobalFilter` y `Ordered` con orden -1. También participa como `WebFilter` para registrar Actuator, preflight y rutas inexistentes. Una marca por intercambio evita registros duplicados. Cada solicitud registra método y ruta; antes de confirmar la respuesta registra el estado HTTP efectivo, milisegundos, ruta elegida y destino. Un estado implícito se registra como 200; los errores siguen propagándose al manejador correspondiente. No registra cuerpos, cabeceras ni valores de consulta.
+
+Actuator expone `health`, `info` y `gateway`; este último tiene acceso `read-only`. `GET /actuator/gateway/routes` permite inspeccionar rutas y `POST /actuator/gateway/refresh` devuelve 404 al no exponer operaciones de escritura. Se usan los nombres actuales `spring.cloud.gateway.server.webflux` y `management.endpoint.gateway.access`, según los manuales oficiales de [WebFlux](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/starter.html), [CORS](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/cors-configuration.html) y [Actuator](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/actuator-api.html).
+
+La verificación real de balanceo levanta temporalmente dos instancias de Dueños: Eureka publica ambas y el gateway distribuye solicitudes entre sus dos direcciones. Después se restaura una instancia y se comprueba la recuperación. Se mantienen las cuatro bases MySQL existentes; el esquema H2 ilustrativo del PDF no implica migrar la persistencia. Circuit Breaker corresponde al sprint 13; autenticación JWT y rate limiting, al 14.
 
 ## Verificaciones
 
@@ -289,16 +334,16 @@ La consigna del sprint 11 prevalece sobre las vistas previas anteriores: Gateway
 .\mvnw.cmd verify
 ```
 
-Las pruebas de aplicación usan un repositorio en memoria como doble, sin levantar Spring ni MySQL. La [colección del sprint 11](docs/evidencias/sprint-11/sprint-11-openfeign.postman_collection.json) comprueba las cuatro APIs, el flujo OpenFeign, Eureka, Actuator y los errores de referencias. Las [evidencias actuales](docs/evidencias/sprint-11/README.md) incluyen las pruebas de indisponibilidad y timeout; se conservan también las [del sprint 10](docs/evidencias/sprint-10/README.md) y [del sprint 09](docs/evidencias/sprint-09/README.md).
+Las pruebas de aplicación usan un repositorio en memoria como doble, sin levantar Spring ni MySQL. Cuatro pruebas del gateway comprueban el logging, la ausencia de duplicados y la propagación del error con su estado final. La [colección actual](docs/evidencias/sprint-12/sprint-12-gateway.postman_collection.json) comprueba las cuatro APIs por 8080, el flujo OpenFeign, rutas, CORS, Eureka, configuración y Actuator. Las [evidencias del sprint 12](docs/evidencias/sprint-12/README.md) incluyen el balanceo real. Se conservan las entregas históricas de los [sprints 11](docs/evidencias/sprint-11/README.md), [10](docs/evidencias/sprint-10/README.md) y [09](docs/evidencias/sprint-09/README.md); sus colecciones corresponden a sus respectivas versiones.
 
 Con el ecosistema iniciado y las cuatro bases sin registros, ejecutar la colección en el orden guardado:
 
 ```powershell
-npx newman run docs/evidencias/sprint-11/sprint-11-openfeign.postman_collection.json
+npx newman run docs/evidencias/sprint-12/sprint-12-gateway.postman_collection.json
 ```
 
 La colección crea y elimina sus propios datos. Para ejecutar el JAR generado:
 
 ```powershell
-java -jar ms-dueno/target/ms-dueno-0.0.1-SNAPSHOT.jar
+java -jar api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
 ```
