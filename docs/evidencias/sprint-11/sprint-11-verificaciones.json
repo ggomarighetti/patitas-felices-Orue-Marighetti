@@ -1,0 +1,151 @@
+{
+  "executedAt": "2026-11-03T00:08:54.807653+00:00",
+  "baseMerge": "259cc0d6073e871ac9bf95dffbf4fdf4723cc3a9",
+  "modules": [
+    "ms-dueno",
+    "ms-mascota",
+    "ms-veterinario",
+    "ms-turno",
+    "eureka-server",
+    "config-server"
+  ],
+  "build": {
+    "commands": [
+      "mvnw.cmd clean package",
+      "mvnw.cmd verify"
+    ],
+    "tests": 43,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "com.patitas.dueno.application.DuenoServiceImplTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.adapter.out.feign.MascotaFeignAdapterTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.adapter.out.feign.VeterinarioFeignAdapterTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.patitas.turno.application.TurnoServiceImplTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "architecture": {
+    "javaFilesWithoutComments": 73,
+    "applicationWithoutAdaptersAndFeign": true,
+    "independentDomainDtos": true,
+    "clients": {
+      "mascota": {
+        "serviceName": "ms-mascota",
+        "responseFields": [
+          "id",
+          "nombre",
+          "duenoId"
+        ],
+        "discovery": "Eureka + Spring Cloud LoadBalancer",
+        "fixedUrl": false
+      },
+      "veterinario": {
+        "serviceName": "ms-veterinario",
+        "responseFields": [
+          "id",
+          "nombre",
+          "apellido",
+          "especialidad"
+        ],
+        "discovery": "Eureka + Spring Cloud LoadBalancer",
+        "fixedUrl": false
+      }
+    }
+  },
+  "configuration": {
+    "repository": "https://github.com/ggomarighetti/patitas-config",
+    "commit": "8caa85e93a178af113c0813544f379bd5ea78093",
+    "connectTimeoutMs": 3000,
+    "readTimeoutMs": 5000,
+    "requestCompression": true,
+    "responseCompression": true,
+    "logging": "BASIC + DEBUG"
+  },
+  "eureka": {
+    "MS-DUENO": [
+      "UP"
+    ],
+    "MS-MASCOTA": [
+      "UP"
+    ],
+    "MS-TURNO": [
+      "UP"
+    ],
+    "MS-VETERINARIO": [
+      "UP"
+    ]
+  },
+  "databases": {
+    "dueno": {
+      "database": "dueno_db",
+      "container": "mysql",
+      "table": "duenos",
+      "foreignKeys": 0,
+      "health": "UP",
+      "recordsAfterTests": 0
+    },
+    "mascota": {
+      "database": "mascota_db",
+      "container": "mysql-mascota",
+      "table": "mascotas",
+      "foreignKeys": 0,
+      "health": "UP",
+      "recordsAfterTests": 0
+    },
+    "veterinario": {
+      "database": "veterinario_db",
+      "container": "mysql-veterinario",
+      "table": "veterinarios",
+      "foreignKeys": 0,
+      "health": "UP",
+      "recordsAfterTests": 0
+    },
+    "turno": {
+      "database": "turno_db",
+      "container": "mysql-turno",
+      "table": "turnos",
+      "foreignKeys": 0,
+      "health": "UP",
+      "recordsAfterTests": 0
+    }
+  },
+  "postman": {
+    "requests": 59,
+    "assertions": 121,
+    "failures": 0
+  },
+  "failureCases": 3,
+  "measuredReadTimeoutMs": 5035,
+  "gatewayImplemented": false,
+  "circuitBreakerImplemented": false,
+  "cleanup": {
+    "allServicesRestored": true,
+    "allTestRecordsDeleted": true
+  },
+  "specificationSha256": "b93b1544790c952b801a285a71bfc00bbf613ad5c68daeeb751bdd49d98b2864"
+}

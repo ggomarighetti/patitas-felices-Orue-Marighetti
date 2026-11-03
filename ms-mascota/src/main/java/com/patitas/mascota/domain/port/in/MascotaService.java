@@ -12,9 +12,9 @@ public interface MascotaService {
 
     List<Mascota> findByDuenoId(Long duenoId);
 
-    Mascota save(Mascota mascota);
+    Mascota save(Mascota value);
 
-    Mascota update(Long id, Mascota mascota);
+    Mascota update(Long id, Mascota value);
 
     void deleteById(Long id);
 }

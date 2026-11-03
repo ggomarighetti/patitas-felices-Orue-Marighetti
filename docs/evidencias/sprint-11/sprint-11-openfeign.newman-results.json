@@ -1,0 +1,2814 @@
+{
+  "formatVersion": 1,
+  "tool": {
+    "name": "Newman",
+    "version": "6.2.3"
+  },
+  "executedAt": "2026-11-03T00:01:37.608000+00:00",
+  "collection": "Sprint 11 - Comunicación OpenFeign y APIs veterinarias",
+  "totals": {
+    "requests": 59,
+    "assertions": 121,
+    "failures": 0
+  },
+  "failures": [],
+  "results": [
+    {
+      "name": "01 - Salud de ms-dueno",
+      "method": "GET",
+      "url": "http://localhost:8081/actuator/health",
+      "status": 200,
+      "body": {
+        "components": {
+          "clientConfigServer": {
+            "details": {
+              "propertySources": [
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-dueno.yml",
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                "configClient"
+              ]
+            },
+            "status": "UP"
+          },
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "discoveryComposite": {
+            "components": {
+              "discoveryClient": {
+                "details": {
+                  "services": [
+                    "ms-dueno",
+                    "ms-veterinario",
+                    "ms-mascota",
+                    "ms-turno"
+                  ]
+                },
+                "status": "UP"
+              },
+              "eureka": {
+                "details": {
+                  "applications": {
+                    "MS-DUENO": 1,
+                    "MS-MASCOTA": 1,
+                    "MS-TURNO": 1,
+                    "MS-VETERINARIO": 1
+                  }
+                },
+                "description": "Remote status from Eureka server",
+                "status": "UP"
+              }
+            },
+            "status": "UP"
+          },
+          "diskSpace": {
+            "details": {
+              "total": 1081101176832,
+              "free": 948438769664,
+              "threshold": 10485760,
+              "path": "/.",
+              "exists": true
+            },
+            "status": "UP"
+          },
+          "livenessState": {
+            "status": "UP"
+          },
+          "ping": {
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          },
+          "refreshScope": {
+            "status": "UP"
+          },
+          "ssl": {
+            "details": {
+              "expiringChains": [],
+              "invalidChains": [],
+              "validChains": []
+            },
+            "status": "UP"
+          }
+        },
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio y MySQL UP",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "MySQL UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "02 - Salud de ms-mascota",
+      "method": "GET",
+      "url": "http://localhost:8082/actuator/health",
+      "status": 200,
+      "body": {
+        "components": {
+          "clientConfigServer": {
+            "details": {
+              "propertySources": [
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-mascota.yml",
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                "configClient"
+              ]
+            },
+            "status": "UP"
+          },
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "discoveryComposite": {
+            "components": {
+              "discoveryClient": {
+                "details": {
+                  "services": [
+                    "ms-dueno",
+                    "ms-mascota",
+                    "ms-turno",
+                    "ms-veterinario"
+                  ]
+                },
+                "status": "UP"
+              },
+              "eureka": {
+                "details": {
+                  "applications": {
+                    "MS-DUENO": 1,
+                    "MS-MASCOTA": 1,
+                    "MS-TURNO": 1,
+                    "MS-VETERINARIO": 1
+                  }
+                },
+                "description": "Remote status from Eureka server",
+                "status": "UP"
+              }
+            },
+            "status": "UP"
+          },
+          "diskSpace": {
+            "details": {
+              "total": 1081101176832,
+              "free": 948438769664,
+              "threshold": 10485760,
+              "path": "/.",
+              "exists": true
+            },
+            "status": "UP"
+          },
+          "livenessState": {
+            "status": "UP"
+          },
+          "ping": {
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          },
+          "refreshScope": {
+            "status": "UP"
+          },
+          "ssl": {
+            "details": {
+              "expiringChains": [],
+              "invalidChains": [],
+              "validChains": []
+            },
+            "status": "UP"
+          }
+        },
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio y MySQL UP",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "MySQL UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "03 - Salud de ms-veterinario",
+      "method": "GET",
+      "url": "http://localhost:8083/actuator/health",
+      "status": 200,
+      "body": {
+        "components": {
+          "clientConfigServer": {
+            "details": {
+              "propertySources": [
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-veterinario.yml",
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                "configClient"
+              ]
+            },
+            "status": "UP"
+          },
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "discoveryComposite": {
+            "components": {
+              "discoveryClient": {
+                "details": {
+                  "services": [
+                    "ms-dueno",
+                    "ms-mascota",
+                    "ms-turno",
+                    "ms-veterinario"
+                  ]
+                },
+                "status": "UP"
+              },
+              "eureka": {
+                "details": {
+                  "applications": {
+                    "MS-DUENO": 1,
+                    "MS-MASCOTA": 1,
+                    "MS-TURNO": 1,
+                    "MS-VETERINARIO": 1
+                  }
+                },
+                "description": "Remote status from Eureka server",
+                "status": "UP"
+              }
+            },
+            "status": "UP"
+          },
+          "diskSpace": {
+            "details": {
+              "total": 1081101176832,
+              "free": 948438769664,
+              "threshold": 10485760,
+              "path": "/.",
+              "exists": true
+            },
+            "status": "UP"
+          },
+          "livenessState": {
+            "status": "UP"
+          },
+          "ping": {
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          },
+          "refreshScope": {
+            "status": "UP"
+          },
+          "ssl": {
+            "details": {
+              "expiringChains": [],
+              "invalidChains": [],
+              "validChains": []
+            },
+            "status": "UP"
+          }
+        },
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio y MySQL UP",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "MySQL UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "04 - Salud de ms-turno",
+      "method": "GET",
+      "url": "http://localhost:8084/actuator/health",
+      "status": 200,
+      "body": {
+        "components": {
+          "clientConfigServer": {
+            "details": {
+              "propertySources": [
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+                "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+                "configClient"
+              ]
+            },
+            "status": "UP"
+          },
+          "db": {
+            "details": {
+              "database": "MySQL",
+              "validationQuery": "isValid()"
+            },
+            "status": "UP"
+          },
+          "discoveryComposite": {
+            "components": {
+              "discoveryClient": {
+                "details": {
+                  "services": [
+                    "ms-dueno",
+                    "ms-mascota",
+                    "ms-turno",
+                    "ms-veterinario"
+                  ]
+                },
+                "status": "UP"
+              },
+              "eureka": {
+                "details": {
+                  "applications": {
+                    "MS-DUENO": 1,
+                    "MS-MASCOTA": 1,
+                    "MS-TURNO": 1,
+                    "MS-VETERINARIO": 1
+                  }
+                },
+                "description": "Remote status from Eureka server",
+                "status": "UP"
+              }
+            },
+            "status": "UP"
+          },
+          "diskSpace": {
+            "details": {
+              "total": 1081101176832,
+              "free": 948438769664,
+              "threshold": 10485760,
+              "path": "/.",
+              "exists": true
+            },
+            "status": "UP"
+          },
+          "livenessState": {
+            "status": "UP"
+          },
+          "ping": {
+            "status": "UP"
+          },
+          "readinessState": {
+            "status": "UP"
+          },
+          "refreshScope": {
+            "status": "UP"
+          },
+          "ssl": {
+            "details": {
+              "expiringChains": [],
+              "invalidChains": [],
+              "validChains": []
+            },
+            "status": "UP"
+          }
+        },
+        "groups": [
+          "liveness",
+          "readiness"
+        ],
+        "status": "UP"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Servicio y MySQL UP",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "MySQL UP",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "05 - Cuatro microservicios registrados",
+      "method": "GET",
+      "url": "http://localhost:8761/eureka/apps",
+      "status": 200,
+      "body": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "UP_4_",
+          "application": [
+            {
+              "name": "MS-DUENO",
+              "instance": [
+                {
+                  "instanceId": "38dbb354c6b7:ms-dueno:8081",
+                  "hostName": "172.30.0.5",
+                  "app": "MS-DUENO",
+                  "ipAddr": "172.30.0.5",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 8081,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793662582567,
+                    "lastRenewalTimestamp": 1793664142335,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793662581794
+                  },
+                  "metadata": {
+                    "management.port": "8081"
+                  },
+                  "homePageUrl": "http://172.30.0.5:8081/",
+                  "statusPageUrl": "http://172.30.0.5:8081/actuator/info",
+                  "healthCheckUrl": "http://172.30.0.5:8081/actuator/health",
+                  "vipAddress": "ms-dueno",
+                  "secureVipAddress": "ms-dueno",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793662582567",
+                  "lastDirtyTimestamp": "1793662581593",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "MS-MASCOTA",
+              "instance": [
+                {
+                  "instanceId": "5198546dde05:ms-mascota:8082",
+                  "hostName": "172.30.0.10",
+                  "app": "MS-MASCOTA",
+                  "ipAddr": "172.30.0.10",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 8082,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793664027345,
+                    "lastRenewalTimestamp": 1793664147278,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793663887832
+                  },
+                  "metadata": {
+                    "management.port": "8082"
+                  },
+                  "homePageUrl": "http://172.30.0.10:8082/",
+                  "statusPageUrl": "http://172.30.0.10:8082/actuator/info",
+                  "healthCheckUrl": "http://172.30.0.10:8082/actuator/health",
+                  "vipAddress": "ms-mascota",
+                  "secureVipAddress": "ms-mascota",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793664027345",
+                  "lastDirtyTimestamp": "1793664026773",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "MS-TURNO",
+              "instance": [
+                {
+                  "instanceId": "f52b0ce65d4e:ms-turno:8084",
+                  "hostName": "172.30.0.11",
+                  "app": "MS-TURNO",
+                  "ipAddr": "172.30.0.11",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 8084,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793664041841,
+                    "lastRenewalTimestamp": 1793664041841,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793663902426
+                  },
+                  "metadata": {
+                    "management.port": "8084"
+                  },
+                  "homePageUrl": "http://172.30.0.11:8084/",
+                  "statusPageUrl": "http://172.30.0.11:8084/actuator/info",
+                  "healthCheckUrl": "http://172.30.0.11:8084/actuator/health",
+                  "vipAddress": "ms-turno",
+                  "secureVipAddress": "ms-turno",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793664041841",
+                  "lastDirtyTimestamp": "1793664041265",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "MS-VETERINARIO",
+              "instance": [
+                {
+                  "instanceId": "36dc6d2bdcd8:ms-veterinario:8083",
+                  "hostName": "172.30.0.9",
+                  "app": "MS-VETERINARIO",
+                  "ipAddr": "172.30.0.9",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 8083,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793664026661,
+                    "lastRenewalTimestamp": 1793664146600,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793663886967
+                  },
+                  "metadata": {
+                    "management.port": "8083"
+                  },
+                  "homePageUrl": "http://172.30.0.9:8083/",
+                  "statusPageUrl": "http://172.30.0.9:8083/actuator/info",
+                  "healthCheckUrl": "http://172.30.0.9:8083/actuator/health",
+                  "vipAddress": "ms-veterinario",
+                  "secureVipAddress": "ms-veterinario",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793664026661",
+                  "lastDirtyTimestamp": "1793664026084",
+                  "actionType": "ADDED"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombres Eureka exactos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "06 - Timeouts y compresión desde Git",
+      "method": "GET",
+      "url": "http://localhost:8888/ms-turno/default",
+      "status": 200,
+      "body": {
+        "name": "ms-turno",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": "13adaf66dc82198e6def9a2fb901d736dac318a4",
+        "state": "",
+        "propertySources": [
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/ms-turno.yml",
+            "source": {
+              "server.port": 8084,
+              "spring.cloud.openfeign.client.config.default.connectTimeout": 3000,
+              "spring.cloud.openfeign.client.config.default.readTimeout": 5000,
+              "spring.cloud.openfeign.client.config.default.loggerLevel": "basic",
+              "spring.cloud.openfeign.compression.request.enabled": true,
+              "spring.cloud.openfeign.compression.response.enabled": true,
+              "spring.datasource.url": "${DB_URL:jdbc:mysql://localhost:3306/turno_db}",
+              "spring.datasource.username": "${DB_USERNAME:patitas}",
+              "spring.datasource.password": "${DB_PASSWORD:}",
+              "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+              "spring.jpa.hibernate.ddl-auto": "update",
+              "spring.jpa.show-sql": true,
+              "spring.jpa.open-in-view": false,
+              "info.app.name": "ms-turno",
+              "info.app.description": "Microservicio de gestión de turnos - Patitas Felices",
+              "info.app.version": "1.0.0",
+              "logging.level.com.patitas.turno.adapter.out.feign": "DEBUG"
+            }
+          },
+          {
+            "name": "https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "source": {
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.instance.prefer-ip-address": true,
+              "management.endpoints.web.exposure.include": "health,info,metrics,env,beans,mappings",
+              "management.endpoint.health.show-details": "always",
+              "management.endpoint.env.show-values": "never",
+              "management.info.env.enabled": true,
+              "patitas.config-source": "patitas-config"
+            }
+          }
+        ]
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Configuración OpenFeign actual",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "07 - Lista inicial vacía de duenos",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin registros previos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "08 - Lista inicial vacía de mascotas",
+      "method": "GET",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin registros previos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "09 - Lista inicial vacía de veterinarios",
+      "method": "GET",
+      "url": "http://localhost:8083/api/veterinarios",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin registros previos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "10 - Lista inicial vacía de turnos",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Sin registros previos",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "11 - Registrar dueño de la mascota",
+      "method": "POST",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 201,
+      "body": {
+        "id": 13,
+        "nombre": "Ana",
+        "apellido": "Gómez",
+        "email": "sprint11@example.com",
+        "telefono": "1112345678"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "12 - Crear Luna según ejemplo del PDF",
+      "method": "POST",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 201,
+      "body": {
+        "id": 1,
+        "nombre": "Luna",
+        "especie": "Gato",
+        "raza": "Siamés",
+        "fechaNacimiento": null,
+        "edad": 3,
+        "duenoId": 13
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Edad declarada conservada",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "No se inventa fecha de nacimiento",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "13 - Consultar Luna",
+      "method": "GET",
+      "url": "http://localhost:8082/api/mascotas/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "nombre": "Luna",
+        "especie": "Gato",
+        "raza": "Siamés",
+        "fechaNacimiento": null,
+        "edad": 3,
+        "duenoId": 13
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombre conservado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "14 - Mascotas por dueño",
+      "method": "GET",
+      "url": "http://localhost:8082/api/mascotas/dueno/13",
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "nombre": "Luna",
+          "especie": "Gato",
+          "raza": "Siamés",
+          "fechaNacimiento": null,
+          "edad": 3,
+          "duenoId": 13
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Solo la mascota del dueño",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "15 - Rechazar edad negativa",
+      "method": "POST",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:42.910775288",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "edad: must be greater than or equal to 0",
+        "path": "/api/mascotas"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "16 - Rechazar dueño no positivo",
+      "method": "POST",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:43.325858728",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "duenoId: must be greater than 0",
+        "path": "/api/mascotas"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "17 - Rechazar nombre de mascota vacío",
+      "method": "POST",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:43.729789885",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "nombre: must not be blank",
+        "path": "/api/mascotas"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "18 - Rechazar fecha de nacimiento futura",
+      "method": "POST",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:44.135178099",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "fechaNacimiento: must be a date in the past or in the present",
+        "path": "/api/mascotas"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "19 - Mascota inexistente responde 404",
+      "method": "GET",
+      "url": "http://localhost:8082/api/mascotas/999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:44.543140601",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Mascota no encontrada: 999999",
+        "path": "/api/mascotas/999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "20 - Actualizar mascota",
+      "method": "PUT",
+      "url": "http://localhost:8082/api/mascotas/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "nombre": "Luna",
+        "especie": "Gato",
+        "raza": "Siamés",
+        "fechaNacimiento": null,
+        "edad": 4,
+        "duenoId": 13
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Edad actualizada",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "21 - Actualizar mascota inexistente",
+      "method": "PUT",
+      "url": "http://localhost:8082/api/mascotas/999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:44.748319943",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Mascota no encontrada: 999999",
+        "path": "/api/mascotas/999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "22 - Crear veterinaria según ejemplo sin matrícula",
+      "method": "POST",
+      "url": "http://localhost:8083/api/veterinarios",
+      "status": 201,
+      "body": {
+        "id": 1,
+        "nombre": "Marta",
+        "apellido": "López",
+        "matricula": null,
+        "especialidad": "Felinos",
+        "email": "marta@patitas.com"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Nombre conservado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "23 - Consultar veterinaria",
+      "method": "GET",
+      "url": "http://localhost:8083/api/veterinarios/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "nombre": "Marta",
+        "apellido": "López",
+        "matricula": null,
+        "especialidad": "Felinos",
+        "email": "marta@patitas.com"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "24 - Veterinarios por especialidad",
+      "method": "GET",
+      "url": "http://localhost:8083/api/veterinarios/especialidad/Felinos",
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "nombre": "Marta",
+          "apellido": "López",
+          "matricula": null,
+          "especialidad": "Felinos",
+          "email": "marta@patitas.com"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Especialidad encontrada",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "25 - Rechazar email inválido de veterinario",
+      "method": "POST",
+      "url": "http://localhost:8083/api/veterinarios",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:45.698202727",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "email: must be a well-formed email address",
+        "path": "/api/veterinarios"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "26 - Rechazar especialidad vacía",
+      "method": "POST",
+      "url": "http://localhost:8083/api/veterinarios",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:46.035903634",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "especialidad: must not be blank",
+        "path": "/api/veterinarios"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "27 - Veterinario inexistente responde 404",
+      "method": "GET",
+      "url": "http://localhost:8083/api/veterinarios/999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:46.445012701",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Veterinario no encontrado: 999999",
+        "path": "/api/veterinarios/999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "28 - Actualizar veterinario",
+      "method": "PUT",
+      "url": "http://localhost:8083/api/veterinarios/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "nombre": "Marta María",
+        "apellido": "López",
+        "matricula": "MP-1234",
+        "especialidad": "Felinos",
+        "email": "marta@patitas.com"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos actualizados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "29 - Crear turno validando ambos servicios con Feign",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 201,
+      "body": {
+        "id": 1,
+        "fechaHora": "2026-11-15T10:00:00",
+        "mascotaId": 1,
+        "veterinarioId": 1,
+        "motivo": "Control anual",
+        "estado": "PENDIENTE"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Estado inicial PENDIENTE",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Location con ID asignado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "30 - Consultar turno",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "fechaHora": "2026-11-15T10:00:00",
+        "mascotaId": 1,
+        "veterinarioId": 1,
+        "motivo": "Control anual",
+        "estado": "PENDIENTE"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Motivo conservado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "31 - Rechazar mascota inexistente en Turnos",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:47.177642631",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Mascota no encontrada: 999999",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error de mascota",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "32 - Rechazar veterinario inexistente en Turnos",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:47.296533586",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Veterinario no encontrado: 999999",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error de veterinario",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "33 - Rechazar ID de mascota no positivo",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:47.38083946",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "mascotaId: must be greater than 0",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "34 - Rechazar fecha inválida",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:47.781993701",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "La solicitud contiene datos inválidos o incompletos",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "35 - Rechazar datos obligatorios ausentes",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 400,
+      "body": {
+        "timestamp": "2026-11-03T00:01:48.16824215",
+        "status": 400,
+        "error": "Bad Request",
+        "mensaje": "fechaHora: must not be null; mascotaId: must not be null; motivo: must not be blank; veterinarioId: must not be null",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "36 - Ningún turno inválido fue persistido",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "fechaHora": "2026-11-15T10:00:00",
+          "mascotaId": 1,
+          "veterinarioId": 1,
+          "motivo": "Control anual",
+          "estado": "PENDIENTE"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Un único turno",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "37 - Rechazar actualización con mascota inexistente",
+      "method": "PUT",
+      "url": "http://localhost:8084/api/turnos/1",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:48.680752691",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Mascota no encontrada: 999999",
+        "path": "/api/turnos/1"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "38 - Conservar turno tras actualización rechazada",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "fechaHora": "2026-11-15T10:00:00",
+        "mascotaId": 1,
+        "veterinarioId": 1,
+        "motivo": "Control anual",
+        "estado": "PENDIENTE"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Motivo intacto",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "39 - Actualizar turno con referencias válidas",
+      "method": "PUT",
+      "url": "http://localhost:8084/api/turnos/1",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "fechaHora": "2026-11-15T10:00:00",
+        "mascotaId": 1,
+        "veterinarioId": 1,
+        "motivo": "Control actualizado",
+        "estado": "PENDIENTE"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Motivo actualizado",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Conserva estado",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "40 - Turnos por mascota",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos/mascota/1",
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "fechaHora": "2026-11-15T10:00:00",
+          "mascotaId": 1,
+          "veterinarioId": 1,
+          "motivo": "Control actualizado",
+          "estado": "PENDIENTE"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Turno de la mascota",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "41 - Turnos por veterinario",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos/veterinario/1",
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "fechaHora": "2026-11-15T10:00:00",
+          "mascotaId": 1,
+          "veterinarioId": 1,
+          "motivo": "Control actualizado",
+          "estado": "PENDIENTE"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Turno del veterinario",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "42 - Cancelar turno",
+      "method": "PATCH",
+      "url": "http://localhost:8084/api/turnos/1/cancelar",
+      "status": 200,
+      "body": {
+        "id": 1,
+        "fechaHora": "2026-11-15T10:00:00",
+        "mascotaId": 1,
+        "veterinarioId": 1,
+        "motivo": "Control actualizado",
+        "estado": "CANCELADO"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Estado CANCELADO",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "43 - Turno inexistente responde 404",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos/999999",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:49.63470363",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Turno no encontrado: 999999",
+        "path": "/api/turnos/999999"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "44 - Cancelar turno inexistente",
+      "method": "PATCH",
+      "url": "http://localhost:8084/api/turnos/999999/cancelar",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:49.729142006",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Turno no encontrado: 999999",
+        "path": "/api/turnos/999999/cancelar"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "45 - Eliminar turno de prueba",
+      "method": "DELETE",
+      "url": "http://localhost:8084/api/turnos/1",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "46 - Eliminar mascota de prueba",
+      "method": "DELETE",
+      "url": "http://localhost:8082/api/mascotas/1",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "47 - Mascota eliminada deja de validar turnos",
+      "method": "POST",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 404,
+      "body": {
+        "timestamp": "2026-11-03T00:01:50.044859862",
+        "status": 404,
+        "error": "Not Found",
+        "mensaje": "Mascota no encontrada: 1",
+        "path": "/api/turnos"
+      },
+      "assertions": [
+        {
+          "name": "HTTP 404",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Error uniforme y descriptivo",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "48 - Eliminar veterinario de prueba",
+      "method": "DELETE",
+      "url": "http://localhost:8083/api/veterinarios/1",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "49 - Eliminar dueño de prueba",
+      "method": "DELETE",
+      "url": "http://localhost:8081/api/duenos/13",
+      "status": 204,
+      "body": null,
+      "assertions": [
+        {
+          "name": "HTTP 204",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "50 - Lista final vacía de duenos",
+      "method": "GET",
+      "url": "http://localhost:8081/api/duenos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "51 - Lista final vacía de mascotas",
+      "method": "GET",
+      "url": "http://localhost:8082/api/mascotas",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "52 - Lista final vacía de veterinarios",
+      "method": "GET",
+      "url": "http://localhost:8083/api/veterinarios",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "53 - Lista final vacía de turnos",
+      "method": "GET",
+      "url": "http://localhost:8084/api/turnos",
+      "status": 200,
+      "body": [],
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Datos de prueba eliminados",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "54 - Swagger de ms-mascota",
+      "method": "GET",
+      "url": "http://localhost:8082/swagger-ui/index.html",
+      "status": 200,
+      "body": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n  </head>\n\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"./swagger-ui-bundle.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-ui-standalone-preset.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-initializer.js\" charset=\"UTF-8\"> </script>\n  </body>\n</html>\n",
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Swagger UI disponible",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "55 - OpenAPI de ms-mascota",
+      "method": "GET",
+      "url": "http://localhost:8082/v3/api-docs",
+      "status": 200,
+      "body": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "OpenAPI definition",
+          "version": "v0"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8082",
+            "description": "Generated server url"
+          }
+        ],
+        "paths": {
+          "/api/mascotas/{id}": {
+            "get": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "findById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/MascotaResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "put": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "update",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/MascotaRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/MascotaResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "deleteById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "204": {
+                  "description": "Recurso eliminado"
+                }
+              }
+            }
+          },
+          "/api/mascotas": {
+            "get": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "findAll",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/MascotaResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "save",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/MascotaRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "201": {
+                  "description": "Recurso creado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/MascotaResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/mascotas/dueno/{duenoId}": {
+            "get": {
+              "tags": [
+                "mascotas"
+              ],
+              "operationId": "findByDuenoId",
+              "parameters": [
+                {
+                  "name": "duenoId",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/MascotaResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "MascotaRequest": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "especie": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "raza": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "fechaNacimiento": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "edad": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "duenoId": {
+                  "type": "integer",
+                  "format": "int64",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "duenoId",
+                "especie",
+                "nombre"
+              ]
+            },
+            "MascotaResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "especie": {
+                  "type": "string"
+                },
+                "raza": {
+                  "type": "string"
+                },
+                "fechaNacimiento": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "edad": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "duenoId": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Alta documentada con 201",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "56 - Swagger de ms-veterinario",
+      "method": "GET",
+      "url": "http://localhost:8083/swagger-ui/index.html",
+      "status": 200,
+      "body": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n  </head>\n\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"./swagger-ui-bundle.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-ui-standalone-preset.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-initializer.js\" charset=\"UTF-8\"> </script>\n  </body>\n</html>\n",
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Swagger UI disponible",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "57 - OpenAPI de ms-veterinario",
+      "method": "GET",
+      "url": "http://localhost:8083/v3/api-docs",
+      "status": 200,
+      "body": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "OpenAPI definition",
+          "version": "v0"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8083",
+            "description": "Generated server url"
+          }
+        ],
+        "paths": {
+          "/api/veterinarios/{id}": {
+            "get": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "findById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/VeterinarioResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "put": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "update",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/VeterinarioRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/VeterinarioResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "deleteById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "204": {
+                  "description": "Recurso eliminado"
+                }
+              }
+            }
+          },
+          "/api/veterinarios": {
+            "get": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "findAll",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VeterinarioResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "save",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/VeterinarioRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "201": {
+                  "description": "Recurso creado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/VeterinarioResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/veterinarios/especialidad/{especialidad}": {
+            "get": {
+              "tags": [
+                "veterinarios"
+              ],
+              "operationId": "findByEspecialidad",
+              "parameters": [
+                {
+                  "name": "especialidad",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/VeterinarioResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "VeterinarioRequest": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "apellido": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "matricula": {
+                  "type": "string",
+                  "maxLength": 50,
+                  "minLength": 0
+                },
+                "especialidad": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "minLength": 0
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "maxLength": 254,
+                  "minLength": 0
+                }
+              },
+              "required": [
+                "apellido",
+                "email",
+                "especialidad",
+                "nombre"
+              ]
+            },
+            "VeterinarioResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "apellido": {
+                  "type": "string"
+                },
+                "matricula": {
+                  "type": "string"
+                },
+                "especialidad": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Alta documentada con 201",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "58 - Swagger de ms-turno",
+      "method": "GET",
+      "url": "http://localhost:8084/swagger-ui/index.html",
+      "status": 200,
+      "body": "<!-- HTML for static distribution bundle build -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Swagger UI</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"index.css\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\n  </head>\n\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"./swagger-ui-bundle.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-ui-standalone-preset.js\" charset=\"UTF-8\"> </script>\n    <script src=\"./swagger-initializer.js\" charset=\"UTF-8\"> </script>\n  </body>\n</html>\n",
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Swagger UI disponible",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "59 - OpenAPI de ms-turno",
+      "method": "GET",
+      "url": "http://localhost:8084/v3/api-docs",
+      "status": 200,
+      "body": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "OpenAPI definition",
+          "version": "v0"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:8084",
+            "description": "Generated server url"
+          }
+        ],
+        "paths": {
+          "/api/turnos/{id}": {
+            "get": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "findById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/TurnoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "put": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "update",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/TurnoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/TurnoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "deleteById",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "204": {
+                  "description": "Recurso eliminado"
+                }
+              }
+            }
+          },
+          "/api/turnos": {
+            "get": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "findAll",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TurnoResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "post": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "save",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/TurnoRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "201": {
+                  "description": "Recurso creado",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/TurnoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/turnos/{id}/cancelar": {
+            "patch": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "cancelar",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "$ref": "#/components/schemas/TurnoResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/turnos/veterinario/{veterinarioId}": {
+            "get": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "findByVeterinarioId",
+              "parameters": [
+                {
+                  "name": "veterinarioId",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TurnoResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/api/turnos/mascota/{mascotaId}": {
+            "get": {
+              "tags": [
+                "turnos"
+              ],
+              "operationId": "findByMascotaId",
+              "parameters": [
+                {
+                  "name": "mascotaId",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TurnoResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "TurnoRequest": {
+              "type": "object",
+              "properties": {
+                "fechaHora": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "mascotaId": {
+                  "type": "integer",
+                  "format": "int64",
+                  "exclusiveMinimum": 0
+                },
+                "veterinarioId": {
+                  "type": "integer",
+                  "format": "int64",
+                  "exclusiveMinimum": 0
+                },
+                "motivo": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "minLength": 0
+                }
+              },
+              "required": [
+                "fechaHora",
+                "mascotaId",
+                "motivo",
+                "veterinarioId"
+              ]
+            },
+            "TurnoResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "fechaHora": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "mascotaId": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "veterinarioId": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "motivo": {
+                  "type": "string"
+                },
+                "estado": {
+                  "type": "string",
+                  "enum": [
+                    "PENDIENTE",
+                    "CONFIRMADO",
+                    "CANCELADO"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "name": "Alta documentada con 201",
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    }
+  ]
+}

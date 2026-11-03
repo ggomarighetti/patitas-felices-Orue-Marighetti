@@ -12,9 +12,9 @@ public interface VeterinarioService {
 
     List<Veterinario> findByEspecialidad(String especialidad);
 
-    Veterinario save(Veterinario veterinario);
+    Veterinario save(Veterinario value);
 
-    Veterinario update(Long id, Veterinario veterinario);
+    Veterinario update(Long id, Veterinario value);
 
     void deleteById(Long id);
 }

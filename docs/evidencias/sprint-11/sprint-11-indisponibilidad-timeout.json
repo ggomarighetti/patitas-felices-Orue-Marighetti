@@ -1,0 +1,76 @@
+{
+  "executedAt": "2026-11-03T00:04:48.705612+00:00",
+  "initialFlow": {
+    "status": 201,
+    "state": "PENDIENTE",
+    "persistedAndDeleted": true
+  },
+  "cases": [
+    {
+      "name": "Servicio detenido: ms-mascota",
+      "response": {
+        "status": 503,
+        "body": {
+          "timestamp": "2026-11-03T00:03:43.294841643",
+          "status": 503,
+          "error": "Service Unavailable",
+          "mensaje": "Servicio remoto no disponible: ms-mascota",
+          "path": "/api/turnos"
+        },
+        "elapsedMs": 3028
+      },
+      "persistedTurnos": 0,
+      "recovery": {
+        "status": 201,
+        "state": "PENDIENTE",
+        "persistedAndDeleted": true
+      }
+    },
+    {
+      "name": "Servicio detenido: ms-veterinario",
+      "response": {
+        "status": 503,
+        "body": {
+          "timestamp": "2026-11-03T00:04:05.956495241",
+          "status": 503,
+          "error": "Service Unavailable",
+          "mensaje": "Servicio remoto no disponible: ms-veterinario",
+          "path": "/api/turnos"
+        },
+        "elapsedMs": 3042
+      },
+      "persistedTurnos": 0,
+      "recovery": {
+        "status": 201,
+        "state": "PENDIENTE",
+        "persistedAndDeleted": true
+      }
+    },
+    {
+      "name": "Timeout de lectura con ms-mascota pausado",
+      "response": {
+        "status": 503,
+        "body": {
+          "timestamp": "2026-11-03T00:04:47.604336293",
+          "status": 503,
+          "error": "Service Unavailable",
+          "mensaje": "Servicio remoto no disponible: ms-mascota",
+          "path": "/api/turnos"
+        },
+        "elapsedMs": 5035
+      },
+      "measuredMs": 5035,
+      "configuredReadTimeoutMs": 5000,
+      "persistedTurnos": 0,
+      "recovery": {
+        "status": 201,
+        "state": "PENDIENTE",
+        "persistedAndDeleted": true
+      }
+    }
+  ],
+  "cleanup": {
+    "allServicesRestored": true,
+    "allTestRecordsDeleted": true
+  }
+}

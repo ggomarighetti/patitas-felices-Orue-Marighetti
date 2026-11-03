@@ -25,5 +25,6 @@ public class Mascota {
     private String especie;
     private String raza;
     private LocalDate fechaNacimiento;
+    private Integer edad;
     private Long duenoId;
 }
