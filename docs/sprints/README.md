@@ -9,6 +9,7 @@ Se conserva la consigna original sin modificar el PDF.
 | 11 | [Comunicación con OpenFeign](Sprint_11_OpenFeign_Comunicacion.pdf) | APIs de Mascotas, Veterinarios y Turnos; validación cruzada, errores y timeout |
 | 12 | [API Gateway](Sprint_12_APIGateway.pdf) | Entrada reactiva en 8080, rutas con Eureka, CORS, logging, Actuator y configuración Git |
 | 13 | [Resiliencia con Resilience4j](Sprint_13_Resilience4j.pdf) | Circuit Breaker, Retry y fallback en Feign; Rate Limiter con Redis; Actuator y recuperación |
+| 14 | [Seguridad con JWT](Sprint_14_JWT_Seguridad.pdf) | ms-auth, usuarios BCrypt, registro/login, JWT HS256 y filtro global reactivo |
 
 ## Sprint 09
 
@@ -68,3 +69,13 @@ Gateway utiliza RequestRateLimiter con Redis y clave por dirección remota: 10 t
 Los bootstraps locales siguen siendo mínimos; la configuración se publica en patitas-config. Se adaptan las dependencias a Boot 4 mediante Resilience4j 2.4.0 y el starter AspectJ; las razones se explican en el [README](../../README.md#resiliencia--sprint-13).
 
 Las [evidencias del sprint 13](../evidencias/sprint-13/README.md) contienen la colección funcional, las 55 pruebas Maven, las caídas reales de ambas dependencias, las transiciones CLOSED → OPEN → HALF_OPEN → CLOSED, los reintentos, la ausencia de escrituras tras errores y la ráfaga con HTTP 429. JWT queda fuera de esta entrega.
+
+## Sprint 14
+
+Se agrega ms-auth en 8085, con base patitas_auth y entidad Usuario, username único, password BCrypt y rol. AuthService ofrece registro y login, con AuthenticationManager/DaoAuthenticationProvider. JwtService genera HS256 con identidad, rol, emisión y expiración a 24 horas, valida tokens y extrae el username. JJWT 0.12.6 se administra en el padre y sus componentes impl/jackson son dependencias de runtime.
+
+AuthenticationFilter implementa GlobalFilter, WebFilter y Ordered. Protege las APIs canónicas, sus aliases, Actuator y rutas inexistentes; exceptúa /auth/** y el preflight CORS válido. Rechaza JWT ausente, inválido o expirado con 401 antes del backend y agrega X-Auth-User desde la identidad verificada, sustituyendo cabeceras recibidas. Los cuatro servicios de negocio conservan su código.
+
+La clave compartida se genera localmente, permanece en .env y se inyecta únicamente en ms-auth y Gateway. Config Server publica placeholders y configura la ruta lb://ms-auth; Eureka registra seis aplicaciones. Se usan nueve rutas y catorce contenedores. La salud HTTP de Gateway requiere Bearer y Compose verifica su puerto TCP.
+
+Las [evidencias del sprint 14](../evidencias/sprint-14/README.md) contienen 103 pruebas Maven, 119 solicitudes y 208 verificaciones Newman, persistencia BCrypt, registro concurrente, 40 rechazos sin llegar a Mascotas y una ráfaga autenticada con 429. Se incluyen los cinco escenarios pedidos y el script de reproducción con limpieza de usuarios propios y tokens redactados. Autorización por rol y refresh token permanecen como extensiones opcionales.

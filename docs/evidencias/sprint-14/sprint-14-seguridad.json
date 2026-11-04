@@ -1,0 +1,531 @@
+{
+  "executedAt": "2026-11-03T23:57:50.474608+00:00",
+  "newman": {
+    "requests": 119,
+    "assertions": 208,
+    "failures": 0,
+    "durationMs": 33706
+  },
+  "database": {
+    "name": "patitas_auth",
+    "rows": [
+      {
+        "id": 1,
+        "username": "jorge_1ff5592dcae4",
+        "rol": "ADMIN",
+        "bcryptLength": 60,
+        "bcryptPrefix": true,
+        "plaintextStored": false
+      },
+      {
+        "id": 4,
+        "username": "s14_390d50c05287_race",
+        "rol": "ADMIN",
+        "bcryptLength": 60,
+        "bcryptPrefix": true,
+        "plaintextStored": false
+      },
+      {
+        "id": 3,
+        "username": "s14_390d50c05287_recep",
+        "rol": "RECEPCIONISTA",
+        "bcryptLength": 60,
+        "bcryptPrefix": true,
+        "plaintextStored": false
+      },
+      {
+        "id": 2,
+        "username": "s14_390d50c05287_vet",
+        "rol": "VET",
+        "bcryptLength": 60,
+        "bcryptPrefix": true,
+        "plaintextStored": false
+      }
+    ],
+    "uniqueUsernameIndex": true,
+    "saltedHashesAreDifferent": true
+  },
+  "concurrentRegistration": {
+    "statuses": [
+      200,
+      409
+    ],
+    "rowsForUsername": 1
+  },
+  "unauthorizedBeforeBackend": {
+    "requests": 40,
+    "statuses": [
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401
+    ],
+    "backendGetCountBefore": 14.0,
+    "backendGetCountAfter": 14.0
+  },
+  "authenticatedRateLimiter": {
+    "requests": 60,
+    "accepted": 20,
+    "rejected": 40,
+    "results": [
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 66.11
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 41.76
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 94.93
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 106.12
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 94.13
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 99.76
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 86.6
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 73.16
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 97.55
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 113.59
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 105.08
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 92.5
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 101.96
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 86.7
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 56.82
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 44.47
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 96.26
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 27.58
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 58.17
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 86.5
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 50.27
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 82.03
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 113.02
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 91.14
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 107.97
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 102.1
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 113.55
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 105.39
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 52.01
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 110.5
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 99.83
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 92.76
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 101.4
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 115.01
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 107.49
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 64.22
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 69.1
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 111.87
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 81.16
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 91.22
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 77.19
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 99.03
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 78.5
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 106.12
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 93.51
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 200,
+        "durationMs": 64.29
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 102.95
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 108.98
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 111.1
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 97.2
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 108.62
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 81.95
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 113.03
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 113.3
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 94.26
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 74.1
+      },
+      {
+        "path": "/api/turnos",
+        "status": 200,
+        "durationMs": 101.47
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 101.84
+      },
+      {
+        "path": "/api/turnos",
+        "status": 429,
+        "durationMs": 94.09
+      },
+      {
+        "path": "/ms-turno/api/turnos",
+        "status": 429,
+        "durationMs": 86.74
+      }
+    ],
+    "tokenAcceptedAfterRefill": true
+  },
+  "authenticatedHealth": {
+    "components": {
+      "clientConfigServer": {
+        "details": {
+          "propertySources": [
+            "configserver:https://github.com/ggomarighetti/patitas-config.git/api-gateway.yml",
+            "configserver:https://github.com/ggomarighetti/patitas-config.git/application.yml",
+            "configClient"
+          ]
+        },
+        "status": "UP"
+      },
+      "discoveryComposite": {
+        "components": {
+          "discoveryClient": {
+            "details": {
+              "services": [
+                "ms-dueno",
+                "ms-auth",
+                "ms-mascota",
+                "ms-turno",
+                "ms-veterinario",
+                "api-gateway"
+              ]
+            },
+            "status": "UP"
+          },
+          "eureka": {
+            "details": {
+              "applications": {
+                "MS-DUENO": 1,
+                "API-GATEWAY": 1,
+                "MS-AUTH": 1,
+                "MS-MASCOTA": 1,
+                "MS-TURNO": 1,
+                "MS-VETERINARIO": 1
+              }
+            },
+            "description": "Remote status from Eureka server",
+            "status": "UP"
+          }
+        },
+        "status": "UP"
+      },
+      "diskSpace": {
+        "details": {
+          "total": 1081101176832,
+          "free": 948059705344,
+          "threshold": 10485760,
+          "path": "/.",
+          "exists": true
+        },
+        "status": "UP"
+      },
+      "livenessState": {
+        "status": "UP"
+      },
+      "ping": {
+        "status": "UP"
+      },
+      "reactiveDiscoveryClients": {
+        "components": {
+          "Simple Reactive Discovery Client": {
+            "details": {
+              "services": []
+            },
+            "status": "UP"
+          },
+          "Spring Cloud Eureka Reactive Discovery Client": {
+            "details": {
+              "services": [
+                "ms-dueno",
+                "ms-auth",
+                "ms-mascota",
+                "ms-turno",
+                "ms-veterinario",
+                "api-gateway"
+              ]
+            },
+            "status": "UP"
+          }
+        },
+        "status": "UP"
+      },
+      "readinessState": {
+        "status": "UP"
+      },
+      "redis": {
+        "details": {
+          "version": "8.10.3"
+        },
+        "status": "UP"
+      },
+      "refreshScope": {
+        "status": "UP"
+      },
+      "ssl": {
+        "details": {
+          "expiringChains": [],
+          "invalidChains": [],
+          "validChains": []
+        },
+        "status": "UP"
+      }
+    },
+    "groups": [
+      "liveness",
+      "readiness"
+    ],
+    "status": "UP"
+  },
+  "businessDataAfterVerification": {
+    "duenos": [],
+    "mascotas": [],
+    "veterinarios": [],
+    "turnos": []
+  },
+  "cleanup": {
+    "ownUsersRemoved": 4,
+    "totalUsersRestored": 0
+  }
+}

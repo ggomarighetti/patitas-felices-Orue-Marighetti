@@ -4,7 +4,9 @@ Sistema de gestión veterinaria de la materia Microservicios y APIs Escalables d
 
 Este repositorio continúa la Fase 2 del trabajo práctico. El [monolito VetSystem, sprints 01 a 08](https://github.com/ggomarighetti/vetSystem-Orue-Marighetti) conserva sus entregas e historial. Se toma como base el [avance de los pasos 1 a 4 del sprint 09](https://github.com/ggomarighetti/patitas-felices-base-sprint-09/tree/e5cdd7d), cuyo historial también se conserva aquí.
 
-**Sprint 13:** Circuit Breaker y Retry con Resilience4j en los adaptadores Feign de Turnos, fallback 503, observabilidad y Rate Limiter con Redis en Gateway. Se incluyen la [consigna](docs/sprints/Sprint_13_Resilience4j.pdf) y las [evidencias actuales](docs/evidencias/sprint-13/README.md).
+**Sprint 14:** autenticación JWT con ms-auth, usuarios en una base propia, BCrypt y protección de todas las entradas de Gateway. Se incluyen la [consigna](docs/sprints/Sprint_14_JWT_Seguridad.pdf) y las [evidencias actuales](docs/evidencias/sprint-14/README.md).
+
+**Sprint 13:** Circuit Breaker y Retry con Resilience4j en los adaptadores Feign de Turnos, fallback 503, observabilidad y Rate Limiter con Redis en Gateway. Se conservan la [consigna](docs/sprints/Sprint_13_Resilience4j.pdf) y las [evidencias](docs/evidencias/sprint-13/README.md).
 
 **Sprint 12:** API Gateway reactivo como entrada de las cuatro APIs en el puerto 8080, rutas por Eureka y LoadBalancer, CORS, logging y configuración centralizada. Se conservan la [consigna](docs/sprints/Sprint_12_APIGateway.pdf) y las [evidencias](docs/evidencias/sprint-12/README.md).
 
@@ -17,7 +19,7 @@ Este repositorio continúa la Fase 2 del trabajo práctico. El [monolito VetSyst
 ## Requisitos
 
 - JDK 21, con `JAVA_HOME` apuntando al JDK. El wrapper incluido utiliza Maven 3.9.16.
-- MySQL 8 con dueno_db, mascota_db, veterinario_db y turno_db, y Redis 8 para el Rate Limiter, o Docker Desktop para levantar los servicios incluidos.
+- MySQL 8 con dueno_db, mascota_db, veterinario_db, turno_db y patitas_auth, y Redis 8 para el Rate Limiter, o Docker Desktop para levantar los servicios incluidos.
 - Acceso a Maven Central en la primera compilación y a GitHub para que Config Server clone el repositorio público de configuración.
 
 En PowerShell, si el JDK instalado no está seleccionado:
@@ -35,23 +37,23 @@ $env:PATH = "$env:JAVA_HOME/bin;$env:PATH"
 Desde la raíz, compilar todos los módulos y levantar el ecosistema:
 
 ```powershell
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+.\scripts\inicializar-entorno.ps1
 .\mvnw.cmd clean package
 docker compose --profile app up -d --wait
 ```
 
-Compose espera que Config Server esté disponible antes de iniciar Eureka. Cada microservicio espera a su propia base y a la infraestructura; Turnos también espera a Mascotas y Veterinarios. Gateway espera a los cuatro servicios y a Redis saludable. Los siete JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux. El ecosistema contiene doce contenedores.
+El script prepara `.env` y genera una clave JWT aleatoria si todavía no existe; conserva una clave ya configurada y no la muestra. Compose espera a Config Server, Eureka, las cinco bases, las aplicaciones y Redis según sus dependencias. Los ocho JARs se compilan para Java 21 y se ejecutan en Temurin 25 sobre Linux. El ecosistema contiene catorce contenedores.
 
 1. Config Server en 8888 clona la rama main de patitas-config.
 2. Eureka Server en 8761 habilita el registro.
-3. ms-mascota y ms-veterinario obtienen su configuración, conectan a sus bases y se registran en Eureka.
+3. ms-auth en 8085 obtiene su configuración, conecta a patitas_auth y se registra. Las cuatro APIs de negocio también obtienen configuración, conectan a sus bases y se registran.
 4. ms-turno arranca con ambos destinos disponibles. ms-dueno también se ejecuta en 8081.
 5. Redis almacena los tokens del Rate Limiter dentro de la red de Compose.
 6. api-gateway obtiene las rutas de Config Server, se registra en Eureka y recibe las solicitudes externas en 8080.
 
-Eureka y LoadBalancer actualizan sus registros y cachés periódicamente. Antes de ejecutar las colecciones, esperar que las cuatro listas públicas respondan 200. Tras reiniciar un servicio puede haber una demora de propagación aunque su health ya indique UP.
+Eureka y LoadBalancer actualizan sus registros y cachés periódicamente. Antes de ejecutar la colección, esperar que el login alcance ms-auth y que las cuatro listas respondan 200 con un Bearer válido. Tras reiniciar un servicio puede haber una demora de propagación aunque su health ya indique UP.
 
-En Docker, los puertos 8081 a 8084 quedan dentro de la red de Compose. Todas las llamadas de negocio se hacen a `http://localhost:8080`. Los puertos 8888 y 8761 siguen disponibles en localhost para administrar configuración y registro; los puertos MySQL permiten la administración local de las bases.
+En Docker, los puertos 8081 a 8085 quedan dentro de la red de Compose. Todas las llamadas de aplicación se hacen a `http://localhost:8080`. Los puertos 8888 y 8761 siguen disponibles en localhost para administrar configuración y registro; los puertos MySQL permiten la administración local de las bases. patitas_auth se administra en localhost:3310.
 
 Después de recompilar un servicio, reiniciar su contenedor. `docker compose --profile app stop` conserva el volumen de MySQL.
 
@@ -61,7 +63,7 @@ Cada contenedor MySQL crea la base de su servicio, con usuario `patitas` y contr
 
 ### Orden de arranque con Java local
 
-En un entorno con Java local funcionando, iniciar las cuatro bases con `docker compose --profile app up -d --wait mysql mysql-mascota mysql-veterinario mysql-turno`. Después, desde la raíz, iniciar cada aplicación en una terminal distinta y respetar el orden:
+En un entorno con Java local funcionando, ejecutar el inicializador e iniciar las cinco bases con `docker compose --profile app up -d --wait mysql mysql-mascota mysql-veterinario mysql-turno mysql-auth`. Después, desde la raíz, iniciar cada aplicación en una terminal distinta y respetar el orden:
 
 ```powershell
 .\mvnw.cmd spring-boot:run -pl config-server
@@ -73,7 +75,17 @@ Esperar que <http://localhost:8888/actuator/health> indique UP y luego iniciar:
 .\mvnw.cmd spring-boot:run -pl eureka-server
 ```
 
-Esperar que <http://localhost:8761/actuator/health> indique UP y recién entonces iniciar ms-dueno.
+Esperar que <http://localhost:8761/actuator/health> indique UP. En otra terminal, iniciar ms-auth con las credenciales de `.env`, su base y la misma clave local que usará Gateway:
+
+```powershell
+$env:DB_USERNAME = 'patitas'
+$env:DB_PASSWORD = 'patitas-local'
+$env:DB_URL = 'jdbc:mysql://localhost:3310/patitas_auth'
+$env:JWT_SECRET = (Get-Content -LiteralPath .env | Where-Object { $_ -like 'JWT_SECRET=*' }) -replace '^JWT_SECRET=', ''
+.\mvnw.cmd spring-boot:run -pl ms-auth
+```
+
+Después iniciar los servicios de negocio.
 
 Exportar al proceso de Spring las mismas credenciales definidas en `.env` y ejecutar el servicio:
 
@@ -108,9 +120,9 @@ Cuando los cuatro servicios figuren UP en Eureka, disponer de Redis en localhost
 .\mvnw.cmd spring-boot:run -pl api-gateway
 ```
 
-El gateway no necesita credenciales de MySQL. Con ejecución Java local, los servicios escuchan en 8081 a 8084; los clientes del sistema deben usar igualmente el puerto 8080.
+Antes de ese comando, cargar JWT_SECRET en la terminal de Gateway con la misma instrucción del ejemplo de ms-auth. El gateway no necesita credenciales de MySQL. Con ejecución Java local, los servicios escuchan en 8081 a 8085; los clientes del sistema usan el puerto 8080.
 
-Con un servidor MySQL propio, crear las cuatro bases y usar su puerto real en DB_URL. Con Compose, MySQL de Dueños está en 3306; Mascotas en 3307, Veterinarios en 3308 y Turnos en 3309.
+Con un servidor MySQL propio, crear las cinco bases y usar su puerto real en DB_URL. Con Compose, MySQL de Dueños está en 3306; Mascotas en 3307, Veterinarios en 3308, Turnos en 3309 y Auth en 3310.
 
 Spring Boot no carga `.env` automáticamente; Docker Compose sí lo utiliza. Si se usa MySQL instalado, crear `dueno_db` en Workbench y configurar las variables con el usuario correspondiente. Hibernate crea la tabla `duenos` al arrancar.
 
@@ -125,13 +137,15 @@ Spring Boot no carga `.env` automáticamente; Docker Compose sí lo utiliza. Si 
 | `EUREKA_URL` | `http://localhost:8761/eureka/` | Registro obtenido desde configuración compartida |
 | `REDIS_HOST` | `localhost` | Servidor Redis del gateway; Compose usa redis |
 | `REDIS_PORT` | `6379` | Puerto Redis del gateway |
+| `JWT_SECRET` | Sin valor predeterminado | Clave compartida de ms-auth y Gateway; mínimo 32 bytes UTF-8 |
 
-Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto al ejecutar Java local. Cada microservicio recibe su propia DB_URL; dentro de Docker se usan los nombres de los cuatro servidores MySQL. No se configura `spring.jpa.database-platform`: Hibernate detecta el dialecto.
+Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto al ejecutar Java local. Cada microservicio recibe su propia DB_URL; dentro de Docker se usan los nombres de los cinco servidores MySQL. No se configura `spring.jpa.database-platform`: Hibernate detecta el dialecto.
 
 - Eureka: <http://localhost:8761>.
 - Configuración JSON: <http://localhost:8888/ms-dueno/default>.
 - Configuración YAML: <http://localhost:8888/ms-dueno-default.yml>.
 - Configuración del gateway: <http://localhost:8888/api-gateway/default>.
+- Configuración de Auth: <http://localhost:8888/ms-auth/default>.
 - Salud del gateway: <http://localhost:8080/actuator/health>.
 - Información del gateway: <http://localhost:8080/actuator/info>.
 - Rutas activas: <http://localhost:8080/actuator/gateway/routes>.
@@ -142,6 +156,8 @@ Si se cambia `MYSQL_PORT`, configurar `DB_URL` de Dueños con ese mismo puerto a
 - Circuitos de Turnos: <http://localhost:8080/ms-turno/actuator/circuitbreakers>.
 - Eventos de Circuit Breaker: <http://localhost:8080/ms-turno/actuator/circuitbreakerevents>.
 - Eventos de Retry: <http://localhost:8080/ms-turno/actuator/retryevents>.
+
+Desde el sprint 14, los enlaces HTTP de Gateway requieren Authorization: Bearer, incluyendo Actuator. El navegador sin esa cabecera recibe 401. Los POST de `/auth/register` y `/auth/login` son públicos. El control de salud de Compose para Gateway verifica el puerto TCP; el health HTTP se comprueba con token en las evidencias.
 
 Swagger y OpenAPI permanecen en cada microservicio como documentación interna. Este sprint no agrega una interfaz Swagger unificada; la colección de Postman valida el acceso público por Gateway.
 
@@ -207,6 +223,14 @@ patitas-felices/
                                Circuit Breaker, Retry y predicado de errores transitorios
   eureka-server/                Aplicación de registro en 8761
   config-server/                Servidor de configuración Git en 8888
+  ms-auth/                      Usuarios, BCrypt y emisión JWT en 8085
+    src/main/java/com/patitas/auth/
+      domain/model/Usuario.java
+      domain/port/out/UsuarioRepository.java
+      application/service/     AuthService y JwtService
+      adapter/in/web/          AuthController
+      adapter/out/persistence/ UsuarioJpaRepository y su adaptador
+      config/                  SecurityConfig y GlobalExceptionHandler
   api-gateway/                  Entrada WebFlux/Netty en 8080
     src/main/java/com/patitas/gateway/
       ApiGatewayApplication.java
@@ -231,7 +255,8 @@ La consigna combina un dominio independiente de frameworks con la exigencia expl
 | `ms-mascota` | 8082 | Mascotas y referencia al dueño | API REST y base propia |
 | `ms-veterinario` | 8083 | Veterinarios y especialidades | API REST y base propia |
 | `ms-turno` | 8084 | Turnos, cancelación y validación remota | API REST, base propia y OpenFeign |
-| `api-gateway` | 8080 (publicado) | Entrada HTTP, rutas, CORS y logging | WebFlux, Netty y Eureka |
+| `api-gateway` | 8080 (publicado) | Entrada HTTP, JWT, rutas, CORS y logging | WebFlux, Netty y Eureka |
+| `ms-auth` | 8085 | Registro, login y tokens | BCrypt, JWT y patitas_auth |
 
 Cada servicio tiene su propia base. Mascota guarda duenoId como Long y Turno guarda mascotaId y veterinarioId como Long, sin JOIN, foreign key ni relaciones JPA entre servicios. Ningún módulo importa entidades o código de dominio de otro.
 
@@ -317,7 +342,7 @@ La consigna del sprint 11 prevalece sobre las vistas previas anteriores: Gateway
 
 El módulo `api-gateway` usa `spring-cloud-starter-gateway-server-webflux`, Eureka Client, Spring Cloud LoadBalancer, Config Client y Actuator. El servidor es Netty reactivo; su JAR no incluye Spring MVC, servidor Tomcat, JPA ni drivers MySQL. Se conserva la versión real del padre Maven, `0.0.1-SNAPSHOT`.
 
-El `application.yml` local contiene solamente `spring.application.name: api-gateway` y el import obligatorio de Config Server. Puerto, Eureka, rutas, CORS, Redis y Actuator provienen de [api-gateway.yml en patitas-config](https://github.com/ggomarighetti/patitas-config/blob/c369260a51fec773c2f1b7165333652ad306744b/api-gateway.yml). Los cambios de configuración se aplican al reiniciar la aplicación.
+El `application.yml` local contiene solamente `spring.application.name: api-gateway` y el import obligatorio de Config Server. Puerto, Eureka, rutas, CORS, Redis, JWT y Actuator provienen de [api-gateway.yml en patitas-config](https://github.com/ggomarighetti/patitas-config/blob/6209ff5268f5282daef5de110f9ed9d2160b03f9/api-gateway.yml). Los cambios de configuración se aplican al reiniciar la aplicación.
 
 | Ruta pública en 8080 | Destino resuelto por Eureka |
 | --- | --- |
@@ -328,7 +353,7 @@ El `application.yml` local contiene solamente `spring.application.name: api-gate
 
 Los cuatro destinos usan nombres de servicio, sin direcciones fijas. Discovery Locator genera `/ms-dueno/**`, `/ms-mascota/**` y `/ms-veterinario/**`, eliminando el prefijo del servicio antes de reenviar. Por ejemplo, `/ms-dueno/api/duenos` llega a `/api/duenos`. Desde el sprint 13, `/ms-turno/**` pertenece a la ruta canónica de Turnos y usa RewritePath: comparte la cuota de Rate Limiter con `/api/turnos/**`. El locator excluye Turnos y el propio gateway.
 
-Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` se reescriben a `/api/duenos` y `/api/duenos/{id}`. Actuator muestra actualmente **ocho rutas**: cuatro canónicas, tres automáticas de discovery y una de versionado. La entrega original del sprint 12 tenía nueve; el sprint 13 integra el alias de Turnos en la misma ruta protegida. Los identificadores automáticos pueden conservar el nombre de aplicación en mayúsculas; sus prefijos públicos son minúsculos.
+Se implementa el paso opcional de versionado: `/v1/duenos` y `/v1/duenos/{id}` se reescriben a `/api/duenos` y `/api/duenos/{id}`. Actuator muestra actualmente **nueve rutas**: cuatro canónicas de negocio, tres automáticas de discovery, una de versionado y la ruta de Auth. El sprint 13 integra el alias de Turnos en su ruta canónica; el sprint 14 agrega Auth sin generar un alias automático adicional. Los identificadores automáticos pueden conservar el nombre de aplicación en mayúsculas; sus prefijos públicos son minúsculos.
 
 `RewriteLocationResponseHeader` conserva el host público en las cabeceras `Location` de las altas, para que sus enlaces sigan pasando por 8080. CORS permite cualquier origen y cabecera en desarrollo, los métodos GET, POST, PUT, PATCH, DELETE y OPTIONS, sin credenciales. PATCH conserva la cancelación de turnos existente. También se responden las solicitudes preflight que no coinciden con una ruta.
 
@@ -361,7 +386,43 @@ Actuator de Turnos expone `health`, `info`, `metrics`, `circuitbreakers`, `circu
 
 Gateway utiliza `RequestRateLimiter` con Redis: 10 tokens por segundo, capacidad 20 y costo 1. `clientIpKeyResolver` obtiene la dirección remota de la conexión, sin depender de principal, parámetros ni `X-Forwarded-For`. La cuota es compartida por los accesos canónico y con prefijo de Turnos. Los excesos devuelven 429; tras regenerar tokens vuelven a pasar. Clientes que comparten una dirección comparten también su cuota. [Referencia oficial](https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-webflux/gatewayfilter-factories/requestratelimiter-factory.html).
 
-Redis es una dependencia de esta ejecución: Compose lo inicia, comprueba su salud y lo conecta al gateway por la red interna. Sus tokens son datos temporales y no se guardan en un volumen. La nueva consigna incorpora Rate Limiter en el sprint 13, por encima de la vista previa del sprint 12; JWT queda para una entrega posterior.
+Redis es una dependencia de esta ejecución: Compose lo inicia, comprueba su salud y lo conecta al gateway por la red interna. Sus tokens son datos temporales y no se guardan en un volumen. La consigna del sprint 13 incorpora Rate Limiter por encima de la vista previa del sprint 12; JWT se agrega en el sprint 14.
+
+## Autenticación JWT — Sprint 14
+
+`ms-auth` tiene su propio contexto `com.patitas.auth`, la entidad Usuario y la base patitas_auth. Guarda username único, password con BCrypt y rol; el ID usa GeneratedValue AUTO. UsuarioJpaRepository ofrece findByUsername y el adaptador de persistencia conserva la causa de conflictos concurrentes. Las excepciones se reutilizan por categoría y el mapeo HTTP permanece en `config/GlobalExceptionHandler.java`.
+
+| Solicitud a Gateway | Resultado |
+| --- | --- |
+| POST `/auth/register`, con username, password y rol | 200 y `{ "token": "..." }` |
+| POST `/auth/login`, con username y password válidos | 200 y token |
+| Login con credenciales incorrectas o usuario inexistente | 401 con el mismo mensaje genérico |
+| Registro duplicado | 409 |
+| Registro inválido | 400 |
+| Ruta protegida sin Bearer válido | 401 antes de llegar al destino |
+| Ruta protegida con JWT válido | Se procesa con el contrato existente de la API |
+
+El ejemplo de la consigna se puede ejecutar desde PowerShell:
+
+```powershell
+$registro = @{ username = 'jorge'; password = '1234'; rol = 'ADMIN' } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri http://localhost:8080/auth/register -ContentType application/json -Body $registro
+$credenciales = @{ username = 'jorge'; password = '1234' } | ConvertTo-Json
+$login = Invoke-RestMethod -Method Post -Uri http://localhost:8080/auth/login -ContentType application/json -Body $credenciales
+Invoke-RestMethod -Uri http://localhost:8080/api/mascotas -Headers @{ Authorization = 'Bearer ' + $login.token }
+```
+
+Los usernames admiten de 3 a 50 caracteres ASCII, letras, números, punto, guion y guion bajo. La contraseña admite desde 4 caracteres para aceptar el ejemplo del PDF y hasta 72 bytes UTF-8, el límite de BCrypt. Los roles admitidos son ADMIN, VET y RECEPCIONISTA. El registro público admite esos roles conforme al alcance base de la consigna; autorización por rol y refresh token son extensiones posteriores.
+
+JJWT 0.12.6 se administra en el padre. Ambos módulos incluyen jjwt-api para compilar y jjwt-impl/jjwt-jackson en runtime. JwtService de Auth emite HS256 con sub, rol, iat y exp a 24 horas, valida tokens y extrae el username. El verificador de Gateway acepta únicamente HS256, firma válida, identidad y claims requeridos, y comprueba expiración y nbf. La clave se convierte desde sus bytes UTF-8 según el PDF. Solo ms-auth y Gateway reciben JWT_SECRET; la configuración Git contiene el placeholder y las aplicaciones fallan si la clave falta o es insuficiente.
+
+SecurityConfig expone BCryptPasswordEncoder, UserDetailsService y AuthenticationManager con DaoAuthenticationProvider. El login comprueba BCrypt mediante ese manager; el servicio es stateless y los endpoints `/auth/**` no requieren CSRF ni login previo. Las respuestas de registro y login contienen únicamente el token. [JJWT 0.12.6](https://github.com/jwtk/jjwt/tree/0.12.6) y [DaoAuthenticationProvider](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html).
+
+AuthenticationFilter es GlobalFilter, WebFilter y Ordered, con orden 0. WebFilter cubre también Actuator y rutas sin coincidencia; una marca por intercambio evita validar dos veces. LoggingFilter, de orden -1, conserva los registros; la autenticación ocurre antes del Rate Limiter. Todas las entradas canónicas, aliases y rutas de discovery requieren token. Se exceptúan `/auth/**` y los preflight CORS válidos; el prefijo público rechaza formas ambiguas con puntos de recorrido, escapes o barras inversas.
+
+Gateway sustituye cualquier X-Auth-User recibido por el subject verificado. Elimina Authorization y X-Auth-Rol antes de reenviar para que los servicios de negocio reciban únicamente la identidad validada. Los cuatro servicios de negocio conservan su código y sus llamadas internas. No se confía en un username enviado por el cliente ni en tokens en la query.
+
+La ruta pública `/auth/**` usa lb://ms-auth. El locator excluye ms-auth y ms-turno; hay nueve rutas en total. Eureka registra seis aplicaciones: los cuatro contextos de negocio, ms-auth y Gateway. Se mantiene el límite de Turnos por IP compartido entre la ruta canónica y su alias.
 
 ## Verificaciones
 
@@ -371,23 +432,17 @@ Redis es una dependencia de esta ejecución: Compose lo inicia, comprueba su sal
 .\mvnw.cmd verify
 ```
 
-Las 55 pruebas Maven incluyen las 47 existentes, seis pruebas de los proxies AOP reales y dos de la clave de Rate Limiter. Las pruebas AOP comprueban reintentos, fallback, causa original, aislamiento de circuitos, rechazo inmediato de OPEN y cierre tras tres pruebas correctas. Usan esperas de milisegundos; las pruebas del entorno real conservan los tiempos de la consigna.
+Las 103 pruebas Maven incluyen las 55 existentes y verificaciones de emisión/validación JWT, BCrypt real con AuthenticationManager, conflictos concurrentes, claves débiles, cabeceras falsas y las cadenas reactivas de autenticación.
 
-La [colección actual](docs/evidencias/sprint-13/sprint-13-resiliencia.postman_collection.json) comprueba las cuatro APIs por 8080, OpenFeign, CORS, Eureka, Redis y Actuator. Las [evidencias del sprint 13](docs/evidencias/sprint-13/README.md) incluyen las caídas reales de Mascotas y Veterinarios, recuperación y una ráfaga para verificar 429 y ausencia de llegada al backend. Se conservan las entregas históricas de los [sprints 12](docs/evidencias/sprint-12/README.md), [11](docs/evidencias/sprint-11/README.md), [10](docs/evidencias/sprint-10/README.md) y [09](docs/evidencias/sprint-09/README.md); sus colecciones corresponden a sus respectivas versiones.
+La [colección actual](docs/evidencias/sprint-14/sprint-14-jwt.postman_collection.json) comprueba registro/login, rechazos JWT y las cuatro APIs con Bearer. Las [evidencias del sprint 14](docs/evidencias/sprint-14/README.md) incluyen 119 solicitudes y 208 verificaciones, BCrypt persistido, registro concurrente, rechazos anteriores al backend y Rate Limiter autenticado. Las entregas anteriores conservan sus evidencias y corresponden a sus respectivas versiones.
 
-Con el ecosistema iniciado y las cuatro bases sin registros, ejecutar la colección en el orden guardado:
-
-```powershell
-npx newman run docs/evidencias/sprint-13/sprint-13-resiliencia.postman_collection.json --delay-request 120
-```
-
-La colección crea y elimina sus propios datos. La demora entre solicitudes mantiene esta prueba funcional dentro de la cuota; la prueba de ráfaga se ejecuta por separado. Para repetir los escenarios de caída, recuperación y límite:
+Con el ecosistema de Compose iniciado y las cuatro bases de negocio sin registros, ejecutar el verificador desde la raíz. Requiere Python y Node/Newman; genera localmente los tokens de prueba y el entorno privado de la colección:
 
 ```powershell
-python docs/evidencias/sprint-13/verificar-resiliencia.py
+python docs/evidencias/sprint-14/verificar-seguridad.py
 ```
 
-Ese script detiene y restaura Mascotas y Veterinarios por separado, crea datos propios y los elimina al terminar. Requiere el ecosistema de Compose activo y las cuatro bases sin registros. Para ejecutar el JAR generado:
+El script crea usuarios con nombres únicos y los elimina directamente de su base al finalizar; conserva usuarios preexistentes. La colección crea y elimina los datos de negocio. Los tokens se ocultan en los resultados archivados y el entorno privado se elimina al terminar. Para ejecutar el JAR generado:
 
 ```powershell
 java -jar api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar

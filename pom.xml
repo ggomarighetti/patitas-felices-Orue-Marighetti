@@ -26,6 +26,7 @@
         <module>eureka-server</module>
         <module>config-server</module>
         <module>api-gateway</module>
+        <module>ms-auth</module>
     </modules>
 
     <properties>
@@ -33,11 +34,27 @@
         <spring-boot.version>4.1.0</spring-boot.version>
         <spring-cloud.version>2025.1.4</spring-cloud.version>
         <resilience4j.version>2.4.0</resilience4j.version>
+        <jjwt.version>0.12.6</jjwt.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-bom</artifactId>

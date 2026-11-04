@@ -223,6 +223,53 @@ services:
       start_period: 15s
 
 
+  mysql-auth:
+    image: mysql:8.0.40
+    profiles: ["app"]
+    environment:
+      MYSQL_DATABASE: patitas_auth
+      MYSQL_USER: ${DB_USERNAME:-patitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "127.0.0.1:3310:3306"
+    volumes:
+      - auth-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+
+  ms-auth:
+    image: eclipse-temurin:25-jre-alpine
+    profiles: ["app"]
+    command: ["java", "-jar", "/app/ms-auth.jar"]
+    environment:
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-auth:3306/patitas_auth
+      DB_USERNAME: ${DB_USERNAME:-patitas}
+      DB_PASSWORD: ${DB_PASSWORD:?Definir DB_PASSWORD en .env}
+      JWT_SECRET: ${JWT_SECRET:?Ejecutar scripts/inicializar-entorno.ps1}
+    expose:
+      - "8085"
+    volumes:
+      - ./ms-auth/target/ms-auth-0.0.1-SNAPSHOT.jar:/app/ms-auth.jar:ro
+    depends_on:
+      mysql-auth:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8085/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 5s
+      timeout: 5s
+      retries: 36
+      start_period: 15s
+
   redis:
     image: redis:8-alpine
     profiles: ["app"]
@@ -240,6 +287,7 @@ services:
       CONFIG_SERVER_URL: http://config-server:8888
       EUREKA_URL: http://eureka-server:8761/eureka/
       REDIS_HOST: redis
+      JWT_SECRET: ${JWT_SECRET:?Ejecutar scripts/inicializar-entorno.ps1}
     ports:
       - "127.0.0.1:8080:8080"
     volumes:
@@ -259,8 +307,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      ms-auth:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      test: ["CMD", "nc", "-z", "-w", "2", "localhost", "8080"]
       interval: 5s
       timeout: 5s
       retries: 36
@@ -271,3 +321,4 @@ volumes:
   mascota-data:
   veterinario-data:
   turno-data:
+  auth-data:
